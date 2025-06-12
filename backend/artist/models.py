@@ -4,6 +4,7 @@ from .constants import (
     ARTIST_USERNAME_MAX_LENGTH,
     ARTIST_DESCRIPTION_MAX_LENGTH,
 )
+from song.models import Song
 from genre.models import Genre
 
 
@@ -80,3 +81,23 @@ class ArtistGenre(models.Model):
     def __str__(self) -> str:
         return (f'{self.artist.username} '
                 f'играет в жанре {self.genre.name}')
+
+
+class ArtistSong(models.Model):
+    artist = models.ForeignKey(
+        Artist,
+        on_delete=models.DO_NOTHING,
+        verbose_name='Исполнитель'
+    )
+    song = models.ForeignKey(
+        Song,
+        on_delete=models.DO_NOTHING,
+        verbose_name='Песня',
+    )
+
+    class Meta:
+        verbose_name = 'Исполнитель песни'
+        verbose_name_plural = 'Исполнители песни'
+
+    def __str__(self) -> str:
+        return f'{self.artist.username} исполнитель песни {self.song.name}'

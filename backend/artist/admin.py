@@ -5,6 +5,7 @@ from .models import (
     Artist,
     RelatedArtists,
     ArtistGenre,
+    ArtistSong
 )
 
 
@@ -51,4 +52,13 @@ class ArtistGenreAdmin(admin.ModelAdmin):
     search_fields = (
         'artist',
         'genre',
+    )
+
+
+@admin.register(ArtistSong)
+class ArtistSongAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'artist',
+        'song',
     )
