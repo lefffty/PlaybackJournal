@@ -2,6 +2,11 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from .models import User
+from .tabular_inlines import (
+    RatedAlbumInline,
+    ListenedAlbumInline,
+    FavouriteAlbumInline,
+)
 
 
 @admin.register(User)
@@ -16,6 +21,7 @@ class UserAdmin(admin.ModelAdmin):
         'username', 'first_name',
         'last_name', 'email',
     )
+    inlines = (RatedAlbumInline, ListenedAlbumInline, FavouriteAlbumInline)
 
     @admin.display(description='Аватар пользователя')
     @mark_safe

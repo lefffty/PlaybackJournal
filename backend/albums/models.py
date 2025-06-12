@@ -21,6 +21,12 @@ class Album(models.Model):
         blank=True,
         null=True,
     )
+    cover = models.ImageField(
+        verbose_name='Обложка альбома',
+        blank=False,
+        null=False,
+        upload_to='album_covers/',
+    )
 
     class Meta:
         verbose_name = 'Альбом'

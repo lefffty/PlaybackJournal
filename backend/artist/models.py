@@ -29,8 +29,8 @@ class Artist(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Артист'
-        verbose_name_plural = 'Артисты'
+        verbose_name = 'Исполнитель'
+        verbose_name_plural = 'Исполнители'
         ordering = ('id',)
 
     def __str__(self) -> str:
@@ -50,6 +50,11 @@ class RelatedArtists(models.Model):
         verbose_name='Похожий артист',
         related_name='similar_to_artists',
     )
+
+    class Meta:
+        verbose_name = 'Похожий исполнитель'
+        verbose_name_plural = 'Похожие исполнители'
+        ordering = ('id',)
 
     def __str__(self) -> str:
         return (f'{self.related_artist.username}'
