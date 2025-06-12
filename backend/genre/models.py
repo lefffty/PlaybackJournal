@@ -8,10 +8,11 @@ from .constants import (
 
 class Genre(models.Model):
     name = models.CharField(
-        verbose_name='Наввание жанра',
+        verbose_name='Название жанра',
         blank=False,
         null=False,
         max_length=GENRE_NAME_MAX_LENGTH,
+        unique=True,
     )
     description = models.CharField(
         verbose_name='Краткое описание жанра',

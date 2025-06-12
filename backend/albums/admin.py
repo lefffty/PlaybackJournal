@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 
 from .models import (
     Album,
@@ -22,6 +23,7 @@ class AlbumAdmin(admin.ModelAdmin):
         'id',
         'name',
         'publication_date',
+        'display_cover',
     )
     search_fields = (
         'name',
@@ -31,6 +33,14 @@ class AlbumAdmin(admin.ModelAdmin):
         'name',
     )
     inlines = (AlbumSongInline, AlbumGenreInline, AlbumArtistInline)
+
+    @admin.display(description='Обложка альбома')
+    @mark_safe
+    def display_cover(self, album):
+        if album.cover:
+            return (f'<a href="{album.cover.url}" target="_blank"><img '
+                    f'src="{album.cover.url}" style="max-height:100px;"></a>')
+        return '-'
 
 
 class AbstractUserAlbumAdmin(admin.ModelAdmin):

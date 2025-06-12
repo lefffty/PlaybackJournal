@@ -9,3 +9,6 @@ class SongAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'duration',)
     search_fields = ('name',)
     list_per_page = SONG_LIST_PER_PAGE
+    ordering = (
+        'id',
+    )

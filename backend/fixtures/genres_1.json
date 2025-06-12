@@ -1,0 +1,30 @@
+[
+    {
+        "model": "genre.Genre",
+        "pk": 4,
+        "fields": {
+            "name": "хеви-метал"
+        }
+    },
+    {
+        "model": "genre.Genre",
+        "pk": 5,
+        "fields": {
+            "name": "диско"
+        }
+    },
+    {
+        "model": "genre.Genre",
+        "pk": 6,
+        "fields": {
+            "name": "глэм-рок"
+        }
+    },
+    {
+        "model": "genre.Genre",
+        "pk": 7,
+        "fields": {
+            "name": "рок"
+        }
+    }
+]
