@@ -4,6 +4,7 @@ from .models import (
     Playlist,
     PlaylistSong
 )
+from .inlines import PlaylistSongInline
 
 
 @admin.register(Playlist)
@@ -24,6 +25,7 @@ class PlaylistAdmin(admin.ModelAdmin):
         'id',
         'name',
     )
+    inlines = (PlaylistSongInline,)
 
 
 @admin.register(PlaylistSong)

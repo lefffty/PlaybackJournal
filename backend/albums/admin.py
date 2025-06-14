@@ -10,7 +10,7 @@ from .models import (
     AlbumGenre,
     AlbumSong,
 )
-from .tabular_inlines import (
+from .inlines import (
     AlbumSongInline,
     AlbumArtistInline,
     AlbumGenreInline,
@@ -32,6 +32,18 @@ class AlbumAdmin(admin.ModelAdmin):
         'id',
         'name',
     )
+    fields = (
+        'name',
+        'publication_date',
+        'display_songs',
+        'display_genres',
+        'display_cover',
+    )
+    readonly_fields = (
+        'display_cover',
+        'display_songs',
+        'display_genres',
+    )
     inlines = (AlbumSongInline, AlbumGenreInline, AlbumArtistInline)
 
     @admin.display(description='Обложка альбома')
@@ -41,6 +53,24 @@ class AlbumAdmin(admin.ModelAdmin):
             return (f'<a href="{album.cover.url}" target="_blank"><img '
                     f'src="{album.cover.url}" style="max-height:100px;"></a>')
         return '-'
+
+    @admin.display(description='Песни с альбома')
+    @mark_safe
+    def display_songs(self, album):
+        songs = [
+            f'{album_song.song.name} - {album_song.song.duration}</br>'
+            for album_song in album.album_songs.all()
+        ]
+        return '<br>'.join(songs) if songs else '-'
+
+    @admin.display(description='Жанры')
+    @mark_safe
+    def display_genres(self, album):
+        genres = [
+            f'{album_genre.genre.name}'
+            for album_genre in album.album_genres.all()
+        ]
+        return '<br>'.join(genres) if genres else '-'
 
 
 class AbstractUserAlbumAdmin(admin.ModelAdmin):

@@ -43,6 +43,7 @@ class PlaylistSong(models.Model):
         Song,
         on_delete=models.CASCADE,
         verbose_name='Песня',
+        related_name='playlist_songs',
     )
     author = models.ForeignKey(
         User,

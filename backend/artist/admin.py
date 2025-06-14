@@ -7,6 +7,10 @@ from .models import (
     ArtistGenre,
     ArtistSong
 )
+from .inlines import (
+    RelatedArtistsInline,
+    ArtistGenreInline
+)
 
 
 @admin.register(Artist)
@@ -19,6 +23,7 @@ class ArtistAdmin(admin.ModelAdmin):
     search_fields = (
         'username',
     )
+    inlines = (RelatedArtistsInline, ArtistGenreInline)
 
     @admin.display(description='Аватар артиста')
     @mark_safe

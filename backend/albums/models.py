@@ -27,6 +27,21 @@ class Album(models.Model):
         null=False,
         upload_to='album_covers/',
     )
+    artists = models.ManyToManyField(
+        Artist,
+        through='AlbumArtist',
+        verbose_name='Исполнители, принявшие участие в альбоме'
+    )
+    genres = models.ManyToManyField(
+        Genre,
+        through='AlbumGenre',
+        verbose_name='Жанры'
+    )
+    songs = models.ManyToManyField(
+        Song,
+        through='AlbumSong',
+        verbose_name='Песни альбома'
+    )
 
     class Meta:
         verbose_name = 'Альбом'
@@ -88,6 +103,7 @@ class AlbumSong(models.Model):
         Album,
         on_delete=models.CASCADE,
         verbose_name='Альбом',
+        related_name='album_songs',
     )
     song = models.ForeignKey(
         Song,
@@ -108,6 +124,7 @@ class AlbumGenre(models.Model):
         Album,
         on_delete=models.CASCADE,
         verbose_name='Альбом',
+        related_name='album_genres',
     )
     genre = models.ForeignKey(
         Genre,
@@ -133,6 +150,7 @@ class AlbumArtist(models.Model):
         Artist,
         on_delete=models.CASCADE,
         verbose_name='Артист',
+        related_name='album_artists',
     )
 
     class Meta:

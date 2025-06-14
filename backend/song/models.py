@@ -13,6 +13,10 @@ class Song(models.Model):
     duration = models.TimeField(
         verbose_name='Длительность песни'
     )
+    artists = models.ManyToManyField(
+        'artist.Artist',
+        through='artist.ArtistSong',
+    )
 
     class Meta:
         verbose_name = 'Песня'

@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import Song
 from .constants import SONG_LIST_PER_PAGE
+from .inlines import SongArtistInline
 
 
 @admin.register(Song)
@@ -12,3 +13,4 @@ class SongAdmin(admin.ModelAdmin):
     ordering = (
         'id',
     )
+    inlines = [SongArtistInline]
