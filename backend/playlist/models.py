@@ -23,6 +23,12 @@ class Playlist(models.Model):
         blank=True,
         max_length=PLAYLIST_DESCRIPTION_MAX_LENGTH,
     )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Автор плейлиста',
+        related_name='user_playlists'
+    )
 
     class Meta:
         verbose_name = 'Плейлист'
@@ -38,17 +44,12 @@ class PlaylistSong(models.Model):
         Playlist,
         on_delete=models.CASCADE,
         verbose_name='Плейлист',
+        related_name='playlist_songs',
     )
     song = models.ForeignKey(
         Song,
         on_delete=models.CASCADE,
         verbose_name='Песня',
-        related_name='playlist_songs',
-    )
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='Автор плейлиста',
     )
 
     class Meta:

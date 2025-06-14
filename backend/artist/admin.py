@@ -16,6 +16,7 @@ from .inlines import (
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'username',
         'description',
         'avatar_display',

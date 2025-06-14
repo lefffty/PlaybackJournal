@@ -43,12 +43,12 @@ class RelatedArtists(models.Model):
         Artist,
         on_delete=models.CASCADE,
         verbose_name='Артист',
+        related_name='similar_artists',
     )
     related_artist = models.ForeignKey(
         Artist,
         on_delete=models.CASCADE,
         verbose_name='Похожий артист',
-        related_name='similar_artists',
     )
 
     class Meta:
@@ -66,12 +66,12 @@ class ArtistGenre(models.Model):
         Artist,
         on_delete=models.CASCADE,
         verbose_name='Автор',
+        related_name='artist_genres',
     )
     genre = models.ForeignKey(
         Genre,
         on_delete=models.CASCADE,
         verbose_name='Жанр, в котором автор работает',
-        related_name='artist_genres',
     )
 
     class Meta:
@@ -87,13 +87,13 @@ class ArtistSong(models.Model):
     artist = models.ForeignKey(
         Artist,
         on_delete=models.DO_NOTHING,
-        verbose_name='Исполнитель'
+        verbose_name='Исполнитель',
+        related_name='song_artists',
     )
     song = models.ForeignKey(
         Song,
         on_delete=models.DO_NOTHING,
         verbose_name='Песня',
-        related_name='song_artists',
     )
 
     class Meta:

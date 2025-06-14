@@ -1,0 +1,138 @@
+[
+    {
+        "model": "artist.Artist",
+        "pk": 16,
+        "fields": {
+            "username": "Solomon Burke",
+            "description": "Американский певец и композитор, известный своими хитами в стиле ритм-н-блюз."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 17,
+        "fields": {
+            "username": "Eminem",
+            "description": "Американский рэпер, один из самых успешных и влиятельных артистов в истории хип-хопа."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 18,
+        "fields": {
+            "username": "Strawberry Guy",
+            "description": "Артист, известный своим участием в музыкальной индустрии."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 19,
+        "fields": {
+            "username": "Denzel Curry",
+            "description": "Американский рэпер, известный своей экспериментальной музыкой."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 20,
+        "fields": {
+            "username": "Kiddo Marv",
+            "description": "Артист, сотрудничавший с другими музыкантами."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 21,
+        "fields": {
+            "username": "Wiz Khalifa",
+            "description": "Американский рэпер, известный своими хитами и влиянием на современный хип-хоп."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 22,
+        "fields": {
+            "username": "Shocking Blue",
+            "description": "Голландская рок-группа, известная своими хитами в стиле поп-рок."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 23,
+        "fields": {
+            "username": "Elvis Presley",
+            "description": "Американский певец, известный как «король рок-н-ролла»."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 24,
+        "fields": {
+            "username": "Ляпис Трубецкой",
+            "description": "Российский рок-музыкант и поэт."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 25,
+        "fields": {
+            "username": "Skepta",
+            "description": "Британский рэпер, известный своим влиянием на британский грайм."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 26,
+        "fields": {
+            "username": "Gucci Mane",
+            "description": "Американский рэпер, известный своим творчеством в стиле треп."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 27,
+        "fields": {
+            "username": "Юлия Савичева",
+            "description": "Российская певица, известная своими лирическими песнями."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 28,
+        "fields": {
+            "username": "The Game",
+            "description": "Американский рэпер, активный участник хип-хоп-индустрии."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 29,
+        "fields": {
+            "username": "The Notorious B.I.G.",
+            "description": "Американский рэпер, один из основоположников западного хип-хопа."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 30,
+        "fields": {
+            "username": "Eagles",
+            "description": "Американская рок-группа, известная своими хитами в стиле кантри-рок."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 31,
+        "fields": {
+            "username": "Aretha Franklin",
+            "description": "Американская певица, известная как «королева灵魂», одна из величайших вокалисток всех времен."
+        }
+    },
+    {
+        "model": "artist.Artist",
+        "pk": 32,
+        "fields": {
+            "username": "Derek & The Dominos",
+            "description": "Англо-американская рок-группа, известная своим легендарным альбомом «Layla and Other Assorted Love Songs»."
+        }
+    }
+]

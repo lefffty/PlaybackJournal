@@ -1,0 +1,162 @@
+[
+    {
+        "model": "song.Song",
+        "pk": 202,
+        "fields": {
+            "name": "Cry to Me",
+            "duration": "00:24"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 203,
+        "fields": {
+            "name": "Lose Yourself",
+            "duration": "00:52"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 204,
+        "fields": {
+            "name": "Mrs Magic",
+            "duration": "00:29"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 205,
+        "fields": {
+            "name": "WISH",
+            "duration": "00:12"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 206,
+        "fields": {
+            "name": "Get Your Shit",
+            "duration": "00:37"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 207,
+        "fields": {
+            "name": "Seven Days",
+            "duration": "00:39"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 208,
+        "fields": {
+            "name": "Gonna Sing Me A Song",
+            "duration": "00:45"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 209,
+        "fields": {
+            "name": "Love Over Gold",
+            "duration": "00:16"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 210,
+        "fields": {
+            "name": "Always On My Mind (Remastered)",
+            "duration": "00:43"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 211,
+        "fields": {
+            "name": "Капитал",
+            "duration": "00:16"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 212,
+        "fields": {
+            "name": "Bellator",
+            "duration": "00:40"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 213,
+        "fields": {
+            "name": "Lemonade",
+            "duration": "00:06"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 214,
+        "fields": {
+            "name": "Telegraph Road",
+            "duration": "00:18"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 215,
+        "fields": {
+            "name": "Если в сердце живёт любовь",
+            "duration": "00:55"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 216,
+        "fields": {
+            "name": "Hate It Or Love It",
+            "duration": "00:26"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 217,
+        "fields": {
+            "name": "Juicy 2005 Remaster",
+            "duration": "00:03"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 218,
+        "fields": {
+            "name": "New Kid in Town 2013 Remaster",
+            "duration": "00:05"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 219,
+        "fields": {
+            "name": "Rhythm of Love",
+            "duration": "00:50"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 220,
+        "fields": {
+            "name": "I Say A Little Prayer Single Version",
+            "duration": "00:33"
+        }
+    },
+    {
+        "model": "song.Song",
+        "pk": 221,
+        "fields": {
+            "name": "Layla",
+            "duration": "00:04"
+        }
+    }
+]

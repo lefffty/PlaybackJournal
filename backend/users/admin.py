@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from .models import User
-from .tabular_inlines import (
+from .inlines import (
     RatedAlbumInline,
     ListenedAlbumInline,
     FavouriteAlbumInline,
