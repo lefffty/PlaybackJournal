@@ -1,16 +1,18 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from djoser.serializers import UserCreateSerializer, SetPasswordSerializer
+from drf_extra_fields.fields import Base64ImageField
 
 User = get_user_model()
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(UserCreateSerializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     username = serializers.CharField(validators=[UnicodeUsernameValidator()])
 
-    class Meta:
+    class Meta(UserCreateSerializer.Meta):
         model = User
         fields = (
             'id',
@@ -39,7 +41,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         }
 
 
-class UserListDetailSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(use_url=True)
 
     class Meta:
@@ -53,3 +55,27 @@ class UserListDetailSerializer(serializers.ModelSerializer):
             'registration_date',
             'avatar',
         )
+
+
+class AvatarSerializer(serializers.ModelSerializer):
+    avatar = Base64ImageField()
+
+    class Meta:
+        model = User
+        fields = (
+            'avatar',
+        )
+        extra_kwargs = {
+            'avatar': {
+                'required': True,
+            }
+        }
+
+
+class NewPasswordSerializer(SetPasswordSerializer):
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        new_password = self.validated_data['new_password']
+        user.set_password(new_password)
+        user.save()
+        return user
