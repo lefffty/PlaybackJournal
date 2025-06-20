@@ -37,6 +37,7 @@ class AlbumAdmin(admin.ModelAdmin):
         'publication_date',
         'display_songs',
         'display_genres',
+        'cover',
         'display_cover',
     )
     readonly_fields = (
