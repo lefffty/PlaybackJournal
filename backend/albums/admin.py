@@ -32,14 +32,6 @@ class AlbumAdmin(admin.ModelAdmin):
         'id',
         'name',
     )
-    # fields = (
-    #     'name',
-    #     'publication_date',
-    #     'display_songs',
-    #     'display_genres',
-    #     'cover',
-    #     'display_cover',
-    # )
     readonly_fields = (
         'display_cover',
         'display_songs',
@@ -85,17 +77,17 @@ class AlbumAdmin(admin.ModelAdmin):
         return '<br>'.join(genres) if genres else '-'
 
     @admin.display(description='Количество прослушиваний альбома')
-    def display_listens(self, album):
-        return album.listenedalbums.count()
+    def display_listens(self, obj):
+        return obj.listenedalbums.count()
 
     @admin.display(description='Количество добавлений в "Любимое"')
-    def display_favorites(self, album):
-        return album.favouritealbums.count()
+    def display_favorites(self, obj):
+        return obj.favouritealbums.count()
 
     @admin.display(description='Количество оценок альбома')
-    def display_rated(self, album):
-        print(album.ratedalbums.count())
-        return album.ratedalbums.count()
+    def display_rated(self, obj):
+        print(obj.ratedalbums.count())
+        return obj.ratedalbums.count()
 
 
 class AbstractUserAlbumAdmin(admin.ModelAdmin):

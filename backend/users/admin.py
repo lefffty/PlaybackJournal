@@ -21,6 +21,21 @@ class UserAdmin(admin.ModelAdmin):
         'username', 'first_name',
         'last_name', 'email',
     )
+    readonly_fields = (
+        'registration_date',
+        'display_avatar',
+        'display_favorites',
+        'display_listens',
+        'display_rated',
+    )
+    fieldsets = (
+        (None, {
+            'fields': ('username', 'first_name', 'last_name', 'email', 'avatar', 'registration_date')
+        }),
+        ('Статистика', {
+            'fields': ('display_favorites', 'display_listens', 'display_rated'),
+        }),
+    )
     inlines = (RatedAlbumInline, ListenedAlbumInline, FavouriteAlbumInline)
 
     @admin.display(description='Аватар пользователя')
@@ -30,3 +45,16 @@ class UserAdmin(admin.ModelAdmin):
             return (f'<a href="{user.avatar.url}" target="_blank"><img '
                     f'src="{user.avatar.url}" style="max-height:100px;"></a>')
         return 'Нет изображения'
+
+    @admin.display(description='Количество прослушанных альбомов')
+    def display_listens(self, obj):
+        return obj.listenedalbums.count()
+
+    @admin.display(description='Количество альбомов в "Любимое"')
+    def display_favorites(self, obj):
+        return obj.favouritealbums.count()
+
+    @admin.display(description='Количество оценок альбомов')
+    def display_rated(self, obj):
+        print(obj.ratedalbums.count())
+        return obj.ratedalbums.count()
