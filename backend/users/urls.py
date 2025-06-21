@@ -22,6 +22,13 @@ router.register(
     basename='user_avatar',
 )
 
+useralbums_router = DefaultRouter()
+useralbums_router.register(
+    r'users',
+    views.UserAlbumsListsViewSet,
+    basename='user_albums_list',
+)
+
 urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
     path(
@@ -32,5 +39,6 @@ urlpatterns = [
             }
         ),
     ),
+    path('', include(useralbums_router.urls)),
     path('', include(router.urls)),
 ]

@@ -11,6 +11,14 @@ from .serializers import (
     UserProfileSerializer,
     AvatarSerializer,
     NewPasswordSerializer,
+    UserRatedAlbumsSerializer,
+    UserListenedAlbumsSerializer,
+    UserFavouriteAlbumsSerialzer,
+)
+from albums.models import (
+    FavouriteAlbum,
+    ListenedAlbum,
+    RatedAlbum,
 )
 
 User = get_user_model()
@@ -28,11 +36,8 @@ class UserCreateViewSet(
 
 class UserProfileViewSet(
     viewsets.GenericViewSet,
-    mixins.RetrieveModelMixin
 ):
-    queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
-    serializer_class = UserProfileSerializer
 
     @action(detail=False, methods=['GET'], url_path='me')
     def profile(self, request):
@@ -45,7 +50,7 @@ class UserProfileViewSet(
 
 
 class AvatarViewSet(
-    viewsets.GenericViewSet   
+    viewsets.GenericViewSet
 ):
     permission_classes = [IsAuthenticated]
 
@@ -69,7 +74,9 @@ class AvatarViewSet(
         )
 
 
-class NewPasswordViewSet(viewsets.GenericViewSet):
+class NewPasswordViewSet(
+    viewsets.GenericViewSet
+):
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['post'], url_path='set_password')
@@ -83,4 +90,45 @@ class NewPasswordViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         return Response(
             status=status.HTTP_204_NO_CONTENT,
+        )
+
+
+class UserAlbumsListsViewSet(
+    viewsets.GenericViewSet
+):
+    permission_classes = [IsAuthenticated]
+
+    def _get_albums_list(self, request, model, serializer):
+        user = request.user
+        objects = model.objects.filter(
+            user=user,
+        )
+        _serializer = serializer(objects, many=True)
+        return Response(
+            _serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=False, methods=['GET'], url_path='favorite/albums')
+    def favourite(self, request):
+        return self._get_albums_list(
+            request,
+            FavouriteAlbum,
+            UserFavouriteAlbumsSerialzer,
+        )
+
+    @action(detail=False, methods=['GET'], url_path='listened/albums')
+    def listened(self, request):
+        return self._get_albums_list(
+            request,
+            ListenedAlbum,
+            UserListenedAlbumsSerializer,
+        )
+
+    @action(detail=False, methods=['GET'], url_path='rated/albums')
+    def rated(self, request):
+        return self._get_albums_list(
+            request,
+            RatedAlbum,
+            UserRatedAlbumsSerializer,
         )

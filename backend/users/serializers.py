@@ -4,6 +4,15 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from djoser.serializers import UserCreateSerializer, SetPasswordSerializer
 from drf_extra_fields.fields import Base64ImageField
 
+from albums.models import (
+    FavouriteAlbum,
+    ListenedAlbum,
+    RatedAlbum,
+)
+from albums.serializers import (
+    AlbumSimpleSerializer
+)
+
 User = get_user_model()
 
 
@@ -79,3 +88,34 @@ class NewPasswordSerializer(SetPasswordSerializer):
         user.set_password(new_password)
         user.save()
         return user
+
+
+class UserFavouriteAlbumsSerialzer(serializers.ModelSerializer):
+    album = AlbumSimpleSerializer(read_only=True)
+
+    class Meta:
+        model = FavouriteAlbum
+        fields = (
+            'album',
+        )
+
+
+class UserRatedAlbumsSerializer(serializers.ModelSerializer):
+    album = AlbumSimpleSerializer(read_only=True)
+
+    class Meta:
+        model = RatedAlbum
+        fields = (
+            'album',
+            'rating',
+        )
+
+
+class UserListenedAlbumsSerializer(serializers.ModelSerializer):
+    album = AlbumSimpleSerializer(read_only=True)
+
+    class Meta:
+        model = ListenedAlbum
+        fields = (
+            'album',
+        )
