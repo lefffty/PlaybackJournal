@@ -64,6 +64,16 @@ class AbstractUserAlbumModel(models.Model):
         verbose_name='Альбом',
     )
 
+    class Meta:
+        abstract = True
+        default_related_name = '%(class)ss'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'album'],
+                name='unique_%(class)s'
+            )
+        ]
+
 
 class RatedAlbum(AbstractUserAlbumModel):
     rating = models.FloatField(
@@ -72,7 +82,7 @@ class RatedAlbum(AbstractUserAlbumModel):
         null=False,
     )
 
-    class Meta:
+    class Meta(AbstractUserAlbumModel.Meta):
         verbose_name = 'Оценка альбома'
         verbose_name_plural = 'Оценки альбомов'
 
@@ -81,7 +91,7 @@ class RatedAlbum(AbstractUserAlbumModel):
 
 
 class FavouriteAlbum(AbstractUserAlbumModel):
-    class Meta:
+    class Meta(AbstractUserAlbumModel.Meta):
         verbose_name = 'Любимый альбом'
         verbose_name_plural = 'Любимые альбомы'
 
@@ -90,7 +100,7 @@ class FavouriteAlbum(AbstractUserAlbumModel):
 
 
 class ListenedAlbum(AbstractUserAlbumModel):
-    class Meta:
+    class Meta(AbstractUserAlbumModel.Meta):
         verbose_name = 'Прослушанный альбом'
         verbose_name_plural = 'Прослушанные альбомы'
 
