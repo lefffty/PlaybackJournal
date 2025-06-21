@@ -29,6 +29,11 @@ class Playlist(models.Model):
         verbose_name='Автор плейлиста',
         related_name='user_playlists'
     )
+    songs = models.ManyToManyField(
+        Song,
+        through='PlaylistSong',
+        verbose_name='Песни в плейлисте',
+    )
 
     class Meta:
         verbose_name = 'Плейлист'
@@ -55,6 +60,7 @@ class PlaylistSong(models.Model):
     class Meta:
         verbose_name = 'Песня плейлиста'
         verbose_name_plural = 'Песни плейлиста'
+        ordering = ('id',)
 
     def __str__(self) -> str:
         return f'Песни плейлиста {self.playlist.name}'

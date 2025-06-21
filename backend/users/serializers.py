@@ -119,3 +119,13 @@ class UserListenedAlbumsSerializer(serializers.ModelSerializer):
         fields = (
             'album',
         )
+
+
+class UserSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+        )
