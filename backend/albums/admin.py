@@ -32,18 +32,29 @@ class AlbumAdmin(admin.ModelAdmin):
         'id',
         'name',
     )
-    fields = (
-        'name',
-        'publication_date',
-        'display_songs',
-        'display_genres',
-        'cover',
-        'display_cover',
-    )
+    # fields = (
+    #     'name',
+    #     'publication_date',
+    #     'display_songs',
+    #     'display_genres',
+    #     'cover',
+    #     'display_cover',
+    # )
     readonly_fields = (
         'display_cover',
         'display_songs',
         'display_genres',
+        'display_listens',
+        'display_favorites',
+        'display_rated',
+    )
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'publication_date', 'display_songs', 'display_genres', 'cover', 'display_cover')
+        }),
+        ('Статистика', {
+            'fields': ('display_favorites', 'display_listens', 'display_rated'),
+        }),
     )
     inlines = (AlbumSongInline, AlbumGenreInline, AlbumArtistInline)
 
@@ -72,6 +83,19 @@ class AlbumAdmin(admin.ModelAdmin):
             for album_genre in album.album_genres.all()
         ]
         return '<br>'.join(genres) if genres else '-'
+
+    @admin.display(description='Количество прослушиваний альбома')
+    def display_listens(self, album):
+        return album.listenedalbums.count()
+
+    @admin.display(description='Количество добавлений в "Любимое"')
+    def display_favorites(self, album):
+        return album.favouritealbums.count()
+
+    @admin.display(description='Количество оценок альбома')
+    def display_rated(self, album):
+        print(album.ratedalbums.count())
+        return album.ratedalbums.count()
 
 
 class AbstractUserAlbumAdmin(admin.ModelAdmin):
