@@ -87,7 +87,7 @@ class RatedAlbum(AbstractUserAlbumModel):
         verbose_name_plural = 'Оценки альбомов'
 
     def __str__(self) -> str:
-        return f'{self.album.name},{self.user.username} - {self.rating}'
+        return f'{self.user.username}, {self.album.name} - {self.rating}'
 
 
 class FavouriteAlbum(AbstractUserAlbumModel):

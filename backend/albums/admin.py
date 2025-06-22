@@ -104,7 +104,15 @@ class AbstractUserAlbumAdmin(admin.ModelAdmin):
 
 @admin.register(RatedAlbum)
 class RatedAlbumAdmin(AbstractUserAlbumAdmin):
-    pass
+    list_display = (
+        'id',
+        'user',
+        'album',
+        'rating'
+    )
+    readonly_fields = (
+        'rating',
+    )
 
 
 @admin.register(FavouriteAlbum)
