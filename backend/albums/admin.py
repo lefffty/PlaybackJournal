@@ -29,8 +29,7 @@ class AlbumAdmin(admin.ModelAdmin):
         'name',
     )
     list_filter = (
-        'id',
-        'name',
+        'artists',
     )
     readonly_fields = (
         'display_cover',

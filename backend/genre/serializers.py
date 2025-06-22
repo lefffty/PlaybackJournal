@@ -7,6 +7,7 @@ class GenreSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = (
+            'id',
             'name',
         )
 
@@ -24,6 +25,7 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = (
+            'id',
             'name',
             'description',
             'albums',
