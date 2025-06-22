@@ -24,6 +24,10 @@ class Genre(models.Model):
         'albums.Album',
         through='albums.AlbumGenre',
     )
+    artists = models.ManyToManyField(
+        'artist.Artist',
+        through='artist.ArtistGenre',
+    )
 
     class Meta:
         verbose_name = 'Жанр'

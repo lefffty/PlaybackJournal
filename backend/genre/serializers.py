@@ -16,11 +16,16 @@ class GenreSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True,
     )
+    artists = serializers.StringRelatedField(
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = Genre
         fields = (
             'name',
             'description',
-            'albums'
+            'albums',
+            'artists',
         )
