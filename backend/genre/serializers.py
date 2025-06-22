@@ -1,4 +1,4 @@
-from rest_framework import serializers 
+from rest_framework import serializers
 
 from .models import Genre
 
@@ -12,9 +12,15 @@ class GenreSimpleSerializer(serializers.ModelSerializer):
 
 
 class GenreSerializer(serializers.ModelSerializer):
+    albums = serializers.StringRelatedField(
+        many=True,
+        read_only=True,
+    )
+
     class Meta:
         model = Genre
         fields = (
             'name',
             'description',
+            'albums'
         )

@@ -28,6 +28,10 @@ class Artist(models.Model):
         blank=True,
         null=True,
     )
+    albums = models.ManyToManyField(
+        'albums.Album',
+        through='albums.AlbumArtist',
+    )
 
     class Meta:
         verbose_name = 'Исполнитель'
@@ -56,9 +60,11 @@ class RelatedArtists(models.Model):
         verbose_name_plural = 'Похожие исполнители'
         ordering = ('id',)
 
-    def __str__(self) -> str:
-        return (f'{self.related_artist.username}'
-                f' похож на {self.artist.username}')
+    # def __str__(self) -> str:
+    #     return (f'{self.related_artist.username}'
+    #             f' похож на {self.artist.username}')
+    def __str__(self):
+        return self.related_artist.username
 
 
 class ArtistGenre(models.Model):

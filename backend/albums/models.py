@@ -30,7 +30,8 @@ class Album(models.Model):
     artists = models.ManyToManyField(
         Artist,
         through='AlbumArtist',
-        verbose_name='Исполнители, принявшие участие в альбоме'
+        verbose_name='Исполнители, принявшие участие в альбоме',
+        related_name='artist_albums',
     )
     genres = models.ManyToManyField(
         Genre,
