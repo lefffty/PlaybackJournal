@@ -56,5 +56,4 @@ class UserAdmin(admin.ModelAdmin):
 
     @admin.display(description='Количество оценок альбомов')
     def display_rated(self, obj):
-        print(obj.ratedalbums.count())
         return obj.ratedalbums.count()

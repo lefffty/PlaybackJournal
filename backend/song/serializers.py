@@ -18,7 +18,6 @@ class SongSimpleSerializer(serializers.Serializer):
     )
 
     def to_internal_value(self, data):
-        print(data)
         ret = super().to_internal_value(data)
         return {
             'song': ret['id']

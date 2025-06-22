@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
+from django.db.transaction import atomic
 
 from .models import (
     Playlist,
     PlaylistSong
 )
 from song.serializers import SongSerializer, SongSimpleSerializer
-from song.models import Song
 from users.serializers import UserSimpleSerializer
 
 
@@ -20,13 +20,14 @@ class PlaylistSerializer(serializers.ModelSerializer):
             'author',
             'name',
             'description',
+            'cover',
             'songs',
         )
 
 
 class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
     songs = SongSimpleSerializer(many=True)
-    image = Base64ImageField()
+    cover = Base64ImageField()
 
     class Meta:
         model = Playlist
@@ -34,7 +35,7 @@ class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'songs',
-            'image',
+            'cover',
         )
         extra_kwargs = {
             'name': {
@@ -46,7 +47,7 @@ class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
             'songs': {
                 'required': True,
             },
-            'image': {
+            'cover': {
                 'required': True,
             }
         }
@@ -55,7 +56,7 @@ class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
         if request and request.method == 'PATCH':
-            self.fields['image'].required = False
+            self.fields['cover'].required = False
 
     def validate_songs(self, value):
         if not value:
@@ -83,8 +84,8 @@ class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
             songs
         )
 
+    @atomic
     def create(self, validated_data):
-        print(validated_data)
         songs = validated_data.pop('songs')
         playlist = Playlist.objects.create(
             **validated_data,
@@ -92,9 +93,13 @@ class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
         self._save_songs(playlist, songs)
         return playlist
 
+    @atomic
     def update(self, instance, validated_data):
         songs = validated_data.pop('songs', None)
         super().update(instance, validated_data)
         self._save_songs(instance, songs)
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        return PlaylistSerializer(instance).data

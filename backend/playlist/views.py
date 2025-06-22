@@ -1,7 +1,6 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets
 from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated
+    IsAuthenticatedOrReadOnly,
 )
 from rest_framework.pagination import PageNumberPagination
 
@@ -9,29 +8,26 @@ from .serializers import (
     PlaylistSerializer,
     PlaylistCreateUpdateSerializer
 )
+from .permissions import OwnerOrReadOnly
 from .models import Playlist
 
 
-class PlaylistListDetailViewSet(
-    viewsets.GenericViewSet,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
+class PlaylistViewSet(
+    viewsets.ModelViewSet
 ):
     queryset = Playlist.objects.all()
-    serializer_class = PlaylistSerializer
     pagination_class = PageNumberPagination
-    permission_classes = [AllowAny]
+    # permission_classes = [IsAuthenticatedOrReadOnly, OwnerOrReadOnly]
 
+    def get_permissions(self):
+        if self.action in ('list', 'retrieve', 'create'):
+            return [IsAuthenticatedOrReadOnly()]
+        return [OwnerOrReadOnly()]
 
-class PlaylistCreateUpdateViewSet(
-    viewsets.GenericViewSet,
-    mixins.CreateModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-):
-    serializer_class = PlaylistCreateUpdateSerializer
-    permission_classes = [IsAuthenticated]
-    queryset = Playlist.objects.all()
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return PlaylistSerializer
+        return PlaylistCreateUpdateSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
