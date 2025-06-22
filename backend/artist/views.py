@@ -1,7 +1,7 @@
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import AllowAny
 
-from .serializers import ArtistSerilizer
+from .serializers import ArtistSerializer
 from .models import Artist
 
 
@@ -12,4 +12,4 @@ class ArtistViewSet(
 ):
     queryset = Artist.objects.all()
     permission_classes = [AllowAny]
-    serializer_class = ArtistSerilizer
+    serializer_class = ArtistSerializer
