@@ -13,15 +13,20 @@ class ArtistSimpleSerializer(serializers.ModelSerializer):
 
 
 class ArtistSerilizer(serializers.ModelSerializer):
-    similar_artists = serializers.StringRelatedField(
+    albums = serializers.StringRelatedField(
+        many=True,
+    )
+    genres = serializers.StringRelatedField(
         many=True,
     )
 
     class Meta:
         model = Artist
         fields = (
+            'id',
             'username',
             'description',
             'avatar',
-            'similar_artists'
+            'albums',
+            'genres',
         )

@@ -8,6 +8,7 @@ from .models import Artist
 class ArtistViewSet(
     viewsets.GenericViewSet,
     mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
 ):
     queryset = Artist.objects.all()
     permission_classes = [AllowAny]
