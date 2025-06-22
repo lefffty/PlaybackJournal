@@ -23,9 +23,8 @@ class Album(models.Model):
     )
     cover = models.ImageField(
         verbose_name='Обложка альбома',
-        blank=False,
-        null=False,
         upload_to='album_covers/',
+        default='default_images/default album cover.jpg',
     )
     artists = models.ManyToManyField(
         Artist,

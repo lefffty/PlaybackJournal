@@ -10,3 +10,16 @@ class SongSerializer(serializers.ModelSerializer):
             'name',
             'duration',
         )
+
+
+class SongSimpleSerializer(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Song.objects.all()
+    )
+
+    def to_internal_value(self, data):
+        print(data)
+        ret = super().to_internal_value(data)
+        return {
+            'song': ret['id']
+        }

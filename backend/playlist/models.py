@@ -34,6 +34,11 @@ class Playlist(models.Model):
         through='PlaylistSong',
         verbose_name='Песни в плейлисте',
     )
+    image = models.ImageField(
+        verbose_name='Аватар плейлиста',
+        upload_to='playlists_avatars/',
+        default='default_images/default playlist cover.jpg',
+    )
 
     class Meta:
         verbose_name = 'Плейлист'

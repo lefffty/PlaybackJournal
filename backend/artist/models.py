@@ -25,8 +25,7 @@ class Artist(models.Model):
     avatar = models.ImageField(
         upload_to='artist_avatars/',
         verbose_name='Изображение исполнителя',
-        blank=True,
-        null=True,
+        default='default_images/default artist avatar.png',
     )
     albums = models.ManyToManyField(
         'albums.Album',

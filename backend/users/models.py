@@ -40,9 +40,8 @@ class User(AbstractUser):
     )
     avatar = models.ImageField(
         verbose_name='Аватар пользователя',
-        blank=True,
-        null=True,
         upload_to='user_avatars/',
+        default='default_images/default user avatar.png',
     )
 
     REQUIRED_FIELDS = ['username']
