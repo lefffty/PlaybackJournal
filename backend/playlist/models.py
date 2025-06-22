@@ -34,7 +34,7 @@ class Playlist(models.Model):
         through='PlaylistSong',
         verbose_name='Песни в плейлисте',
     )
-    image = models.ImageField(
+    cover = models.ImageField(
         verbose_name='Аватар плейлиста',
         upload_to='playlists_avatars/',
         default='default_images/default playlist cover.jpg',
@@ -53,13 +53,13 @@ class PlaylistSong(models.Model):
     playlist = models.ForeignKey(
         Playlist,
         on_delete=models.CASCADE,
-        verbose_name='Плейлист',
+        verbose_name='Название плейлиста',
         related_name='playlist_songs',
     )
     song = models.ForeignKey(
         Song,
         on_delete=models.CASCADE,
-        verbose_name='Песня',
+        verbose_name='Название песни',
     )
 
     class Meta:
@@ -68,4 +68,4 @@ class PlaylistSong(models.Model):
         ordering = ('id',)
 
     def __str__(self) -> str:
-        return f'Песни плейлиста {self.playlist.name}'
+        return f'{self.playlist.name} - {self.song.name}'

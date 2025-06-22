@@ -27,6 +27,7 @@ class PlaylistCreateUpdateViewSet(
     viewsets.GenericViewSet,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
 ):
     serializer_class = PlaylistCreateUpdateSerializer
     permission_classes = [IsAuthenticated]
