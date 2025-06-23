@@ -6,7 +6,10 @@ from .models import (
     Playlist,
     PlaylistSong
 )
-from song.serializers import SongSerializer, SongSimpleSerializer
+from song.serializers import (
+    SongSerializer,
+    SongSimpleSerializer
+)
 from users.serializers import UserSimpleSerializer
 
 

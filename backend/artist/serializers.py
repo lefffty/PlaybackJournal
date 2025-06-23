@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-from .models import Artist, RelatedArtists
+from .models import (
+    Artist,
+    RelatedArtists
+)
+from genre.serializers import GenreSimpleSerializer
+from albums.models import Album
 
 
 class ArtistSimpleSerializer(serializers.ModelSerializer):
@@ -27,12 +32,23 @@ class RelatedArtistSerializer(serializers.ModelSerializer):
         )
 
 
+class AlbumArtistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = (
+            'id',
+            'name',
+        )
+
+
 class ArtistSerializer(serializers.ModelSerializer):
-    albums = serializers.StringRelatedField(
+    albums = AlbumArtistSerializer(
         many=True,
+        read_only=True,
     )
-    genres = serializers.StringRelatedField(
+    genres = GenreSimpleSerializer(
         many=True,
+        read_only=True,
     )
     similar = RelatedArtistSerializer(
         many=True,

@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from djoser.serializers import UserCreateSerializer, SetPasswordSerializer
+from djoser.serializers import (
+    UserCreateSerializer,
+    SetPasswordSerializer
+)
 from drf_extra_fields.fields import Base64ImageField
 
 from albums.models import (

@@ -17,7 +17,6 @@ class PlaylistViewSet(
 ):
     queryset = Playlist.objects.all()
     pagination_class = PageNumberPagination
-    # permission_classes = [IsAuthenticatedOrReadOnly, OwnerOrReadOnly]
 
     def get_permissions(self):
         if self.action in ('list', 'retrieve', 'create'):
