@@ -9,25 +9,44 @@ from song.serializers import SongSerializer
 
 
 class AlbumSerializer(serializers.ModelSerializer):
-    artists = ArtistSimpleSerializer(read_only=True, many=True)
-    genres = GenreSimpleSerializer(read_only=True, many=True)
-    songs = SongSerializer(read_only=True, many=True)
+    album_id = serializers.IntegerField(source='id')
+    album_artists = ArtistSimpleSerializer(
+        read_only=True,
+        many=True,
+        source='artists',
+    )
+    album_genres = GenreSimpleSerializer(
+        read_only=True,
+        many=True,
+        source='genres',
+    )
+    album_songs = SongSerializer(
+        read_only=True,
+        many=True,
+        source='songs',
+    )
+    album_name = serializers.CharField(source='name')
+    album_publication_date = serializers.DateField(source='publication_date')
+    album_cover = serializers.ImageField(source='cover')
 
     class Meta:
         model = Album
         fields = (
-            'id',
-            'name',
-            'publication_date',
-            'cover',
-            'artists',
-            'genres',
-            'songs',
+            'album_id',
+            'album_name',
+            'album_publication_date',
+            'album_cover',
+            'album_artists',
+            'album_genres',
+            'album_songs',
         )
 
 
 class AlbumSimpleSerializer(serializers.ModelSerializer):
-    artists = ArtistSimpleSerializer(read_only=True, many=True)
+    album_id = serializers.IntegerField(source='id')
+    album_name = serializers.CharField(source='name')
+    album_publication_date = serializers.DateField(source='publication_date')
+    album_artists = ArtistSimpleSerializer(read_only=True, many=True)
 
     class Meta:
         model = Album
@@ -35,5 +54,5 @@ class AlbumSimpleSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'publication_date',
-            'artists'
+            'album_artists',
         )

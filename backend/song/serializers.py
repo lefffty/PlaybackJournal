@@ -4,12 +4,16 @@ from .models import Song
 
 
 class SongSerializer(serializers.ModelSerializer):
+    song_name = serializers.CharField(source='name')
+    song_duration = serializers.TimeField(source='duration')
+    song_id = serializers.IntegerField(source='id')
+
     class Meta:
         model = Song
         fields = (
-            'id',
-            'name',
-            'duration',
+            'song_id',
+            'song_name',
+            'song_duration',
         )
 
 

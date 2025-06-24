@@ -9,48 +9,61 @@ from albums.models import Album
 
 
 class ArtistSimpleSerializer(serializers.ModelSerializer):
+    artist_username = serializers.CharField(source='username')
+    artist_avatar = serializers.ImageField(source='avatar')
+    artist_id = serializers.IntegerField(source='id')
+
     class Meta:
         model = Artist
         fields = (
-            'id',
-            'username',
-            'avatar'
+            'artist_id',
+            'artist_username',
+            'artist_avatar'
         )
 
 
 class RelatedArtistSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='related_artist.id')
-    username = serializers.CharField(source='related_artist.username')
-    avatar = serializers.ImageField(source='related_artist.avatar')
+    artist_id = serializers.IntegerField(source='related_artist.id')
+    artist_username = serializers.CharField(source='related_artist.username')
+    artist_avatar = serializers.ImageField(source='related_artist.avatar')
 
     class Meta:
         model = RelatedArtists
         fields = (
-            'id',
-            'username',
-            'avatar',
+            'artist_id',
+            'artist_username',
+            'artist_avatar',
         )
 
 
 class AlbumArtistSerializer(serializers.ModelSerializer):
+    album_id = serializers.IntegerField(source='id')
+    album_name = serializers.CharField(source='name')
+
     class Meta:
         model = Album
         fields = (
-            'id',
-            'name',
+            'album_id',
+            'album_name',
         )
 
 
 class ArtistSerializer(serializers.ModelSerializer):
-    albums = AlbumArtistSerializer(
+    artist_id = serializers.IntegerField(source='id')
+    artist_username = serializers.CharField(source='username')
+    artist_description = serializers.CharField(source='description')
+    artist_avatar = serializers.ImageField(source='avatar')
+    artist_albums = AlbumArtistSerializer(
         many=True,
         read_only=True,
+        source='albums',
     )
-    genres = GenreSimpleSerializer(
+    artist_genres = GenreSimpleSerializer(
         many=True,
         read_only=True,
+        source='genres',
     )
-    similar = RelatedArtistSerializer(
+    artist_similar = RelatedArtistSerializer(
         many=True,
         read_only=True,
         source='similar_artists'
@@ -59,11 +72,11 @@ class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artist
         fields = (
-            'id',
-            'username',
-            'description',
-            'avatar',
-            'albums',
-            'genres',
-            'similar'
+            'artist_id',
+            'artist_username',
+            'artist_description',
+            'artist_avatar',
+            'artist_albums',
+            'artist_genres',
+            'artist_similar'
         )

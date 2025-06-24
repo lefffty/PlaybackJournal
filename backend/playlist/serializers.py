@@ -14,18 +14,22 @@ from users.serializers import UserSimpleSerializer
 
 
 class PlaylistSerializer(serializers.ModelSerializer):
-    songs = SongSerializer(read_only=True, many=True)
-    author = UserSimpleSerializer(read_only=True)
+    playlist_id = serializers.IntegerField(source='id')
+    playlist_name = serializers.CharField(source='name')
+    playlist_description = serializers.CharField(source='description')
+    playlist_cover = serializers.ImageField(source='cover')
+    playlist_songs = SongSerializer(read_only=True, many=True, source='songs')
+    playlist_author = UserSimpleSerializer(read_only=True, source='author')
 
     class Meta:
         model = Playlist
         fields = (
-            'id',
-            'author',
-            'name',
-            'description',
-            'cover',
-            'songs',
+            'playlist_id',
+            'playlist_author',
+            'playlist_name',
+            'playlist_description',
+            'playlist_cover',
+            'playlist_songs',
         )
 
 
