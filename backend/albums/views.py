@@ -1,7 +1,11 @@
-from rest_framework import viewsets, mixins, status
+from rest_framework import (
+    viewsets,
+    mixins,
+    status,
+)
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated
@@ -12,8 +16,8 @@ from django.http import HttpRequest
 from .serializers import AlbumSerializer
 from .models import (
     Album,
-    ListenedAlbum,
     RatedAlbum,
+    ListenedAlbum,
     FavouriteAlbum
 )
 
@@ -25,7 +29,7 @@ class AlbumListDetailViewSet(
 ):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
 
 
@@ -33,6 +37,7 @@ class AlbumUserViewSet(
     viewsets.GenericViewSet
 ):
     permission_classes = [IsAuthenticated]
+    pagination_class = LimitOffsetPagination
 
     def _create_delete_album_user(self, request: HttpRequest, pk, model):
         album = get_object_or_404(Album, pk=pk)

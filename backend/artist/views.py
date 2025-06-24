@@ -2,6 +2,7 @@ from rest_framework import (
     viewsets,
     mixins
 )
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
 
 from .serializers import ArtistSerializer
@@ -16,3 +17,4 @@ class ArtistViewSet(
     queryset = Artist.objects.all()
     permission_classes = [AllowAny]
     serializer_class = ArtistSerializer
+    pagination_class = LimitOffsetPagination
