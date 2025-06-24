@@ -68,9 +68,18 @@ class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
             self.fields['cover'].required = False
 
     def validate_songs(self, value):
-        if not value:
+        print(value)
+
+        ids = [
+            song['song'].pk
+            for song in value
+        ]
+        print(ids)
+        print(set(ids))
+
+        if list(set(ids)) != ids:
             raise serializers.ValidationError(
-                detail='Нужно добавить хотя бы одну песню!'
+                'Песни не должны повторяться!'
             )
         return value
 

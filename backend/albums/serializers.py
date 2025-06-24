@@ -51,8 +51,8 @@ class AlbumSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
         fields = (
-            'id',
-            'name',
-            'publication_date',
+            'album_id',
+            'album_name',
+            'album_publication_date',
             'album_artists',
         )

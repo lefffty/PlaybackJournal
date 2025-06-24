@@ -58,6 +58,13 @@ class AlbumUserViewSet(
                         {'detail': 'Необходимо указать оценку.'},
                         status=status.HTTP_400_BAD_REQUEST
                     )
+                if not (0 <= rating <= 10):
+                    return Response(
+                        {
+                            'detail': 'Оценка должна быть в диапазоне от 0 до 10'
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
                 params['rating'] = rating
 
             model.objects.create(**params)
