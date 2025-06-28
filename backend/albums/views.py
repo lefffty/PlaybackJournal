@@ -7,18 +7,21 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import (
+    IsAuthenticated,
     AllowAny,
-    IsAuthenticated
 )
 from django.shortcuts import get_object_or_404
 from django.http import HttpRequest
 
-from .serializers import AlbumSerializer
+from .serializers import (
+    AlbumCreateSerializer,
+    AlbumSerializer,
+)
 from .models import (
-    Album,
-    RatedAlbum,
+    FavouriteAlbum,
     ListenedAlbum,
-    FavouriteAlbum
+    RatedAlbum,
+    Album,
 )
 
 
@@ -26,15 +29,24 @@ class AlbumListDetailViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
 ):
     queryset = Album.objects.all()
-    serializer_class = AlbumSerializer
     pagination_class = LimitOffsetPagination
-    permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        if self.action in ('create'):
+            return AlbumCreateSerializer
+        return AlbumSerializer
+
+    def get_permissions(self):
+        if self.action in ('create'):
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
-class AlbumUserViewSet(
-    viewsets.GenericViewSet
+class AlbumCreateUserViewSet(
+    viewsets.GenericViewSet,
 ):
     permission_classes = [IsAuthenticated]
     pagination_class = LimitOffsetPagination

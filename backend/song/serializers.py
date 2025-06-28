@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Song
+from artist.serializers import ArtistAlbumCreateSerializer
 
 
 class SongSerializer(serializers.ModelSerializer):
@@ -27,3 +28,15 @@ class SongSimpleSerializer(serializers.Serializer):
         return {
             'song': ret['id']
         }
+
+
+class SongAlbumCreateSerializer(serializers.ModelSerializer):
+    artists = ArtistAlbumCreateSerializer(many=True, required=False)
+
+    class Meta:
+        model = Song
+        fields = (
+            'name',
+            'duration',
+            'artists',
+        )

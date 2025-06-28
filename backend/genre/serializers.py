@@ -37,3 +37,15 @@ class GenreSerializer(serializers.ModelSerializer):
             'albums',
             'artists',
         )
+
+
+class GenreAlbumCreateSerializer(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Genre.objects.all(),
+    )
+
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+        return {
+            'genre': ret['id']
+        }

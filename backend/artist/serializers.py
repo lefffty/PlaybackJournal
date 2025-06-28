@@ -6,6 +6,7 @@ from .models import (
 )
 from genre.serializers import GenreSimpleSerializer
 from albums.models import Album
+from song.models import Song
 
 
 class ArtistSimpleSerializer(serializers.ModelSerializer):
@@ -80,3 +81,15 @@ class ArtistSerializer(serializers.ModelSerializer):
             'artist_genres',
             'artist_similar'
         )
+
+
+class ArtistAlbumCreateSerializer(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Artist.objects.all(),
+    )
+
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+        return {
+            'artist': ret['id']
+        }
