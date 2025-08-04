@@ -1,4 +1,4 @@
-# music_albums_tracker
+# PlaybackJournal
 
 ## Настройка PostgreSQL для проекта
 
