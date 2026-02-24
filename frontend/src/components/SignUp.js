@@ -63,7 +63,7 @@ const SignUp = props => {
                         onChange={onEmailChange}
                     />
                 </Form.Group>
-                <Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>
                         First name
                     </Form.Label>
@@ -74,7 +74,7 @@ const SignUp = props => {
                         onChange={onFirstNameChange}
                     />
                 </Form.Group>
-                <Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>
                         Last name
                     </Form.Label>
@@ -101,7 +101,7 @@ const SignUp = props => {
                         Password
                     </Form.Label>
                     <Form.Control
-                        type="password"
+                        type="text"
                         value={password}
                         placeholder="Enter password"
                         onChange={onPasswordChange}

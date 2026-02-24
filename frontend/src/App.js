@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
 
@@ -13,6 +13,9 @@ import Genres from './components/Genres';
 import Artists from './components/Artists';
 
 import UserService from './services/UserService';
+import Profile from './components/Profile';
+
+import axios from 'axios';
 
 function App() {
   const navigate = useNavigate();
@@ -23,31 +26,50 @@ function App() {
   async function login(user = null) {
     UserService.login(user)
     .then(
-      response => {
+      (response) => {
+        axios.defaults.headers['Authorization'] = 'Token ' + response.data.auth_token;
         setToken(response.data.auth_token);
         setUser(user);
+        localStorage.setItem('auth_token', response.data.auth_token);
+        localStorage.setItem('user', user);
         setError('');
       }
     )
     .catch(
-      e => {
-        console.log(e.toString());
+      (e) => {
+        setError(e.toString());
       }
     )
   }
 
   async function logout() {
-    setUser('');
-    setToken('');
-    localStorage.setItem('auth_token', '');
-    localStorage.setItem('user', '');
-    console.log('locaStorage', localStorage);
-    navigate('/');
+    console.log('Token inside logout ', token);
+    UserService.logout(token)
+    .then(
+      (response) => {
+        delete axios.defaults.headers['Authorization'];
+        setUser('');
+        setToken('');
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+        navigate('/albums');
+      }
+    )
+    .catch(
+      (e) => {
+        setError(e.toString());
+      }
+    )
   }
 
   async function signup(user = null){
-    setUser(user);
-  }
+    UserService.signup(user)
+    .catch(
+      (e) => {
+        setError(e.toString());
+      }
+    );
+  };
 
   return (
     <div className="App">
@@ -79,28 +101,33 @@ function App() {
       <div className='container mt-4'>
         <Routes>
           <Route
-          path='/genres'
-          element={<Genres/>}
+            path='/profile'
+            element={<Profile token={token}/>}
           >
           </Route>
           <Route
-          path='/albums'
-          element={<Albums/>}
+            path='/genres'
+            element={<Genres/>}
           >
           </Route>
           <Route
-          path='/artists'
-          element={<Artists/>}
+            path='/albums'
+            element={<Albums/>}
           >
           </Route>
           <Route
-          path='/login'
-          element={<Login login={login}/>}
+            path='/artists'
+            element={<Artists/>}
           >
           </Route>
           <Route
-          path='/signup'
-          element={<SignUp signup={signup}/>}
+            path='/login'
+            element={<Login login={login}/>}
+          >
+          </Route>
+          <Route
+            path='/signup'
+            element={<SignUp signup={signup}/>}
           >
           </Route>
         </Routes>
