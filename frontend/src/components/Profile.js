@@ -6,16 +6,19 @@ import { Card, Row, Col } from 'react-bootstrap';
 import Alert from 'react-bootstrap/Alert';
 import {FaUser, FaAt, FaCalendarAlt, FaEnvelope} from 'react-icons/fa';
 import Container from 'react-bootstrap/Container';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 
 const Profile = props => {
     const [profile, setProfile] = useState('');
+    const location = useLocation()
+    const token = localStorage.getItem('auth_token');
 
     useEffect(
         () => {
             retrieveProfile();
-        }, [props.token]
+        }, [token]
     );
 
     useEffect(
@@ -26,7 +29,7 @@ const Profile = props => {
     );
 
     const retrieveProfile = () => {
-        UserService.profile(props.token)
+        UserService.profile(token)
         .then(
             (response) => {
                 setProfile(response.data);
@@ -40,7 +43,7 @@ const Profile = props => {
 
     return (
         <Container>
-            {props.token == null || props.token === "" ? (
+            {token == null || token === "" ? (
                 <Alert variant="warning">
                     You are not logged in. Please <Link to={"/login"}>login</Link>.
                 </Alert>

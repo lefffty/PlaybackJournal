@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-
-import AlbumService from '../services/AlbumService';
-import Album from "./Album";
 import { Link, useLocation } from "react-router-dom";
 import moment from 'moment';
+
+import AlbumService from '../services/AlbumService';
 
 const Albums = (props) => {
     const [albums, setAlbums] = useState([]);
@@ -59,29 +58,29 @@ const Albums = (props) => {
                             <Row className="g-0">
                                 <Col md={4}>
                                 <Card.Img
-                                    src={album.album_cover}
+                                    src={album.cover}
                                 />
                                 </Col>
                                 <Col md={8}>
                                 <Card.Body>
                                     <Card.Title>
-                                        {album.album_name}
+                                        {album.name}
                                     </Card.Title>
                                     <Card.Text>
-                                        Авторы: {album.album_artists.reduce((accumulator, currentValue) => {
-                                            return accumulator.concat(currentValue.artist_username);
+                                        Авторы: {album.artists.reduce((accumulator, currentValue) => {
+                                            return accumulator.concat(currentValue.username);
                                         }, []).join(', ')}
                                     </Card.Text>
                                     <Card.Text>
-                                        Выпущен: {moment(album.album_publication_date).format('Do MMMM YYYY')}
+                                        Выпущен: {moment(album.publication_date).format('Do MMMM YYYY')}
                                     </Card.Text>
                                     <Card.Text>
-                                        Жанры: {album.album_genres.reduce((accumulator, currentValue) => {
-                                            return accumulator.concat(currentValue.genre_name);
+                                        Жанры: {album.genres.reduce((accumulator, currentValue) => {
+                                            return accumulator.concat(currentValue.name);
                                         }, []
                                         ).join(', ')}
                                     </Card.Text>
-                                    <Link to={`/albums/${album.album_id}/`} state={{album}}>
+                                    <Link to={`/albums/${album.id}/`} state={{album}}>
                                         <Button>
                                             К альбому
                                         </Button>

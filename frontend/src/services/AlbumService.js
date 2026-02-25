@@ -1,13 +1,17 @@
-import axios from "axios";
+import AxiosInstance from "../components/AxiosInstance";
 
 
 class AlbumService{
     readAlbums(){
-        return axios.get("http://localhost:8000/api/albums/");
+        return AxiosInstance.get("/api/albums/");
     }
 
     readAlbum(id){
-        return axios.get(`htt://localhost:8000/api/albums/${id}/`);
+        return AxiosInstance.get(`/api/albums/${id}/`);
+    }
+
+    rateAlbum(id, data){
+        return AxiosInstance.post(`/api/albums/${id}/rated/`, data);
     }
 }
 
