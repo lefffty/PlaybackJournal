@@ -19,6 +19,9 @@ class ArtistSimpleSerializer(serializers.ModelSerializer):
 
 
 class RelatedArtistSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='related_artist.username')
+    avatar = serializers.ImageField(source='related_artist.avatar')
+
     class Meta:
         model = RelatedArtists
         fields = (

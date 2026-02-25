@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from typing import Dict
+from statistics import mean
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
 
 from .models import (
     AlbumArtist,
     AlbumGenre,
+    RatedAlbum,
     AlbumSong,
     Album,
     Song,
@@ -27,13 +29,12 @@ class AlbumSerializer(serializers.ModelSerializer):
     artists = ArtistSimpleSerializer(
         read_only=True,
         many=True,
-        source='artists',
     )
     genres = GenreSimpleSerializer(
         read_only=True,
         many=True,
-        source='genres',
     )
+    average_rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Album
@@ -41,10 +42,18 @@ class AlbumSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'publication_date',
+            'average_rating',
             'cover',
             'artists',
             'genres',
         )
+
+    def get_average_rating(self, obj: Album):
+        instances = RatedAlbum.objects.filter(album=obj)
+        if not instances:
+            return '-'
+        ratings = list(map(lambda instance: instance.rating, instances))
+        return mean(ratings)
 
 
 class AlbumSimpleSerializer(serializers.ModelSerializer):
