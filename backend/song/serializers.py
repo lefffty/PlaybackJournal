@@ -5,16 +5,12 @@ from artist.serializers import ArtistAlbumCreateSerializer
 
 
 class SongSerializer(serializers.ModelSerializer):
-    song_name = serializers.CharField(source='name')
-    song_duration = serializers.TimeField(source='duration')
-    song_id = serializers.IntegerField(source='id')
-
     class Meta:
         model = Song
         fields = (
-            'song_id',
-            'song_name',
-            'song_duration',
+            'id',
+            'name',
+            'duration',
         )
 
 

@@ -7,9 +7,7 @@ from .models import (
     AlbumArtist,
     AlbumGenre,
     AlbumSong,
-    Artist,
     Album,
-    Genre,
     Song,
 )
 from artist.serializers import (
@@ -22,57 +20,43 @@ from genre.serializers import (
 )
 from song.serializers import (
     SongAlbumCreateSerializer,
-    SongSerializer,
 )
 
 
 class AlbumSerializer(serializers.ModelSerializer):
-    album_id = serializers.IntegerField(source='id')
-    album_artists = ArtistSimpleSerializer(
+    artists = ArtistSimpleSerializer(
         read_only=True,
         many=True,
         source='artists',
     )
-    album_genres = GenreSimpleSerializer(
+    genres = GenreSimpleSerializer(
         read_only=True,
         many=True,
         source='genres',
     )
-    album_songs = SongSerializer(
-        read_only=True,
-        many=True,
-        source='songs',
-    )
-    album_name = serializers.CharField(source='name')
-    album_publication_date = serializers.DateField(source='publication_date')
-    album_cover = serializers.ImageField(source='cover')
 
     class Meta:
         model = Album
         fields = (
-            'album_id',
-            'album_name',
-            'album_publication_date',
-            'album_cover',
-            'album_artists',
-            'album_genres',
-            'album_songs',
+            'id',
+            'name',
+            'publication_date',
+            'cover',
+            'artists',
+            'genres',
         )
 
 
 class AlbumSimpleSerializer(serializers.ModelSerializer):
-    album_id = serializers.IntegerField(source='id')
-    album_name = serializers.CharField(source='name')
-    album_publication_date = serializers.DateField(source='publication_date')
     album_artists = ArtistSimpleSerializer(read_only=True, many=True)
 
     class Meta:
         model = Album
         fields = (
-            'album_id',
-            'album_name',
-            'album_publication_date',
-            'album_artists',
+            'id',
+            'name',
+            'publication_date',
+            'artists',
         )
 
 
