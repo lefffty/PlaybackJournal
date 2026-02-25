@@ -12,7 +12,7 @@ import Button from "react-bootstrap/Button";
 
 const Profile = props => {
     const [profile, setProfile] = useState('');
-    const location = useLocation()
+    const [file, setFile] = useState(null);
     const token = localStorage.getItem('auth_token');
 
     useEffect(
@@ -48,31 +48,47 @@ const Profile = props => {
                     You are not logged in. Please <Link to={"/login"}>login</Link>.
                 </Alert>
             ) : (
-                <Card>
-                <Row className="g-0">
-                    <Col md={4}>
-                    <Card.Img
-                        src={`http://localhost:8000/${profile.avatar}`}
-                        style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                    />
-                    </Col>
-                    <Col md={8}>
-                    <Card.Body>
-                        <Card.Title>
-                            <FaUser className="me-2 fs-1"/> {profile.first_name} {profile.last_name}
-                        </Card.Title>
-                        <Card.Text>
-                            <FaAt className="me-2 fs-1"/> {profile.username}
-                        </Card.Text>
-                        <Card.Text>
-                            <FaEnvelope className="me-2 fs-1"/> {profile.email}
-                        </Card.Text>
-                        <Card.Text>
-                            <FaCalendarAlt className="me-2 fs-1"/> {moment(profile.registration_date).format('Do MMMM YYYY')}
-                        </Card.Text>
-                    </Card.Body>
-                    </Col>
-                </Row>
+                <Card className="mx-auto" style={{ maxWidth: '900px'}}>
+                    <Row className="g-0">
+                        <Col md={4}>
+                            <Card.Img
+                                src={`http://localhost:8000/${profile.avatar}`}
+                                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                            />
+                        </Col>
+                        <Col md={8}>
+                            <Card.Body>
+                                <Card.Title className="fs-2">
+                                    <FaUser className="me-2 fs-1"/> {profile.first_name} {profile.last_name}
+                                </Card.Title>
+                                <Card.Text className="fs-4">
+                                    <FaAt className="me-2 fs-1"/> {profile.username}
+                                </Card.Text>
+                                <Card.Text className="fs-4">
+                                    <FaEnvelope className="me-2 fs-1"/> {profile.email}
+                                </Card.Text>
+                                <Card.Text className="fs-4">
+                                    <FaCalendarAlt className="me-2 fs-1"/> {moment(profile.registration_date).format('Do MMMM YYYY')}
+                                </Card.Text>
+                                <Row className="mt-4">
+                                    <Col xs={6} className="d-flex justify-content-center">
+                                        <Link to={"/profile/password"}>
+                                            <Button variant="primary">
+                                                Change password
+                                            </Button>
+                                        </Link>
+                                    </Col>
+                                    <Col xs={6} className="d-flex justify-content-center">
+                                        <Link to={"/profile/avatar"}>
+                                            <Button variant="secondary">
+                                                Change avatar
+                                            </Button>
+                                        </Link>
+                                    </Col>
+                                </Row>
+                            </Card.Body>
+                        </Col>
+                    </Row>
                 </Card>
             )}
         </Container>

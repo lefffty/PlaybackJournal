@@ -12,13 +12,11 @@ import Albums from './components/Albums';
 import Genres from './components/Genres';
 import Artists from './components/Artists';
 import Album from './components/Album';
+import Password from './components/Password';
+import Avatar from './components/Avatar';
 
 import UserService from './services/UserService';
 import Profile from './components/Profile';
-import Avatar from './components/Avatar';
-import Password from './components/Password';
-
-import axios from 'axios';
 
 function App() {
   const navigate = useNavigate();
@@ -26,14 +24,27 @@ function App() {
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
 
+  useEffect(
+    () => {
+      const savedToken = localStorage.getItem('auth_token');
+      const savedUser = localStorage.getItem('user');
+      if (savedUser && savedToken){
+        setToken(token);
+        setUser(savedUser);
+      } else{
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+      }
+    }, []);
+
   async function login(user = null) {
     UserService.login(user)
     .then(
       (response) => {
-        axios.defaults.headers['Authorization'] = 'Token ' + response.data.auth_token;
-        setToken(response.data.auth_token);
+        const token = response.data.auth_token;
+        localStorage.setItem('auth_token', token);
+        setToken(token);
         setUser(user);
-        localStorage.setItem('auth_token', response.data.auth_token);
         localStorage.setItem('user', user);
         setError('');
       }
@@ -46,13 +57,11 @@ function App() {
   }
 
   async function logout() {
-    console.log('Token inside logout ', token);
     UserService.logout(token)
     .then(
-      (response) => {
-        delete axios.defaults.headers['Authorization'];
-        setUser('');
-        setToken('');
+      (_) => {
+        setUser(null);
+        setToken(null);
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user');
         navigate('/albums');
@@ -136,6 +145,16 @@ function App() {
           <Route
             path='/albums/:id/'
             element={<Album />}
+          >
+          </Route>
+          <Route
+            path='/profile/password'
+            element={<Password/>}
+          >
+          </Route>
+          <Route
+            path='/profile/avatar'
+            element={<Avatar/>}
           >
           </Route>
         </Routes>
