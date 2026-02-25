@@ -11,9 +11,12 @@ import Login from './components/Login';
 import Albums from './components/Albums';
 import Genres from './components/Genres';
 import Artists from './components/Artists';
+import Album from './components/Album';
 
 import UserService from './services/UserService';
 import Profile from './components/Profile';
+import Avatar from './components/Avatar';
+import Password from './components/Password';
 
 import axios from 'axios';
 
@@ -128,6 +131,11 @@ function App() {
           <Route
             path='/signup'
             element={<SignUp signup={signup}/>}
+          >
+          </Route>
+          <Route
+            path='/albums/:id/'
+            element={<Album />}
           >
           </Route>
         </Routes>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 
 import AlbumService from '../services/AlbumService';
-import { useLocation } from "react-router-dom";
+import Album from "./Album";
+import { Link, useLocation } from "react-router-dom";
 import moment from 'moment';
 
 const Albums = (props) => {
@@ -54,7 +55,7 @@ const Albums = (props) => {
             {albums.map(
                 (album) => {
                     return (
-                        <Card>
+                        <Card className="w-55 mb-3">
                             <Row className="g-0">
                                 <Col md={4}>
                                 <Card.Img
@@ -80,17 +81,11 @@ const Albums = (props) => {
                                         }, []
                                         ).join(', ')}
                                     </Card.Text>
-                                    <Card.Text>
-                                        Песни: {album.album_songs.map(
-                                            (album_song) => {
-                                                return (
-                                                    <Card.Text>
-                                                        {`${album_song.song_name} - ${album_song.song_duration}`}
-                                                    </Card.Text>
-                                                )
-                                            }
-                                        )}
-                                    </Card.Text>
+                                    <Link to={`/albums/${album.album_id}/`} state={{album}}>
+                                        <Button>
+                                            К альбому
+                                        </Button>
+                                    </Link>
                                 </Card.Body>
                                 </Col>
                             </Row>
