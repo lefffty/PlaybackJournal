@@ -8,17 +8,21 @@ import Container from 'react-bootstrap/Navbar';
 
 import SignUp from './components/SignUp';
 import Login from './components/Login';
-import Albums from './components/Albums';
-import Genres from './components/Genres';
-import Genre from './components/Genre';
-import Artists from './components/Artists';
-import Album from './components/Album';
 import Password from './components/Password';
 import Avatar from './components/Avatar';
 import Profile from './components/Profile';
-
 import UserService from './services/UserService';
+
+import Albums from './components/Albums';
+import Album from './components/Album';
+
+import Genres from './components/Genres';
+import Genre from './components/Genre';
+
+import Artists from './components/Artists';
 import Artist from './components/Artist';
+import ArtistList from './components/ArtistList';
+
 
 function App() {
   const navigate = useNavigate();
@@ -118,6 +122,16 @@ function App() {
       </Navbar>
       <div className='container mt-4'>
         <Routes>
+          <Route
+            path='/artists/:id/discography/'
+            element={<ArtistList dataType="discography"/>}
+          >
+          </Route>
+          <Route
+            path='/artists/:id/similar/'
+            element={<ArtistList dataType="similar"/>}
+          >
+          </Route>
           <Route
             path='/'
             element={<Albums/>}

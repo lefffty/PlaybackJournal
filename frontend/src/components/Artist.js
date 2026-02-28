@@ -88,7 +88,7 @@ const Artist = (props) => {
                         <Card.Header className="fs-3 mb-3">
                             <div className="d-flex align-items-end" style={{height: '50px'}}>
                                 <Link
-                                    to={"#"}
+                                    to={`/artists/${artist.id}/discography/`}
                                     className="text-decoration-none"
                                     style={{
                                         color: "black"
@@ -99,7 +99,7 @@ const Artist = (props) => {
                                     </Card.Text>
                                 </Link>
                                 <Link
-                                    to={"#"}
+                                    to={`/artists/${artist.id}/discography/`}
                                     style={{
                                         color: "black"
                                     }}
@@ -149,7 +149,7 @@ const Artist = (props) => {
                         <Card.Header  className="fs-3 mb-3">
                             <div className="d-flex align-items-end">
                                 <Link
-                                    to={"#"}
+                                    to={`/artists/${artist.id}/similar/`}
                                     className="text-decoration-none"
                                     style={{
                                         color: "black"
@@ -160,7 +160,7 @@ const Artist = (props) => {
                                     </Card.Text>
                                 </Link>
                                 <Link
-                                    to={"#"}
+                                    to={`/artists/${artist.id}/similar/`}
                                     style={{
                                         color: "black"
                                     }}

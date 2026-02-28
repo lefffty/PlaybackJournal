@@ -6,7 +6,15 @@ class ArtistService{
     }
 
     readArtist(id){
-        return AxiosInstance.get(`/api/artists/${id}/`)
+        return AxiosInstance.get(`/api/artists/${id}/`);
+    }
+
+    readDiscography(id){
+        return AxiosInstance.get(`/api/artists/${id}/discography/`);
+    }
+
+    readSimilar(id) {
+        return AxiosInstance.get(`/api/artists/${id}/similar/`);
     }
 }
 
