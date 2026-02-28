@@ -1,23 +1,29 @@
-import axios from 'axios';
+import AxiosInstance from "../components/AxiosInstance";
 
 
 class UserService {
-    profile(token){
-        axios.defaults.headers['Authorization'] = 'Token ' + token;
-        return axios.get("http://localhost:8000/api/users/me/");
+    profile(){
+        return AxiosInstance.get("/api/users/me/");
     }
 
     login(data){
-        return axios.post("http://localhost:8000/api/auth/token/login/", data);
+        return AxiosInstance.post("/api/auth/token/login/", data);
     }
 
-    logout(token){
-        axios.defaults.headers['Authorization'] = 'Token ' + token;
-        return axios.post("http://localhost:8000/api/auth/token/logout/");
+    logout(){
+        return AxiosInstance.post("/api/auth/token/logout/");
     }
 
     signup(data){
-        return axios.post("http://localhost:8000/api/users/", data);
+        return AxiosInstance.post("/api/users/", data);
+    }
+
+    setPassword(data){
+        return AxiosInstance.post("/api/users/set_password/", data);
+    }
+
+    setAvatar(data){
+        return AxiosInstance.put("/api/users/me/avatar/", data);
     }
 }
 
