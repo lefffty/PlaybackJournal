@@ -48,7 +48,7 @@ const Artists = (props) => {
                 (artist) => (
                     <Col key={artist.id} xs={12} className="mb-3">
                         <Card>
-                            <Link to={`/artist/${artist.id}/`}>
+                            <Link to={`/artists/${artist.id}/`}>
                                 <Card.Img
                                     variant="top"
                                     src={artist.avatar}
@@ -56,7 +56,7 @@ const Artists = (props) => {
                             </Link>
                             <Card.Body>
                                 <Card.Title className="text-center">
-                                    <Link to={`/artist/${artist.id}/`} className="text-decoration-none">
+                                    <Link to={`/artists/${artist.id}/`} className="text-decoration-none">
                                         {artist.username}
                                     </Link>
                                 </Card.Title>

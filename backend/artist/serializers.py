@@ -21,6 +21,7 @@ class ArtistSimpleSerializer(serializers.ModelSerializer):
 class RelatedArtistSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='related_artist.username')
     avatar = serializers.ImageField(source='related_artist.avatar')
+    id = serializers.IntegerField(source='related_artist.id')
 
     class Meta:
         model = RelatedArtists
@@ -36,6 +37,7 @@ class AlbumArtistSerializer(serializers.ModelSerializer):
         model = Album
         fields = (
             'id',
+            'cover',
             'name',
         )
 

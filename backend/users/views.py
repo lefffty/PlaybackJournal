@@ -3,6 +3,7 @@ from rest_framework import (
     mixins,
     status
 )
+from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import (
@@ -12,6 +13,7 @@ from rest_framework.permissions import (
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest
+from django.db.models import Model
 
 from .serializers import (
     UserCreateSerializer,
@@ -95,6 +97,7 @@ class NewPasswordViewSet(
             }
         )
         serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(
             status=status.HTTP_204_NO_CONTENT,
         )
@@ -105,7 +108,12 @@ class UserAlbumsListsViewSet(
 ):
     permission_classes = [IsAuthenticated]
 
-    def _get_albums_list(self, request, model, serializer):
+    def _get_albums_list(
+        self,
+        request: HttpRequest,
+        model: Model,
+        serializer: serializers.ModelSerializer
+    ):
         user = request.user
         objects = model.objects.filter(
             user=user,

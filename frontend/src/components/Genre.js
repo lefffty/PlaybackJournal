@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import { useParams, Link } from "react-router-dom";
 import { Card, Row, Col } from "react-bootstrap";
+import {FaAngleRight} from 'react-icons/fa';
 
 import GenreService from "../services/GenreService";
+import './Genre.css';
 
 const Genre = (props) => {
     const params = useParams(null);
@@ -52,16 +54,23 @@ const Genre = (props) => {
                     <Card.Body>
                         <Row md={2}>
                             <Col>
-                                <Card.Title>
+                                <Card.Title className="fs-2">
                                     {genre.name}
                                 </Card.Title>
                             </Col>
                         </Row>
-                        <Card.Text>
+                        <Card.Text className="fs-4">
                             {genre.description}
                         </Card.Text>
-                        <Card.Header className="fs-6 mb-3">
-                            <b>Artists</b>
+                        <Card.Header className="fs-3 mb-3">
+                            <div className="d-flex align-items-end" style={{height: '50px'}}>
+                                <Card.Text className="mb-0 me-2">
+                                    <b>Исполнители</b>
+                                </Card.Text>
+                                <Link to={'#'} style={{color: "black"}}>
+                                    <FaAngleRight className="hover-shift"/>
+                                </Link>
+                            </div>
                         </Card.Header>
                         <Row className="g-0">
                             {genre.artists.map(
@@ -73,13 +82,17 @@ const Genre = (props) => {
                                                     src={`http://localhost:8000/${artist.avatar}`}
                                                     style={{
                                                         borderRadius: '50%',
-                                                        width: '100px',
-                                                        height: '100px',
+                                                        width: '240px',
+                                                        height: '240px',
                                                         objectFit: 'cover'
                                                     }}
                                                     />
                                             </Link>
-                                            <Link to={`/artists/${artist.id}/`} className="text-decoration-none">
+                                            <Link
+                                                to={`/artists/${artist.id}/`}
+                                                className="text-decoration-none fs-5"
+                                                style={{color: "black"}}
+                                            >
                                                 <Col>
                                                     {artist.username}
                                                 </Col>
@@ -89,8 +102,15 @@ const Genre = (props) => {
                                 }
                             )}
                         </Row>
-                        <Card.Header className="fs-6 mb-3">
-                            <b>Albums</b>
+                        <Card.Header className="fs-3 mb-3">
+                            <div className="d-flex align-items-end" style={{height: '50px'}}>
+                                <Card.Text className="mb-0 me-2">
+                                    <b>Альбомы</b>
+                                </Card.Text>
+                                <Link to={'#'} style={{color: "black"}}>
+                                    <FaAngleRight className="hover-shift"/>
+                                </Link>
+                            </div>
                         </Card.Header>
                         <Row className="g-0">
                             {genre.albums.map(
@@ -101,14 +121,18 @@ const Genre = (props) => {
                                                 <Card.Img
                                                     src={`http://localhost:8000/${album.cover}`}
                                                     style={{
-                                                        borderRadius: '50%',
-                                                        width: '100px',
-                                                        height: '100px',
+                                                        borderRadius: '75%',
+                                                        width: '240px',
+                                                        height: '240px',
                                                         objectFit: 'cover'
                                                     }}
                                                     />
                                             </Link>
-                                            <Link to={`/albums/${album.id}/`} className="text-decoration-none">
+                                            <Link
+                                                to={`/albums/${album.id}/`}
+                                                className="text-decoration-none fs-5"
+                                                style={{color: "black"}}
+                                            >
                                                 <Col>
                                                     {album.name}
                                                 </Col>

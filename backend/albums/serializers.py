@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from typing import Dict
 from statistics import mean
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
@@ -22,6 +21,7 @@ from genre.serializers import (
 )
 from song.serializers import (
     SongAlbumCreateSerializer,
+    SongSerializer,
 )
 
 
@@ -34,6 +34,7 @@ class AlbumSerializer(serializers.ModelSerializer):
         read_only=True,
         many=True,
     )
+    songs = SongSerializer(read_only=True, many=True)
     average_rating = serializers.SerializerMethodField()
 
     class Meta:
@@ -44,6 +45,7 @@ class AlbumSerializer(serializers.ModelSerializer):
             'publication_date',
             'average_rating',
             'cover',
+            'songs',
             'artists',
             'genres',
         )
@@ -57,7 +59,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class AlbumSimpleSerializer(serializers.ModelSerializer):
-    album_artists = ArtistSimpleSerializer(read_only=True, many=True)
+    artists = ArtistSimpleSerializer(read_only=True, many=True)
 
     class Meta:
         model = Album
@@ -92,7 +94,7 @@ class AlbumCreateSerializer(serializers.ModelSerializer):
         }
 
     @atomic
-    def create(self, validated_data: Dict):
+    def create(self, validated_data: dict):
         songs = validated_data.pop('songs')
         genres = validated_data.pop('genres')
         artists = validated_data.pop('artists')
@@ -122,3 +124,13 @@ class AlbumCreateSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return AlbumSerializer(instance).data
+
+
+class AlbumGenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = (
+            'id',
+            'name',
+            'cover'
+        )

@@ -10,6 +10,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
     AllowAny,
 )
+from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.http import HttpRequest
 
@@ -45,26 +46,51 @@ class AlbumListDetailViewSet(
         return [AllowAny()]
 
 
+class UserAlbumViewSet(
+    viewsets.GenericViewSet
+):
+    permission_classes = [IsAuthenticated]
+
+    @action(
+        detail=True,
+        url_path='user_album',
+    )
+    def user_album(self, request: HttpRequest, pk):
+        user = request.user
+        album = get_object_or_404(Album, pk=pk)
+        response = {
+            'listened': False,
+            'liked': False,
+            'rating': 0,
+        }
+        if ListenedAlbum.objects.filter(user=user, album=album).exists():
+            response['listened'] = True
+        if FavouriteAlbum.objects.filter(user=user, album=album).exists():
+            response['liked'] = True
+        if RatedAlbum.objects.filter(user=user, album=album).exists():
+            instance = RatedAlbum.objects.get(user=user, album=album)
+            response['rating'] = instance.rating
+        return Response(response, status=status.HTTP_200_OK)
+
+
 class AlbumCreateUserViewSet(
     viewsets.GenericViewSet,
 ):
     permission_classes = [IsAuthenticated]
-    pagination_class = LimitOffsetPagination
 
-    def _create_delete_album_user(self, request: HttpRequest, pk, model):
+    def _create_delete_album_user(self, request: HttpRequest, pk, model: Model):
         album = get_object_or_404(Album, pk=pk)
         user = request.user
 
-        if request.method == 'POST':
-            if model.objects.filter(user=user, album=album).exists():
-                return Response(
-                    {'detail': 'Связь альбом-пользователь уже существует'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        params = {
+            'user': user,
+            'album': album,
+        }
 
-            params = {'user': user, 'album': album}
-            if model == RatedAlbum:
-                rating = request.data.get('rating')
+        instance = model.objects.filter(user=user, album=album)
+        if model == RatedAlbum:
+            rating = request.data.get('rating')
+            if instance.exists():
                 if rating is None:
                     return Response(
                         {'detail': 'Необходимо указать оценку.'},
@@ -77,25 +103,24 @@ class AlbumCreateUserViewSet(
                         },
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-                params['rating'] = rating
-
+                instance.update(rating=rating)
+                return Response(
+                    status=status.HTTP_204_NO_CONTENT
+                )
+            params['rating'] = rating
+            model.objects.create(**params)
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            if instance.exists():
+                instance[0].delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
             model.objects.create(**params)
             return Response(status=status.HTTP_201_CREATED)
 
-        if request.method == 'DELETE':
-            instance = model.objects.filter(user=user, album=album)
-            if not instance.exists():
-                return Response(
-                    {'detail': 'Связи альбом-пользователь не существует'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
     @action(
-            detail=True,
-            methods=['POST', 'DELETE'],
-            url_path='favourite'
+        detail=True,
+        methods=['POST'],
+        url_path='favourite'
     )
     def favourite_albums(self, request, pk):
         return self._create_delete_album_user(
@@ -105,9 +130,9 @@ class AlbumCreateUserViewSet(
         )
 
     @action(
-            detail=True,
-            methods=['POST', 'DELETE'],
-            url_path='listened'
+        detail=True,
+        methods=['POST'],
+        url_path='listened'
     )
     def listened_albums(self, request, pk):
         return self._create_delete_album_user(
@@ -117,9 +142,9 @@ class AlbumCreateUserViewSet(
         )
 
     @action(
-            detail=True,
-            methods=['POST', 'DELETE'],
-            url_path='rated'
+        detail=True,
+        methods=['POST'],
+        url_path='rated'
     )
     def rated_albums(self, request: HttpRequest, pk):
         return self._create_delete_album_user(

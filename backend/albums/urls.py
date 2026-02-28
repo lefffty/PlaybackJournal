@@ -4,6 +4,7 @@ from django.urls import path, include
 from .views import (
     AlbumListDetailViewSet,
     AlbumCreateUserViewSet,
+    UserAlbumViewSet
 )
 
 
@@ -17,6 +18,11 @@ router.register(
     r'albums',
     AlbumCreateUserViewSet,
     basename='album_user',
+)
+router.register(
+    r'albums',
+    UserAlbumViewSet,
+    basename='user_album',
 )
 
 urlpatterns = [

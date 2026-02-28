@@ -136,7 +136,20 @@ const Album = (props) => {
                                     </Card.Title>
                                     <Card.Text className="fs-3">
                                         <span className="text-muted fs-5">Исполнители: </span>
-                                        <span>{album.artists.map(art => art.username).join(', ')}</span>
+                                        <span>{album.artists.map(
+                                            (artist, index) => (
+                                                <React.Fragment>
+                                                    <Link
+                                                        className="text-decoration-none"
+                                                        to={`/artists/${artist.id}/`}
+                                                        >
+                                                        {artist.username}
+                                                    </Link>
+                                                    {index < album.artists.length - 1 && ', '}
+                                                    </React.Fragment>
+                                            )
+                                        )}
+                                        </span>
                                     </Card.Text>
                                     <Card.Text className="fs-3">
                                         <span className="text-muted fs-5">Жанры: </span>
