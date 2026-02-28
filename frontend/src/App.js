@@ -14,9 +14,9 @@ import Artists from './components/Artists';
 import Album from './components/Album';
 import Password from './components/Password';
 import Avatar from './components/Avatar';
+import Profile from './components/Profile';
 
 import UserService from './services/UserService';
-import Profile from './components/Profile';
 
 function App() {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ function App() {
         setToken(null);
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user');
-        navigate('/albums');
+        navigate('/login');
       }
     )
     .catch(
@@ -87,7 +87,11 @@ function App() {
     <div className="App">
       <Navbar bg='primary' variant='dark'>
         <div className='container-fluid'>
-          <Navbar.Brand> PlaybackJournal</Navbar.Brand>
+          <Navbar.Brand>
+            <Link className='nav-link' to={"/albums"}>
+              PlaybackJournal
+            </Link>
+          </Navbar.Brand>
           <Nav className='me-auto'>
             <Container>
               <Link class='nav-link' to={"/albums"}>Albums</Link>
@@ -113,6 +117,16 @@ function App() {
       <div className='container mt-4'>
         <Routes>
           <Route
+            path='/'
+            element={<Albums/>}
+          >
+          </Route>
+          <Route
+            path='/albums'
+            element={<Albums/>}
+          >
+          </Route>
+          <Route
             path='/profile'
             element={<Profile token={token}/>}
           >
@@ -120,11 +134,6 @@ function App() {
           <Route
             path='/genres'
             element={<Genres/>}
-          >
-          </Route>
-          <Route
-            path='/albums'
-            element={<Albums/>}
           >
           </Route>
           <Route

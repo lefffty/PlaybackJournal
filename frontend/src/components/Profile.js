@@ -21,13 +21,6 @@ const Profile = props => {
         }, [token]
     );
 
-    useEffect(
-        () => {
-            console.log('Profile updated: ', profile);
-        },
-        [profile]
-    );
-
     const retrieveProfile = () => {
         UserService.profile(token)
         .then(
