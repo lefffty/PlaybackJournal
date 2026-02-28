@@ -6,13 +6,12 @@ import { Card, Row, Col } from 'react-bootstrap';
 import Alert from 'react-bootstrap/Alert';
 import {FaUser, FaAt, FaCalendarAlt, FaEnvelope} from 'react-icons/fa';
 import Container from 'react-bootstrap/Container';
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 
 const Profile = props => {
     const [profile, setProfile] = useState('');
-    const [file, setFile] = useState(null);
     const token = localStorage.getItem('auth_token');
 
     useEffect(
@@ -38,7 +37,7 @@ const Profile = props => {
         <Container>
             {token == null || token === "" ? (
                 <Alert variant="warning">
-                    You are not logged in. Please <Link to={"/login"}>login</Link>.
+                    You are not logged in. Please <Link to={"/login/"}>login</Link>.
                 </Alert>
             ) : (
                 <Card className="mx-auto" style={{ maxWidth: '900px'}}>
@@ -65,14 +64,14 @@ const Profile = props => {
                                 </Card.Text>
                                 <Row className="mt-4">
                                     <Col xs={6} className="d-flex justify-content-center">
-                                        <Link to={"/profile/password"}>
+                                        <Link to={"/profile/password/"}>
                                             <Button variant="primary">
                                                 Change password
                                             </Button>
                                         </Link>
                                     </Col>
                                     <Col xs={6} className="d-flex justify-content-center">
-                                        <Link to={"/profile/avatar"}>
+                                        <Link to={"/profile/avatar/"}>
                                             <Button variant="secondary">
                                                 Change avatar
                                             </Button>

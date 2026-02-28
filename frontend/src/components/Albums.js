@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import moment from 'moment';
 
 import AlbumService from '../services/AlbumService';
@@ -64,14 +64,24 @@ const Albums = (props) => {
                                 <Col md={8}>
                                     <Card.Body>
                                         <Card.Title className="fs-2">
-                                            {album.name}
+                                            <Link to={`/albums/${album.id}/`} className="text-decoration-none">
+                                                {album.name}
+                                            </Link>
+
                                         </Card.Title>
                                         <Card.Text className="fs-4">
                                             <span className="text-muted fs-6">Авторы: </span>
-                                            <span> 
-                                                {album.artists.reduce((accumulator, currentValue) => {
-                                                    return accumulator.concat(currentValue.username);
-                                                }, []).join(', ')}
+                                            <span>
+                                                {album.artists.map(
+                                                    (artist, index) => (
+                                                        <React.Fragment>
+                                                            <Link to={`/artists/${artist.id}/`} className="text-decoration-none">
+                                                                {artist.username}
+                                                            </Link>
+                                                            {index < album.artists.length - 1 && ', '}
+                                                        </React.Fragment>
+                                                    )
+                                                )}
                                             </span>
                                         </Card.Text>
                                         <Card.Text className="fs-4">
@@ -83,17 +93,18 @@ const Albums = (props) => {
                                         <Card.Text className="fs-4">
                                             <span className="text-muted fs-6">Жанры: </span>
                                             <span>
-                                                {album.genres.reduce((accumulator, currentValue) => {
-                                                    return accumulator.concat(currentValue.name);
-                                                }, []
-                                                ).join(', ')}
+                                                {album.genres.map(
+                                                    (genre, index) => (
+                                                        <React.Fragment>
+                                                            <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
+                                                                {genre.name}
+                                                            </Link>
+                                                            {index < album.genres.length - 1 && ', '}
+                                                        </React.Fragment>
+                                                    )
+                                                )}
                                             </span>
                                         </Card.Text>
-                                        <Link to={`/albums/${album.id}/`} state={{album}}>
-                                            <Button>
-                                                К альбому
-                                            </Button>
-                                        </Link>
                                     </Card.Body>
                                 </Col>
                             </Row>

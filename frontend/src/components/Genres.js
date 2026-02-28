@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
-import {Button, Card, Col, Row} from 'react-bootstrap';
+import {Card} from 'react-bootstrap';
 
 import GenreService from "../services/GenreService";
 import { Link } from "react-router-dom";
@@ -16,7 +16,6 @@ const Genres = (props) => {
             .then(
                 (response) => {
                     setGenres(response.data.results);
-                    console.log(response.data.results);
                 }
             )
             .catch(
@@ -57,7 +56,7 @@ const Genres = (props) => {
                         <Card className="w-75 mb-3 mx-auto">
                             <Card.Body>
                                 <Card.Title>
-                                    <Link to={`/genres/${genre.id}/`}>
+                                    <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
                                         {genre.name}
                                     </Link>
                                 </Card.Title>

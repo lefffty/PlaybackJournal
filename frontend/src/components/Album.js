@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import {ListGroup, Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
@@ -140,7 +140,18 @@ const Album = (props) => {
                                     </Card.Text>
                                     <Card.Text className="fs-3">
                                         <span className="text-muted fs-5">Жанры: </span>
-                                        <span>{album.genres.map(genre => genre.name).join(', ')}</span>                                
+                                        <span>
+                                            {album.genres.map(
+                                                (genre, index) => (
+                                                    <React.Fragment>
+                                                        <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
+                                                            {genre.name}
+                                                        </Link>
+                                                        {index < album.genres.length - 1 && ', '}
+                                                    </React.Fragment>
+                                                )
+                                            )}
+                                        </span>
                                     </Card.Text>
                                     <Card.Text className="fs-3">
                                         <span className="text-muted fs-5">Выпущен: </span>
@@ -150,7 +161,7 @@ const Album = (props) => {
                                         <span className="text-muted fs-5">Средняя оценка: </span>
                                         <span>
                                             {album.average_rating !== "-" ? (
-                                                Intl.NumberFormat("en", {minimumFractionDigits: 2}).format(album.average_rating))
+                                                Intl.NumberFormat("en", {maximumFractionDigits: 2}).format(album.average_rating))
                                                 : (
                                                     "-"
                                                 )

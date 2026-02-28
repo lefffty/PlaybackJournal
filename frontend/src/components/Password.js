@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
@@ -58,7 +58,7 @@ const Password = (props) => {
             {token == null || token === '' ?
             (
                 <Alert variant="warning">
-                    You are not logged in. Please <Link to={"/login"}>login</Link>.
+                    You are not logged in. Please <Link to={"/login/"}>login</Link>.
                 </Alert>
             ) : (
                 <Card>

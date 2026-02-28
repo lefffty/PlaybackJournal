@@ -10,6 +10,7 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Albums from './components/Albums';
 import Genres from './components/Genres';
+import Genre from './components/Genre';
 import Artists from './components/Artists';
 import Album from './components/Album';
 import Password from './components/Password';
@@ -17,6 +18,7 @@ import Avatar from './components/Avatar';
 import Profile from './components/Profile';
 
 import UserService from './services/UserService';
+import Artist from './components/Artist';
 
 function App() {
   const navigate = useNavigate();
@@ -88,15 +90,15 @@ function App() {
       <Navbar bg='primary' variant='dark'>
         <div className='container-fluid'>
           <Navbar.Brand>
-            <Link className='nav-link' to={"/albums"}>
+            <Link className='nav-link' to={"/albums/"}>
               PlaybackJournal
             </Link>
           </Navbar.Brand>
           <Nav className='me-auto'>
             <Container>
-              <Link class='nav-link' to={"/albums"}>Albums</Link>
-              <Link class='nav-link' to={"/artists"}>Artists</Link>
-              <Link class='nav-link' to={"/genres"}>Genres</Link>
+              <Link class='nav-link' to={"/albums/"}>Albums</Link>
+              <Link class='nav-link' to={"/artists/"}>Artists</Link>
+              <Link class='nav-link' to={"/genres/"}>Genres</Link>
               {user ? (
                 <>
                   <Link class='nav-link' to={'/profile'}>Profile</Link>
@@ -107,7 +109,7 @@ function App() {
               ) : (
                 <>
                   <Link class='nav-link' to={'/login'}>Login</Link>
-                  <Link class='nav-link' to={'/signup'}>Sign Up</Link>
+                  <Link class='nav-link' to={'/signup/'}>Sign Up</Link>
                 </>
               )}
             </Container>
@@ -122,32 +124,37 @@ function App() {
           >
           </Route>
           <Route
-            path='/albums'
+            path='/albums/'
             element={<Albums/>}
           >
           </Route>
           <Route
-            path='/profile'
+            path='/profile/'
             element={<Profile token={token}/>}
           >
           </Route>
           <Route
-            path='/genres'
+            path='/genres/'
             element={<Genres/>}
           >
           </Route>
           <Route
             path='/artists'
-            element={<Artists/>}
+            element={<Artists />}
           >
           </Route>
           <Route
-            path='/login'
+            path='/artists/:id/'
+            element={<Artist />}
+          >
+          </Route>
+          <Route
+            path='/login/'
             element={<Login login={login}/>}
           >
           </Route>
           <Route
-            path='/signup'
+            path='/signup/'
             element={<SignUp signup={signup}/>}
           >
           </Route>
@@ -157,12 +164,17 @@ function App() {
           >
           </Route>
           <Route
-            path='/profile/password'
+            path='/genres/:id/'
+            element={<Genre />}
+          >
+          </Route>
+          <Route
+            path='/profile/password/'
             element={<Password/>}
           >
           </Route>
           <Route
-            path='/profile/avatar'
+            path='/profile/avatar/'
             element={<Avatar/>}
           >
           </Route>
