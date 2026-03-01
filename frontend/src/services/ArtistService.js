@@ -1,8 +1,8 @@
 import AxiosInstance from "../components/AxiosInstance";
 
 class ArtistService{
-    readArtists(){
-        return AxiosInstance.get("/api/artists/");
+    readArtists(page = 1){
+        return AxiosInstance.get(`/api/artists/?page=${page}`);
     }
 
     readArtist(id){
