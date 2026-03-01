@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import moment from 'moment';
 
-import AlbumService from '../services/AlbumService';
+import AlbumService from '../../services/AlbumService';
 
 const Albums = (props) => {
     const [albums, setAlbums] = useState([]);

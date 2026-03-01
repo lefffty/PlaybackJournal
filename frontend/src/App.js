@@ -6,22 +6,22 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Navbar';
 
-import SignUp from './components/SignUp';
-import Login from './components/Login';
-import Password from './components/Password';
-import Avatar from './components/Avatar';
-import Profile from './components/Profile';
+import SignUp from './components/Users/SignUp';
+import Login from './components/Users/Login';
+import Password from './components/Users/Password';
+import Avatar from './components/Users/Avatar';
+import Profile from './components/Users/Profile';
 import UserService from './services/UserService';
 
-import Albums from './components/Albums';
-import Album from './components/Album';
+import Albums from './components/Albums/Albums';
+import Album from './components/Albums/Album';
 
-import Genres from './components/Genres';
-import Genre from './components/Genre';
+import Genres from './components/Genres/Genres';
+import Genre from './components/Genres/Genre';
 
-import Artists from './components/Artists';
-import Artist from './components/Artist';
-import ArtistList from './components/ArtistList';
+import Artists from './components/Artists/Artists';
+import Artist from './components/Artists/Artist';
+import ArtistList from './components/Artists/ArtistList';
 
 
 function App() {
@@ -98,7 +98,7 @@ function App() {
               PlaybackJournal
             </Link>
           </Navbar.Brand>
-          <Nav className='me-auto'>
+          <Nav className='me-auto fs-5'>
             <Container>
               <Link class='nav-link' to={"/albums/"}>Albums</Link>
               <Link class='nav-link' to={"/artists/"}>Artists</Link>

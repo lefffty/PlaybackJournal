@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
-import UserService from "../services/UserService";
+import UserService from "../../services/UserService";
 
 
 const Password = (props) => {

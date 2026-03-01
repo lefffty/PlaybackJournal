@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { Card, Row, Col } from "react-bootstrap";
 import {FaAngleRight} from 'react-icons/fa';
 
-import GenreService from "../services/GenreService";
+import GenreService from "../../services/GenreService";
 import './Genre.css';
 
 const Genre = (props) => {

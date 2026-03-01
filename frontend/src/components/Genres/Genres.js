@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import {Card} from 'react-bootstrap';
 
-import GenreService from "../services/GenreService";
+import GenreService from "../../services/GenreService";
 import { Link } from "react-router-dom";
 
 const Genres = (props) => {

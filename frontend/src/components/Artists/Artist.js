@@ -3,8 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { Card, Col, Row, Container } from "react-bootstrap";
 import { FaAngleRight } from "react-icons/fa";
 
-import './Album.css';
-import ArtistService from '../services/ArtistService';
+import '../Albums/Album.css';
+import ArtistService from '../../services/ArtistService';
 
 const Artist = (props) => {
     const [artist, setArtist] = useState(null);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import UserService from "../services/UserService";
+import UserService from "../../services/UserService";
 
 import moment from 'moment';
 import { Card, Row, Col } from 'react-bootstrap';

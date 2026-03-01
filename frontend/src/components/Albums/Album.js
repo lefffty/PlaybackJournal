@@ -5,11 +5,11 @@ import Container from "react-bootstrap/Container";
 import {ListGroup, Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
 
-import ScaleRating from "./ScaleRating";
-import HeartIcon from "./HeartIcon";
-import Headphones from "./Headphones";
+import ScaleRating from "../Common/ScaleRating";
+import HeartIcon from "../Common/HeartIcon";
+import Headphones from "../Common/Headphones";
 
-import AlbumService from "../services/AlbumService";
+import AlbumService from "../../services/AlbumService";
 
 const Album = (props) => {
     const params = useParams();

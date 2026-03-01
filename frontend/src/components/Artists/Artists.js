@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {Card, Row, Col} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
-import ArtistService from "../services/ArtistService";
+import ArtistService from "../../services/ArtistService";
 
 const Artists = (props) => {
     const [error, setError] = useState('');
