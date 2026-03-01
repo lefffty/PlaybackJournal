@@ -28,7 +28,7 @@ schema_view = get_schema_view(
         title='PlaybackJournal API',
         default_version='v1',
         description='API documentation',
-        contact=openapi.Contact(email='brigaten2004@yandex.ru'),
+        contact=openapi.Contact(email='brigante2004@yandex.ru'),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,)

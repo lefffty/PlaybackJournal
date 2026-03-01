@@ -121,7 +121,7 @@ const Artist = (props) => {
                                                 <Card.Img
                                                     src={album.cover}
                                                     style={{
-                                                        borderRadius: '75%',
+                                                        borderRadius: '5%',
                                                         width: '240px',
                                                         height: '240px',
                                                         objectFit: 'cover'

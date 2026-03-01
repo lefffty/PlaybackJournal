@@ -219,7 +219,7 @@ const Album = (props) => {
                                     <ListGroup.Item key={song.id} className="px-0">
                                         <Row>
                                             <Col xs={1} className="text-muted fs-5">
-                                                {index}
+                                                {index + 1}
                                             </Col>
                                             <Col xs={8} className="fs-5">
                                                 {song.name}

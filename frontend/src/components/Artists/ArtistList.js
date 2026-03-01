@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {Card, Row, Col} from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 import ArtistService from "../../services/ArtistService";
 
@@ -114,6 +115,12 @@ const ArtistList = (props) => {
                                                         {dataType === 'similar'
                                                             ? item.username
                                                             : item.name
+                                                        }
+                                                    </Col>
+                                                    <Col>
+                                                        {dataType === 'similar'
+                                                            ? ''
+                                                            : moment(item.publication_date).year()
                                                         }
                                                     </Col>
                                                 </Link>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Button, ButtonGroup } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import moment from 'moment';
@@ -10,13 +10,18 @@ const Albums = (props) => {
     const [albums, setAlbums] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [nextPage, setNextPage] = useState(null);
+    const [previousPage, setPreviousPage] = useState(null);
+    
     useEffect(
         () => {
-            AlbumService.readAlbums()
+            AlbumService.readAlbums(currentPage)
             .then(
                 (response) => {
                     setAlbums(response.data.results);
+                    setNextPage(response.data.next);
+                    setPreviousPage(response.data.previous);
                 }
             )
             .catch(
@@ -30,8 +35,16 @@ const Albums = (props) => {
                 }
             )
         },
-        []
+        [currentPage]
     )
+
+    const onNextPageClick = () => {
+        setCurrentPage(currentPage + 1);
+    }
+
+    const onPreviousPageClick = () => {
+        setCurrentPage(currentPage - 1);
+    }
 
     if (loading){
         return (
@@ -112,6 +125,33 @@ const Albums = (props) => {
                     );
                 }
             )}
+            <div className="justify-content-center d-flex">
+                <ButtonGroup>
+                    {previousPage !== null ? (
+                        <>
+                        <Button variant="primary" onClick={onPreviousPageClick}>
+                            {currentPage - 1}
+                        </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                    <Button variant="light">
+                        {currentPage}
+                    </Button>
+                    {nextPage !== null ? (
+                        <>
+                        <Button variant="primary" onClick={onNextPageClick}>
+                            {currentPage + 1}
+                        </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                </ButtonGroup>
+            </div>
         </Container>
     )
 };

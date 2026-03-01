@@ -42,7 +42,7 @@ class ArtistDiscographyViewSet(
     )
     def discography(self, request, pk: int):
         artist = get_object_or_404(Artist, pk=pk)
-        albums = artist.albums.all()
+        albums = artist.albums.all().order_by('publication_date')
         serializer = AlbumArtistSerializer(
             albums,
             many=True,

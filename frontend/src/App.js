@@ -104,7 +104,7 @@ function App() {
               PlaybackJournal
             </Link>
           </Navbar.Brand>
-          <Nav className='me-auto fs-5'>
+          <Nav className='me-auto fs-4'>
             <Container>
               <Link class='nav-link' to={"/albums/"}>Albums</Link>
               <Link class='nav-link' to={"/artists/"}>Artists</Link>

@@ -2,8 +2,8 @@ import AxiosInstance from "../components/AxiosInstance";
 
 
 class AlbumService{
-    readAlbums(){
-        return AxiosInstance.get("/api/albums/");
+    readAlbums(page = 1){
+        return AxiosInstance.get(`/api/albums/?page=${page}`);
     }
 
     readAlbum(id){

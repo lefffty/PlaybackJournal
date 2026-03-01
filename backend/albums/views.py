@@ -5,7 +5,7 @@ from rest_framework import (
 )
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import (
     IsAuthenticated,
     AllowAny,
@@ -33,7 +33,7 @@ class AlbumListDetailViewSet(
     mixins.CreateModelMixin,
 ):
     queryset = Album.objects.all()
-    pagination_class = LimitOffsetPagination
+    pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
         if self.action in ('create'):
