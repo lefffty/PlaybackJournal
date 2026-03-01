@@ -64,10 +64,12 @@ const Genre = (props) => {
                         </Card.Text>
                         <Card.Header className="fs-3 mb-3">
                             <div className="d-flex align-items-end" style={{height: '50px'}}>
-                                <Card.Text className="mb-0 me-2">
-                                    <b>Исполнители</b>
-                                </Card.Text>
-                                <Link to={`/artists/${genre.id}/`} style={{color: "black"}}>
+                                <Link to={`/genre/${genre.id}/artists/`} style={{color: "black"}} className="text-decoration-none">
+                                    <Card.Text className="mb-0 me-2">
+                                        <b>Исполнители</b>
+                                    </Card.Text>
+                                </Link>
+                                <Link to={`/genre/${genre.id}/artists/`} style={{color: "black"}}>
                                     <FaAngleRight className="hover-shift"/>
                                 </Link>
                             </div>
@@ -104,10 +106,12 @@ const Genre = (props) => {
                         </Row>
                         <Card.Header className="fs-3 mb-3">
                             <div className="d-flex align-items-end" style={{height: '50px'}}>
-                                <Card.Text className="mb-0 me-2">
-                                    <b>Альбомы</b>
-                                </Card.Text>
-                                <Link to={'#'} style={{color: "black"}}>
+                                <Link to={`/genre/${genre.id}/albums/`} style={{color: "black"}} className="text-decoration-none">
+                                    <Card.Text className="mb-0 me-2">
+                                        <b>Альбомы</b>
+                                    </Card.Text>
+                                </Link>
+                                <Link to={`/genre/${genre.id}/albums/`} style={{color: "black"}} className="text-decoration-none">
                                     <FaAngleRight className="hover-shift"/>
                                 </Link>
                             </div>
