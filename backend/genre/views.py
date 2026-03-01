@@ -6,11 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 
 
-from .serializers import GenreSerializer
+from .serializers import GenreSerializer, GenreSimpleSerializer
 from .models import Genre
 from albums.serializers import AlbumGenreSerializer
 from artist.serializers import ArtistSimpleSerializer
@@ -22,9 +22,13 @@ class GenreListDetailViewSet(
     mixins.ListModelMixin,
 ):
     queryset = Genre.objects.all()
-    serializer_class = GenreSerializer
     permission_classes = [AllowAny]
-    pagination_class = LimitOffsetPagination
+    pagination_class = PageNumberPagination
+
+    def get_serializer_class(self):
+        if self.action in ('retrieve'):
+            return GenreSerializer
+        return GenreSimpleSerializer
 
 
 class GenreListsViewSet(

@@ -9,6 +9,7 @@ class GenreSimpleSerializer(serializers.ModelSerializer):
         model = Genre
         fields = (
             'id',
+            'description',
             'name',
         )
 

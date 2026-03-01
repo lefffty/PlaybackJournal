@@ -2,8 +2,8 @@ import AxiosInstance from "../components/AxiosInstance";
 
 
 class GenreService {
-    readGenres(){
-        return AxiosInstance.get("api/genres/");
+    readGenres(page = 1){
+        return AxiosInstance.get(`api/genres/?page=${page}`);
     }
 
     readGenre(id){
