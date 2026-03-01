@@ -62,6 +62,13 @@ const ArtistList = (props) => {
         )
     }
 
+    var border_radius = '';
+    if (dataType === 'similar'){
+        border_radius = '50%';
+    } else{
+        border_radius = '5%';
+    }
+
     return (
         <div>
             <Container>
@@ -88,7 +95,7 @@ const ArtistList = (props) => {
                                                             : "http://localhost:8000" + item.cover
                                                         }
                                                         style={{
-                                                            borderRadius: '50%',
+                                                            borderRadius: border_radius,
                                                             width: '240px',
                                                             height: '240px',
                                                             objectFit: 'cover'

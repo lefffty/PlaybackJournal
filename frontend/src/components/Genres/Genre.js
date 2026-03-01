@@ -67,7 +67,7 @@ const Genre = (props) => {
                                 <Card.Text className="mb-0 me-2">
                                     <b>Исполнители</b>
                                 </Card.Text>
-                                <Link to={'#'} style={{color: "black"}}>
+                                <Link to={`/artists/${genre.id}/`} style={{color: "black"}}>
                                     <FaAngleRight className="hover-shift"/>
                                 </Link>
                             </div>

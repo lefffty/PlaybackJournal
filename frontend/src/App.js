@@ -13,6 +13,10 @@ import Avatar from './components/Users/Avatar';
 import Profile from './components/Users/Profile';
 import UserService from './services/UserService';
 
+import FavouriteList from './components/Users/UserLists/FavouriteList';
+import ListenedList from './components/Users/UserLists/ListenedList';
+import RatedList from './components/Users/UserLists/RatedList';
+
 import Albums from './components/Albums/Albums';
 import Album from './components/Albums/Album';
 
@@ -192,9 +196,23 @@ function App() {
             element={<Avatar/>}
           >
           </Route>
+          <Route
+            path='/profile/favourite/'
+            element={<FavouriteList/>}
+          >
+          </Route>
+          <Route
+            path='/profile/listened/'
+            element={<ListenedList/>}
+          >
+          </Route>
+          <Route
+            path='/profile/rated/'
+            element={<RatedList/>}
+          >
+          </Route>
         </Routes>
       </div>
-
       <footer className='text-center text-lg-start bg-light text-muted mt-4'>
         <div className='text-center p-4'>
           Author: <a

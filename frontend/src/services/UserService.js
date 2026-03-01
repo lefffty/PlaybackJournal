@@ -25,6 +25,18 @@ class UserService {
     setAvatar(data){
         return AxiosInstance.put("/api/users/me/avatar/", data);
     }
+
+    fetchListened(){
+        return AxiosInstance.get("/api/users/listened/albums/");
+    }
+
+    fetchFavourite(){
+        return AxiosInstance.get("/api/users/favorite/albums/");
+    }
+
+    fetchRated(){
+        return AxiosInstance.get("/api/users/rated/albums/");
+    }
 }
 
 export default new UserService();

@@ -36,7 +36,7 @@ const Album = (props) => {
                     setError(e.toString());
                 }
             )
-        }, []
+        }, [id]
     )
 
     useEffect(
@@ -49,7 +49,7 @@ const Album = (props) => {
                     }
                 )
             }
-        }, [token, id]
+        }, [id]
     )
 
     const onRatingChange = (value) => {

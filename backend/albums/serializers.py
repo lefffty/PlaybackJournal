@@ -66,6 +66,7 @@ class AlbumSimpleSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
+            'cover',
             'publication_date',
             'artists',
         )
