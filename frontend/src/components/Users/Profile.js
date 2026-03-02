@@ -107,7 +107,7 @@ const Profile = props => {
                                                 <b>Оценки</b>
                                             </Card.Text>
                                         </Link>
-                                        <Link to={"/profile/favourite/"} style={{color: "black"}}>
+                                        <Link to={"/profile/rated/"} style={{color: "black"}}>
                                             <FaAngleRight className="hover-shift"/>
                                         </Link>
                                     </div>

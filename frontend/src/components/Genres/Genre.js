@@ -125,7 +125,7 @@ const Genre = (props) => {
                                                 <Card.Img
                                                     src={`http://localhost:8000/${album.cover}`}
                                                     style={{
-                                                        borderRadius: '75%',
+                                                        borderRadius: '5%',
                                                         width: '240px',
                                                         height: '240px',
                                                         objectFit: 'cover'

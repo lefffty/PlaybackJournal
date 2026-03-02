@@ -49,7 +49,7 @@ const Album = (props) => {
                     }
                 )
             }
-        }, [id]
+        }, []
     )
 
     const onRatingChange = (value) => {
