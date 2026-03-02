@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Button, ButtonGroup } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
-import moment, { max } from 'moment';
+import moment from 'moment';
 
 import AlbumService from '../../services/AlbumService';
 
@@ -15,7 +15,7 @@ const Albums = (props) => {
     const [previousPage, setPreviousPage] = useState(null);
     const [totalItems, setTotalItems] = useState(null);
     const [maxPage, setMaxPage] = useState(null);
-    const [minPage, setMinPage] = useState(1);
+    const [minPage] = useState(1);
     const [itemsPerPage] = useState(10);
     
     useEffect(
@@ -26,8 +26,10 @@ const Albums = (props) => {
                     setAlbums(response.data.results);
                     setNextPage(response.data.next);
                     setPreviousPage(response.data.previous);
-                    setTotalItems(response.data.count);
-                    setMaxPage(Math.trunc(response.data.count / itemsPerPage) + 1);
+                    if (!totalItems){
+                        setTotalItems(response.data.count);
+                        setMaxPage(Math.trunc(response.data.count / itemsPerPage) + 1);
+                    }
                 }
             )
             .catch(
@@ -80,9 +82,9 @@ const Albums = (props) => {
         <Container>
             <div className="justify-content-center d-flex mb-3">
                 <ButtonGroup>
-                    {minPage !== previousPage && (minPage !== currentPage) ? (
+                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
                         <>
-                            <Button variant="primary" onClick={onFirstPageClick}>
+                            <Button variant="secondary" onClick={onFirstPageClick}>
                                 First
                             </Button>
                         </>
@@ -100,7 +102,7 @@ const Albums = (props) => {
                         <>
                         </>
                     )}
-                    <Button variant="light">
+                    <Button variant="secondary">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (
@@ -115,7 +117,7 @@ const Albums = (props) => {
                     )}
                     {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
                         <>
-                            <Button variant="primary" onClick={onLastPageClick}>
+                            <Button variant="secondary" onClick={onLastPageClick}>
                                 Last
                             </Button>
                         </>
@@ -188,9 +190,9 @@ const Albums = (props) => {
             )}
             <div className="justify-content-center d-flex">
                 <ButtonGroup>
-                    {minPage !== previousPage && (minPage !== currentPage) ? (
+                    {minPage !== (currentPage - 1) && minPage !== currentPage ? (
                         <>
-                            <Button variant="primary" onClick={onFirstPageClick}>
+                            <Button variant="secondary" onClick={onFirstPageClick}>
                                 First
                             </Button>
                         </>
@@ -208,7 +210,7 @@ const Albums = (props) => {
                         <>
                         </>
                     )}
-                    <Button variant="light">
+                    <Button variant="secondary">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (
@@ -223,7 +225,7 @@ const Albums = (props) => {
                     )}
                     {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
                         <>
-                            <Button variant="primary" onClick={onLastPageClick}>
+                            <Button variant="secondary" onClick={onLastPageClick}>
                                 Last
                             </Button>
                         </>

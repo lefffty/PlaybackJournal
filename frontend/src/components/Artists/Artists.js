@@ -12,6 +12,10 @@ const Artists = (props) => {
     const [previousPage, setPreviousPage] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [nextPage, setNextPage] = useState(null);
+    const [totalItems, setTotalItems] = useState(null);
+    const [maxPage, setMaxPage] = useState(null);
+    const [minPage] = useState(1);
+    const [itemsPerPage] = useState(10);
 
     useEffect(
         () => {
@@ -21,6 +25,10 @@ const Artists = (props) => {
                     setArtists(response.data.results);
                     setPreviousPage(response.data.previous);
                     setNextPage(response.data.next);
+                    if (!totalItems){
+                        setTotalItems(response.data.count);
+                        setMaxPage(Math.trunc(response.data.count / itemsPerPage) + 1);
+                    }
                 }
             )
             .catch(
@@ -38,6 +46,14 @@ const Artists = (props) => {
 
     const onPreviousPageClick = () => {
         setCurrentPage(currentPage - 1);
+    }
+
+    const onFirstPageClick = () => {
+        setCurrentPage(minPage);
+    }
+
+    const onLastPageClick = () => {
+        setCurrentPage(maxPage);
     }
 
     if (!artists){
@@ -60,6 +76,16 @@ const Artists = (props) => {
         <Container>
             <div className="justify-content-center d-flex mb-3">
                 <ButtonGroup>
+                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
+                        <>
+                            <Button variant="secondary" onClick={onFirstPageClick}>
+                                First
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
                     {previousPage !== null ? (
                         <>
                         <Button variant="primary" onClick={onPreviousPageClick}>
@@ -70,7 +96,7 @@ const Artists = (props) => {
                         <>
                         </>
                     )}
-                    <Button variant="light">
+                    <Button variant="secondary">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (
@@ -78,6 +104,16 @@ const Artists = (props) => {
                         <Button variant="primary" onClick={onNextPageClick}>
                             {currentPage + 1}
                         </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
+                        <>
+                            <Button variant="secondary" onClick={onLastPageClick}>
+                                Last
+                            </Button>
                         </>
                     ) : (
                         <>
@@ -113,6 +149,16 @@ const Artists = (props) => {
             </Row>
             <div className="justify-content-center d-flex mb-3">
                 <ButtonGroup>
+                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
+                        <>
+                            <Button variant="secondary" onClick={onFirstPageClick}>
+                                First
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
                     {previousPage !== null ? (
                         <>
                         <Button variant="primary" onClick={onPreviousPageClick}>
@@ -123,7 +169,7 @@ const Artists = (props) => {
                         <>
                         </>
                     )}
-                    <Button variant="light">
+                    <Button variant="secondary">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (
@@ -131,6 +177,16 @@ const Artists = (props) => {
                         <Button variant="primary" onClick={onNextPageClick}>
                             {currentPage + 1}
                         </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
+                        <>
+                            <Button variant="secondary" onClick={onLastPageClick}>
+                                Last
+                            </Button>
                         </>
                     ) : (
                         <>
