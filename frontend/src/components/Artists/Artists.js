@@ -96,7 +96,7 @@ const Artists = (props) => {
                         <>
                         </>
                     )}
-                    <Button variant="secondary">
+                    <Button variant="success">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (
@@ -169,7 +169,7 @@ const Artists = (props) => {
                         <>
                         </>
                     )}
-                    <Button variant="secondary">
+                    <Button variant="success">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (

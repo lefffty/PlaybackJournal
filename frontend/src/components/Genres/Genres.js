@@ -12,6 +12,10 @@ const Genres = (props) => {
     const [previousPage, setPreviousPage] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [nextPage, setNextPage] = useState(null);
+    const [totalItems, setTotalItems] = useState(null);
+    const [maxPage, setMaxPage] = useState(null);
+    const [minPage] = useState(1);
+    const [itemsPerPage] = useState(10);
 
     useEffect(
         () => {
@@ -21,6 +25,10 @@ const Genres = (props) => {
                     setGenres(response.data.results);
                     setPreviousPage(response.data.previous);
                     setNextPage(response.data.next);
+                    if (!totalItems){
+                        setTotalItems(response.data.count);
+                        setMaxPage(Math.trunc(response.data.count / itemsPerPage) + 1);
+                    }
                 }
             )
             .catch(
@@ -45,6 +53,14 @@ const Genres = (props) => {
         setCurrentPage(currentPage - 1);
     }
 
+    const onFirstPageClick = () => {
+        setCurrentPage(minPage);
+    }
+
+    const onLastPageClick = () => {
+        setCurrentPage(maxPage);
+    }
+
     if (loading){
         return (
             <div>
@@ -65,24 +81,44 @@ const Genres = (props) => {
         <Container>
             <div className="justify-content-center d-flex mb-3">
                 <ButtonGroup>
-                    {previousPage !== null ? (
+                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
                         <>
-                        <Button variant="primary" onClick={onPreviousPageClick}>
-                            {currentPage - 1}
-                        </Button>
+                            <Button variant="secondary" onClick={onFirstPageClick}>
+                                First
+                            </Button>
                         </>
                     ) : (
                         <>
                         </>
                     )}
-                    <Button variant="light">
+                    {previousPage !== null ? (
+                        <>
+                            <Button variant="primary" onClick={onPreviousPageClick}>
+                                {currentPage - 1}
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                    <Button variant="success">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (
                         <>
-                        <Button variant="primary" onClick={onNextPageClick}>
-                            {currentPage + 1}
-                        </Button>
+                            <Button variant="primary" onClick={onNextPageClick}>
+                                {currentPage + 1}
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
+                        <>
+                            <Button variant="secondary" onClick={onLastPageClick}>
+                                Last
+                            </Button>
                         </>
                     ) : (
                         <>
@@ -110,24 +146,44 @@ const Genres = (props) => {
             )}
             <div className="justify-content-center d-flex">
                 <ButtonGroup>
-                    {previousPage !== null ? (
+                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
                         <>
-                        <Button variant="primary" onClick={onPreviousPageClick}>
-                            {currentPage - 1}
-                        </Button>
+                            <Button variant="secondary" onClick={onFirstPageClick}>
+                                First
+                            </Button>
                         </>
                     ) : (
                         <>
                         </>
                     )}
-                    <Button variant="light">
+                    {previousPage !== null ? (
+                        <>
+                            <Button variant="primary" onClick={onPreviousPageClick}>
+                                {currentPage - 1}
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                    <Button variant="success">
                         {currentPage}
                     </Button>
                     {nextPage !== null ? (
                         <>
-                        <Button variant="primary" onClick={onNextPageClick}>
-                            {currentPage + 1}
-                        </Button>
+                            <Button variant="primary" onClick={onNextPageClick}>
+                                {currentPage + 1}
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
+                        <>
+                            <Button variant="secondary" onClick={onLastPageClick}>
+                                Last
+                            </Button>
                         </>
                     ) : (
                         <>
