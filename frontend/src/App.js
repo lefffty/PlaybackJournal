@@ -29,6 +29,8 @@ import Artists from './components/Artists/Artists';
 import Artist from './components/Artists/Artist';
 import ArtistList from './components/Artists/ArtistList';
 
+import Playlists from './components/Playlists/Playlists';
+
 
 function App() {
   const navigate = useNavigate();
@@ -109,6 +111,7 @@ function App() {
               <Link class='nav-link' to={"/albums/"}>Albums</Link>
               <Link class='nav-link' to={"/artists/"}>Artists</Link>
               <Link class='nav-link' to={"/genres/"}>Genres</Link>
+              <Link class='nav-link' to={"/playlists/"}>Playlists</Link>
               {user ? (
                 <>
                   <Link class='nav-link' to={'/profile'}>Profile</Link>
@@ -221,6 +224,11 @@ function App() {
           <Route
             path='/genre/:id/albums/'
             element={<GenreAlbumsList/>}
+          >
+          </Route>
+          <Route
+            path='/playlists/'
+            element={<Playlists/>}
           >
           </Route>
         </Routes>
