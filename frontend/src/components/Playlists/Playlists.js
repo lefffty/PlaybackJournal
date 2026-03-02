@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import {Card, Col, Row} from 'react-bootstrap';
 
 import PlaylistService from '../../services/PlaylistService';
+import { Link } from "react-router-dom";
 
 const Playlists = (props) => {
     const [data, setData] = useState([]);
@@ -61,9 +62,11 @@ const Playlists = (props) => {
                                     </Col>
                                     <Col md={8}>
                                         <Card.Body>
-                                            <Card.Title className="fs-2">
-                                                {playlist.name}
-                                            </Card.Title>
+                                            <Link to={`/playlists/${playlist.id}/`} className="text-decoration-none">
+                                                <Card.Title className="fs-2">
+                                                    {playlist.name}
+                                                </Card.Title>
+                                            </Link>
                                             <Card.Text>
                                                 <span className="text-muted fs-4">Автор: </span>
                                                 <span className="fs-4">

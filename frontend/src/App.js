@@ -30,6 +30,7 @@ import Artist from './components/Artists/Artist';
 import ArtistList from './components/Artists/ArtistList';
 
 import Playlists from './components/Playlists/Playlists';
+import Playlist from './components/Playlists/Playlist';
 
 
 function App() {
@@ -229,6 +230,11 @@ function App() {
           <Route
             path='/playlists/'
             element={<Playlists/>}
+          >
+          </Route>
+          <Route
+            path='/playlists/:id/'
+            element={<Playlist/>}
           >
           </Route>
         </Routes>
