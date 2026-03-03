@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
-import {useParams} from 'react-router-dom';
-import {Card, Row, Col, ListGroup} from 'react-bootstrap';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Card, Row, Col, ListGroup, Button, Modal} from 'react-bootstrap';
 
 import PlaylistService from "../../services/PlaylistService";
+import UserService from "../../services/UserService";
 
 const Playlist = (props) => {
     const params = useParams();
+    const [show, setShow] = useState(false);
     const id = params.id;
+    const token = localStorage.getItem('auth_token');
+    const [userId, setUserId] = useState(null);
     const [playlist, setPlaylist] = useState(null);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     useEffect(
         () => {
@@ -19,9 +24,45 @@ const Playlist = (props) => {
                     setPlaylist(response.data);
                 }
             )
+            .catch(
+                (e) => {
+                    setError(e.toString());
+                }
+            )
         },
         [id]
     )
+
+    useEffect(
+        () => {
+            if (token){
+                UserService.profile()
+                .then(
+                    (response) => {
+                        setUserId(response.data.id);
+                    }
+                )
+                .catch(
+                    (e) => {
+                        setError(e.toString());
+                    }
+                )
+            }
+        },
+        [id]
+    )
+
+    const onDeleteBtnClick = () => {
+        PlaylistService.deletePlaylist(id)
+        .then(
+            (_) => {
+                navigate('/playlists/');
+            }
+        )
+    }
+
+    const onCloseHandle = () => setShow(false);
+    const onOpenHandle = () => setShow(true);
 
     if (!playlist){
         return (
@@ -58,14 +99,44 @@ const Playlist = (props) => {
                                             {playlist.name}
                                         </Card.Title>
                                         <Card.Text className="fs-3">
-                                            <span className="text-muted fs-3">Автор: </span>
+                                            <span className="text-muted fs-4">Автор: </span>
                                             <span className="fs-3">
                                                 <b>@{playlist.author.username}</b>
                                             </span>
                                         </Card.Text>
                                         <Card.Text className="fs-3">
-                                            {playlist.description}
+                                            <span className="text-muted fs-4">Описание: </span>
+                                            <span>{playlist.description}</span>
+                                            
                                         </Card.Text>
+                                        {userId === playlist.author.id
+                                            ? (
+                                                <>
+                                                    <Button className="me-2" onClick={onOpenHandle}>
+                                                        Удалить плейлист
+                                                    </Button>
+
+                                                    <Modal show={show} onHide={onCloseHandle}>
+                                                        <Modal.Header closeButton>
+                                                            <Modal.Title>Подтверждение</Modal.Title>
+                                                        </Modal.Header>
+                                                        <Modal.Body>Вы уверены, что хотите удалить плейлист?</Modal.Body>
+                                                        <Modal.Footer>
+                                                            <Button variant="primary" onClick={onDeleteBtnClick}>
+                                                                Да
+                                                            </Button>
+                                                            <Button variant="secondary" onClick={onCloseHandle}>
+                                                                Нет
+                                                            </Button>
+                                                        </Modal.Footer>
+                                                    </Modal>
+                                                </>
+                                            )
+                                            : (
+                                                <>
+                                                </>
+                                            )
+                                        }
                                     </Col>
                                 </Row>
                             </Card.Body>

@@ -12,6 +12,10 @@ class PlaylistService{
     createPlaylist(data){
         return AxiosInstance.post('api/playlists/', data);
     }
+
+    deletePlaylist(id){
+        return AxiosInstance.delete(`api/playlists/${id}/`);
+    }
 }
 
 export default new PlaylistService();

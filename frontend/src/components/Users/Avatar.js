@@ -5,7 +5,7 @@ import UserService from "../../services/UserService";
 import { useNavigate } from "react-router-dom";
 
 
-function Avatar(){
+const Avatar = () => {
     const [file, setFile] = useState(null);
     const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ function Avatar(){
         )
     }
 
-    function onButtonClick(){
+    const onButtonClick = () => {
         const reader = new FileReader();
         reader.onload = () => uploadBase64Image(reader.result);
         if (file) reader.readAsDataURL(file);

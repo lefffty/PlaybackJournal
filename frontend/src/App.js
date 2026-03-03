@@ -32,6 +32,8 @@ import ArtistList from './components/Artists/ArtistList';
 import Playlists from './components/Playlists/Playlists';
 import Playlist from './components/Playlists/Playlist';
 import CreatePlaylist from './components/Playlists/CreatePlaylist';
+import { Image } from 'react-bootstrap';
+import logo from './logo.png';
 
 
 function App() {
@@ -105,7 +107,7 @@ function App() {
         <div className='container-fluid'>
           <Navbar.Brand>
             <Link className='nav-link' to={"/albums/"}>
-              PlaybackJournal
+              <Image src={logo} height={60}/>
             </Link>
           </Navbar.Brand>
           <Nav className='me-auto fs-4'>

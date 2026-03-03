@@ -42,7 +42,7 @@ const RatedList = (props) => {
         <div>
             <Container>
                 <Card>
-                    <Card.Title className="fs-1">
+                    <Card.Title className="fs-1 ms-3 mt-3">
                         Оценки
                     </Card.Title>
                     <Card.Body>

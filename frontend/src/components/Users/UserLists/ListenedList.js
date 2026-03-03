@@ -42,7 +42,7 @@ const ListenedList = (props) => {
         <div>
             <Container>
                 <Card>
-                    <Card.Title className="fs-1">
+                    <Card.Title className="fs-1 ms-3 mt-3">
                         Прослушанные альбомы
                     </Card.Title>
                     <Card.Body>
