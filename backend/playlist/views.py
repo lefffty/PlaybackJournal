@@ -6,6 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from .serializers import (
     PlaylistSerializer,
+    PlaylistDetailSerializer,
     PlaylistCreateUpdateSerializer
 )
 from .permissions import OwnerOrReadOnly
@@ -24,8 +25,10 @@ class PlaylistViewSet(
         return [OwnerOrReadOnly()]
 
     def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
+        if self.action in ('list',):
             return PlaylistSerializer
+        if self.action in ('retrieve',):
+            return PlaylistDetailSerializer
         return PlaylistCreateUpdateSerializer
 
     def perform_create(self, serializer):

@@ -31,6 +31,7 @@ import ArtistList from './components/Artists/ArtistList';
 
 import Playlists from './components/Playlists/Playlists';
 import Playlist from './components/Playlists/Playlist';
+import CreatePlaylist from './components/Playlists/CreatePlaylist';
 
 
 function App() {
@@ -235,6 +236,11 @@ function App() {
           <Route
             path='/playlists/:id/'
             element={<Playlist/>}
+          >
+          </Route>
+          <Route
+            path='/playlists/create/'
+            element={<CreatePlaylist/>}
           >
           </Route>
         </Routes>

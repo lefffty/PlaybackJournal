@@ -28,7 +28,7 @@ schema_view = get_schema_view(
         title='PlaybackJournal API',
         default_version='v1',
         description='API documentation',
-        contact=openapi.Contact(email='brigante2004@yandex.ru'),
+        contact=openapi.Contact(email='admin@example.com'),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,)
@@ -47,6 +47,7 @@ urlpatterns = [
     path('api/', include('playlist.urls')),
     path('api/', include('artist.urls')),
     path('api/', include('genre.urls')),
+    path('api/', include('song.urls')),
 ]
 
 if settings.DEBUG:

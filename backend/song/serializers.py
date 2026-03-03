@@ -4,6 +4,15 @@ from .models import Song
 from artist.serializers import ArtistAlbumCreateSerializer
 
 
+class SongListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Song
+        fields = (
+            'id',
+            'name',
+        )
+
+
 class SongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Song

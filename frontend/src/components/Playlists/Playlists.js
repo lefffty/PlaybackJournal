@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Container from 'react-bootstrap/Container';
-import {Card, Col, Row} from 'react-bootstrap';
+import { FaPlus } from "react-icons/fa";
+import {Button, Card, Col, Row} from 'react-bootstrap';
 
 import PlaylistService from '../../services/PlaylistService';
 import { Link } from "react-router-dom";
 
 const Playlists = (props) => {
     const [data, setData] = useState([]);
+    const token = localStorage.getItem('auth_token');
     const [error, setError] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -45,6 +47,19 @@ const Playlists = (props) => {
 
     return (
         <Container>
+            {token == null || token === ''
+                ? (
+                    <>
+                    </>
+                )
+                : (
+                    <div className="d-flex justify-content-end">
+                        <Link to={"/playlists/create/"}>
+                            <FaPlus size={30} title="Создать плейлист"/>
+                        </Link>
+                    </div>
+                )
+            }
             <div className="mb-3">
                 {data.map(
                     (playlist) => {

@@ -22,7 +22,7 @@ const ScaleRating = ({initialValue, onRatingChange, totalStars = 10}) => {
                                 
                                 key={index}
                                 size={30}
-                                color={starValue <= (hover || rating) ? '#ffc107' : '#e4e5e9'}
+                                color={starValue <= (hover || rating) ? '#ad8611' : '#e4e5e9'}
                                 onClick={() => handleClick(starValue)}
                                 onMouseEnter={() => setHover(starValue)}
                                 onMouseLeave={() => setHover(0)}

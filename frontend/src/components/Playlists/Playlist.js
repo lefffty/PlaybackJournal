@@ -41,7 +41,7 @@ const Playlist = (props) => {
 
     return (
         <div>
-            <Container>
+            <Container className="w-75">
                 <Card className="mb-3">
                     <Row className="g-0">
                         <Col md={4} className="d-flex">

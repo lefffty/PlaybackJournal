@@ -20,7 +20,7 @@ const Login = props => {
     }
 
     const login = () => {
-        props.login({email: email, password: password});
+        props.login({email: email, password: password});            
         navigate("/albums");
     }
 

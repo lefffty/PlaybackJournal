@@ -8,6 +8,10 @@ class PlaylistService{
     fetchPlaylist(id){
         return AxiosInstance.get(`api/playlists/${id}/`);
     }
+
+    createPlaylist(data){
+        return AxiosInstance.post('api/playlists/', data);
+    }
 }
 
 export default new PlaylistService();
