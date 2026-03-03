@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
+import { Image } from 'react-bootstrap';
+import logo from './logo.png';
 
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -32,8 +34,9 @@ import ArtistList from './components/Artists/ArtistList';
 import Playlists from './components/Playlists/Playlists';
 import Playlist from './components/Playlists/Playlist';
 import CreatePlaylist from './components/Playlists/CreatePlaylist';
-import { Image } from 'react-bootstrap';
-import logo from './logo.png';
+
+import SearchField from './components/Common/SearchField';
+import SearchResults from './components/Search/SearchResults';
 
 
 function App() {
@@ -129,6 +132,7 @@ function App() {
                   <Link class='nav-link' to={'/signup/'}>Sign Up</Link>
                 </>
               )}
+              <SearchField/>
             </Container>
           </Nav>
         </div>
@@ -243,6 +247,11 @@ function App() {
           <Route
             path='/playlists/create/'
             element={<CreatePlaylist/>}
+          >
+          </Route>
+          <Route
+            path='/search/'
+            element={<SearchResults />}
           >
           </Route>
         </Routes>

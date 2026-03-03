@@ -13,7 +13,7 @@ from rest_framework.permissions import (
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest
-from django.db.models import Model
+from django.db.models import Model, Q
 
 from .serializers import (
     UserCreateSerializer,
@@ -24,11 +24,22 @@ from .serializers import (
     UserListenedAlbumsSerializer,
     UserFavouriteAlbumsSerialzer,
 )
+
+from albums.serializers import AlbumGenreSerializer
+from playlist.serializers import PlaylistSimpleSerializer
+from artist.serializers import ArtistSimpleSerializer
+from song.serializers import SongSerializer
+
 from albums.models import (
     FavouriteAlbum,
     ListenedAlbum,
     RatedAlbum,
 )
+
+from artist.models import Artist
+from albums.models import Album
+from playlist.models import Playlist
+from song.models import Song
 
 User = get_user_model()
 
@@ -100,6 +111,45 @@ class NewPasswordViewSet(
         serializer.save()
         return Response(
             status=status.HTTP_204_NO_CONTENT,
+        )
+
+
+class SearchViewSet(
+    viewsets.GenericViewSet
+):
+    pagination_class = None
+
+    @action(
+        detail=False,
+        methods=['GET'],
+    )
+    def search(self, request: HttpRequest):
+        query = request.GET.get('query')
+        if not query:
+            return Response(
+                data='Empty query',
+                status=status.HTTP_204_NO_CONTENT
+            )
+        albums = Album.objects.filter(Q(name__icontains=query))
+        playlists = Playlist.objects.filter(Q(name__icontains=query))
+        songs = Song.objects.filter(Q(name__icontains=query))
+        artists = Artist.objects.filter(Q(username__icontains=query))
+        albums_serialized = AlbumGenreSerializer(
+            albums, many=True, read_only=True).data
+        playlists_serialized = PlaylistSimpleSerializer(
+            playlists, many=True, read_only=True).data
+        songs_serialized = SongSerializer(
+            songs, many=True, read_only=True).data
+        artists_serialized = ArtistSimpleSerializer(
+            artists, many=True, read_only=True).data
+        return Response(
+            data={
+                'albums': albums_serialized,
+                'playlists': playlists_serialized,
+                'songs': songs_serialized,
+                'artists': artists_serialized,
+            },
+            status=status.HTTP_200_OK
         )
 
 

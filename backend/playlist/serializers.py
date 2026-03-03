@@ -13,6 +13,19 @@ from song.serializers import (
 from users.serializers import UserSimpleSerializer
 
 
+class PlaylistSimpleSerializer(serializers.ModelSerializer):
+    author = UserSimpleSerializer(read_only=True)
+
+    class Meta:
+        model = Playlist
+        fields = (
+            'id',
+            'author',
+            'name',
+            'cover'
+        )
+
+
 class PlaylistSerializer(serializers.ModelSerializer):
     author = UserSimpleSerializer(read_only=True)
 

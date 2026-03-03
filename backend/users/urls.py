@@ -32,6 +32,12 @@ useralbums_router.register(
 urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
     path(
+        'search/',
+        views.SearchViewSet.as_view({
+            'get': 'search',
+        })
+    ),
+    path(
         'users/set_password/',
         views.NewPasswordViewSet.as_view(
             {
