@@ -34,6 +34,7 @@ class Album(models.Model):
     )
     genres = models.ManyToManyField(
         Genre,
+
         through='AlbumGenre',
         verbose_name='Жанры'
     )

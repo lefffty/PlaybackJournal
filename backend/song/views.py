@@ -1,14 +1,21 @@
-from rest_framework import viewsets
-from rest_framework.response import Response
+from rest_framework import viewsets, mixins
 
 from .models import Song
-from .serializers import SongListSerializer
+from .serializers import (
+    SongListSerializer,
+    SongSerializer
+)
 
 
-class SongsListViewSet(
-    viewsets.ViewSet
+class SongsListRetrieveViewSet(
+    viewsets.GenericViewSet,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
 ):
-    def list(self, request):
-        queryset = Song.objects.all()
-        serializer = SongListSerializer(queryset, many=True, read_only=True)
-        return Response(serializer.data)
+    queryset = Song.objects.all()
+    pagination_class = None
+
+    def get_serializer_class(self):
+        if self.action in ('list'):
+            return SongListSerializer
+        return SongSerializer

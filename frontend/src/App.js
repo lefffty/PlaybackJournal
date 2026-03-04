@@ -38,6 +38,8 @@ import CreatePlaylist from './components/Playlists/CreatePlaylist';
 import SearchField from './components/Common/SearchField';
 import SearchResults from './components/Search/SearchResults';
 
+import Song from './components/Songs/Song';
+
 
 function App() {
   const navigate = useNavigate();
@@ -252,6 +254,11 @@ function App() {
           <Route
             path='/search/'
             element={<SearchResults />}
+          >
+          </Route>
+          <Route
+            path='/songs/:id/'
+            element={<Song/>}
           >
           </Route>
         </Routes>

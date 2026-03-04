@@ -52,7 +52,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     def get_average_rating(self, obj: Album):
         instances = RatedAlbum.objects.filter(album=obj)
-        if not instances:
+        if not instances.exists():
             return '-'
         ratings = list(map(lambda instance: instance.rating, instances))
         return mean(ratings)
