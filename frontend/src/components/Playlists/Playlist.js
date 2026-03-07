@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
-import {useNavigate, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Card, Row, Col, ListGroup, Button, Modal} from 'react-bootstrap';
 
 import PlaylistService from "../../services/PlaylistService";
@@ -157,7 +157,9 @@ const Playlist = (props) => {
                                                 {index + 1}
                                             </Col>
                                             <Col xs={8} className="fs-5">
-                                                {song.name}
+                                                <Link to={`/songs/${song.id}/`} className="text-decoration-none">
+                                                    {song.name}
+                                                </Link>
                                             </Col>
                                             <Col xs={3} className="text-end fs-5">
                                                 {song.duration}

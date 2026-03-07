@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import {Card, Col, Row} from 'react-bootstrap';
 
@@ -60,6 +60,24 @@ const Song = (props) => {
                             <Card.Text className="text-muted">
                                 {song.duration}
                             </Card.Text>
+                            {song.album != null
+                                ? (
+                                    <>
+                                        <Card.Text>
+                                            <span>From </span>
+                                            <span>
+                                                <Link to={`/albums/${song.album.id}`} className="text-decoration-none">
+                                                    {song.album.name}
+                                                </Link>
+                                            </span>
+                                        </Card.Text>
+                                    </>
+                                )
+                                : (
+                                    <>
+                                    </>
+                                )
+                            }
                         </Card.Body>
                     </Col>
                 </Row>

@@ -11,12 +11,12 @@ class SongListSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'cover',
         )
 
 
 class SongSerializer(serializers.ModelSerializer):
     cover = serializers.SerializerMethodField()
+    album = serializers.SerializerMethodField()
 
     class Meta:
         model = Song
@@ -25,7 +25,16 @@ class SongSerializer(serializers.ModelSerializer):
             'name',
             'duration',
             'cover',
+            'album',
         )
+
+    def get_album(self, obj):
+        from albums.serializers import AlbumGenreSerializer
+        if obj.albumsong_set.first():
+            album = obj.albumsong_set.first().album
+            serializer = AlbumGenreSerializer(album)
+            return serializer.data
+        return None
 
     def get_cover(self, obj):
         request = self.context.get('request')

@@ -222,7 +222,9 @@ const Album = (props) => {
                                                 {index + 1}
                                             </Col>
                                             <Col xs={8} className="fs-5">
-                                                {song.name}
+                                                <Link to={`/songs/${song.id}/`} className="text-decoration-none">
+                                                    {song.name}
+                                                </Link>
                                             </Col>
                                             <Col xs={3} className="text-end fs-5">
                                                 {song.duration}
