@@ -69,3 +69,50 @@ class PlaylistSong(models.Model):
 
     def __str__(self) -> str:
         return f'{self.playlist.name} - {self.song.name}'
+
+
+class AbstractUserPlaylistModel(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
+    playlist = models.ForeignKey(
+        Playlist,
+        on_delete=models.CASCADE,
+        verbose_name='Плейлист'
+    )
+
+    class Meta:
+        abstract = True
+        default_related_name = '%(class)ss'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'playlist'],
+                name='unique_%(class)s'
+            )
+        ]
+
+
+class FavouritePlaylist(AbstractUserPlaylistModel):
+    class Meta(AbstractUserPlaylistModel.Meta):
+        verbose_name = 'Любимый плейлист'
+        verbose_name_plural = 'Любимые плейлисты'
+
+    def __str__(self):
+        return f'{self.user} - {self.playlist}'
+
+
+class RatedPlaylist(AbstractUserPlaylistModel):
+    rating = models.FloatField(
+        verbose_name='Оценка плейлиста',
+        blank=False,
+        null=False,
+    )
+
+    class Meta(AbstractUserPlaylistModel.Meta):
+        verbose_name = 'Оценка плейлиста'
+        verbose_name_plural = 'Оценка плейлистов'
+
+    def __str__(self):
+        return f'{self.user} - {self.playlist} - {self.rating}'
