@@ -5,6 +5,10 @@ from albums.models import (
     RatedAlbum,
     FavouriteAlbum,
 )
+from playlist.models import (
+    RatedPlaylist,
+    FavouritePlaylist,
+)
 from .constants import (
     RATED_ALBUM_INLINE_EXTRA,
     LISTENED_ALBUM_INLINE_EXTRA,
@@ -25,3 +29,11 @@ class RatedAlbumInline(admin.TabularInline):
 class FavouriteAlbumInline(admin.TabularInline):
     model = FavouriteAlbum
     extra = FAVOURITE_ALBUM_INLINE_EXTRA
+
+
+class FavouritePlaylistInline(admin.TabularInline):
+    model = FavouritePlaylist
+
+
+class RatedPlaylistInline(admin.TabularInline):
+    model = RatedPlaylist

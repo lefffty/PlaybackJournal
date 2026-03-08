@@ -3,7 +3,9 @@ from django.utils.safestring import mark_safe
 
 from .models import (
     Playlist,
-    PlaylistSong
+    PlaylistSong,
+    RatedPlaylist,
+    FavouritePlaylist,
 )
 
 from .inlines import PlaylistSongInline
@@ -59,4 +61,21 @@ class PlaylistSongAdmin(admin.ModelAdmin):
     list_display = (
         'playlist',
         'song',
+    )
+
+
+@admin.register(FavouritePlaylist)
+class FavouritePlaylistAdmin(admin.ModelAdmin):
+    list_display = (
+        'playlist',
+        'user',
+    )
+
+
+@admin.register(RatedPlaylist)
+class RatedPlaylistAdmin(admin.ModelAdmin):
+    list_display = (
+        'playlist',
+        'user',
+        'rating',
     )

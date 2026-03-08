@@ -6,15 +6,20 @@ from .inlines import (
     RatedAlbumInline,
     ListenedAlbumInline,
     FavouriteAlbumInline,
+    RatedPlaylistInline,
+    FavouritePlaylistInline
 )
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'username',
-        'first_name', 'last_name',
-        'email', 'registration_date',
+        'id',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+        'registration_date',
         'display_avatar',
     )
     search_fields = (
@@ -27,16 +32,37 @@ class UserAdmin(admin.ModelAdmin):
         'display_favorites',
         'display_listens',
         'display_rated',
+        'display_favourite_playlists_count',
+        'display_rated_playlists_count',
     )
     fieldsets = (
         (None, {
-            'fields': ('username', 'first_name', 'last_name', 'email', 'avatar', 'registration_date')
+            'fields': (
+                'username',
+                'first_name',
+                'last_name',
+                'email',
+                'avatar',
+                'registration_date'
+            )
         }),
         ('Статистика', {
-            'fields': ('display_favorites', 'display_listens', 'display_rated'),
+            'fields': (
+                'display_favorites',
+                'display_listens',
+                'display_rated',
+                'display_favourite_playlists_count',
+                'display_rated_playlists_count',
+            ),
         }),
     )
-    inlines = (RatedAlbumInline, ListenedAlbumInline, FavouriteAlbumInline)
+    inlines = (
+        RatedAlbumInline,
+        ListenedAlbumInline,
+        FavouriteAlbumInline,
+        RatedPlaylistInline,
+        FavouritePlaylistInline,
+    )
 
     @admin.display(description='Аватар пользователя')
     @mark_safe
@@ -45,6 +71,14 @@ class UserAdmin(admin.ModelAdmin):
             return (f'<a href="{user.avatar.url}" target="_blank"><img '
                     f'src="{user.avatar.url}" style="max-height:100px;"></a>')
         return 'Нет изображения'
+
+    @admin.display(description='Количество плейлистов в "Любимое"')
+    def display_favourite_playlists_count(self, obj):
+        return obj.favouriteplaylists.count()
+
+    @admin.display(description='Количество оценок плейлистов')
+    def display_rated_playlists_count(self, obj):
+        return obj.ratedplaylists.count()
 
     @admin.display(description='Количество прослушанных альбомов')
     def display_listens(self, obj):
