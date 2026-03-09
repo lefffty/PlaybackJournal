@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-
-import UserService from "../../../services/UserService";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import moment from "moment";
+
+import UserService from "../../../services/UserService";
+import './AlbumsList.css';
 
 const ListenedList = (props) => {
     const [data, setData] = useState([]);
@@ -53,13 +54,14 @@ const ListenedList = (props) => {
                                         <Col>
                                             <Link to={`/albums/${item.album.id}/`}>
                                                 <Card.Img
-                                                src={"http://localhost:8000" + item.album.cover}
-                                                style={{
-                                                    borderRadius: '5%',
-                                                    width: '240px',
-                                                    height: '240px',
-                                                    objectFit: 'cover'
-                                                }}    
+                                                    src={"http://localhost:8000" + item.album.cover}
+                                                    style={{
+                                                        borderRadius: '5%',
+                                                        width: '240px',
+                                                        height: '240px',
+                                                        objectFit: 'cover'
+                                                    }}
+                                                    className="album-cover"
                                                 />
                                             </Link>
                                             <Link to={`/albums/${item.album.id}/`} className="text-decoration-none fs-4" style={{color: "black"}}>

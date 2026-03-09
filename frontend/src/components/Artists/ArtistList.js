@@ -7,6 +7,7 @@ import moment from "moment";
 
 import ArtistService from "../../services/ArtistService";
 
+import './ArtistList.css';
 
 const ArtistList = (props) => {
     const params = useParams();
@@ -100,7 +101,8 @@ const ArtistList = (props) => {
                                                             width: '240px',
                                                             height: '240px',
                                                             objectFit: 'cover'
-                                                        }}                                                        
+                                                        }}
+                                                        className="album-cover"
                                                     />
                                                 </Link>
                                                 <Link

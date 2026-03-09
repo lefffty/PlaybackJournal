@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import UserService from "../../services/UserService";
-
 import moment from 'moment';
 import { Card, Row, Col } from 'react-bootstrap';
 import Alert from 'react-bootstrap/Alert';
@@ -9,8 +7,9 @@ import Container from 'react-bootstrap/Container';
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
+import UserService from "../../services/UserService";
 
-const Profile = props => {
+const Profile = (props) => {
     const [profile, setProfile] = useState('');
     const token = localStorage.getItem('auth_token');
 

@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 
 import GenreService from '../../../services/GenreService';
 
+import './GenreAlbumsList.css';
+
 const GenreAlbumsList = (props) => {
     const params = useParams();
     const id = params.id;
@@ -67,6 +69,7 @@ const GenreAlbumsList = (props) => {
                                                         height: '200px',
                                                         objectFit: 'cover'
                                                     }}
+                                                    className="album-cover"
                                                     />
                                             </Link>
                                             <Link

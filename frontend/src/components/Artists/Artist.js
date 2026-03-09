@@ -4,6 +4,7 @@ import { Card, Col, Row, Container } from "react-bootstrap";
 import { FaAngleRight } from "react-icons/fa";
 
 import '../Albums/Album.css';
+import './ArtistList.css';
 import ArtistService from '../../services/ArtistService';
 
 const Artist = (props) => {
@@ -126,6 +127,7 @@ const Artist = (props) => {
                                                         height: '240px',
                                                         objectFit: 'cover'
                                                     }}
+                                                    className="album-cover"
                                                 />
                                             </Link>
                                             <Link

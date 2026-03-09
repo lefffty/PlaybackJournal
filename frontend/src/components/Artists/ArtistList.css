@@ -1,0 +1,7 @@
+.album-cover:hover {
+    transform: scale(1.03);
+}
+
+.album-cover {
+    transition: transform 0.3s ease;
+}

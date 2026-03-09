@@ -130,7 +130,8 @@ const Genre = (props) => {
                                                         height: '240px',
                                                         objectFit: 'cover'
                                                     }}
-                                                    />
+                                                    className="album-cover"
+                                                />
                                             </Link>
                                             <Link
                                                 to={`/albums/${album.id}/`}
