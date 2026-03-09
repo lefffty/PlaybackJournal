@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (
     PlaylistViewSet,
+    UserPlaylistViewSet,
     PlaylistCreateUserViewSet,
 )
 
@@ -16,6 +17,11 @@ router.register(
     r'playlists',
     PlaylistCreateUserViewSet,
     basename='playlist_user',
+)
+router.register(
+    r'playlists',
+    UserPlaylistViewSet,
+    basename='user_playlist'
 )
 
 urlpatterns = [

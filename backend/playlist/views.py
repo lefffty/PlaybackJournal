@@ -1,9 +1,8 @@
-from rest_framework import viewsets
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
     IsAuthenticated
 )
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
@@ -17,7 +16,11 @@ from .serializers import (
     PlaylistCreateUpdateSerializer
 )
 from .permissions import OwnerOrReadOnly
-from .models import Playlist, RatedPlaylist, FavouritePlaylist
+from .models import (
+    Playlist,
+    RatedPlaylist,
+    FavouritePlaylist
+)
 
 
 class PlaylistViewSet(
@@ -112,3 +115,30 @@ class PlaylistCreateUserViewSet(
             pk,
             RatedPlaylist,
         )
+
+
+class UserPlaylistViewSet(
+    viewsets.GenericViewSet
+):
+    permission_classes = [IsAuthenticated]
+
+    @action(
+        detail=True,
+        url_path='user_playlist',
+    )
+    def user_playlist(self, request: HttpRequest, pk: int):
+        playlist = get_object_or_404(Playlist, pk=pk)
+        user = request.user
+
+        response = {
+            'favourite': False,
+            'rating': 0,
+        }
+
+        if FavouritePlaylist.objects.filter(user=user, playlist=playlist).exists():
+            response['favourite'] = True
+        if RatedPlaylist.objects.filter(user=user, playlist=playlist).exists():
+            instance = RatedPlaylist.objects.get(user=user, playlist=playlist)
+            response['rating'] = instance.rating
+
+        return Response(response, status=status.HTTP_200_OK)
