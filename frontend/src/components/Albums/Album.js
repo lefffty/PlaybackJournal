@@ -5,9 +5,9 @@ import Container from "react-bootstrap/Container";
 import {ListGroup, Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
 
-import ScaleRating from "../Common/ScaleRating";
-import HeartIcon from "../Common/HeartIcon";
-import Headphones from "../Common/Headphones";
+import ScaleRating from "../Common/ScaleRating/ScaleRating";
+import HeartIcon from "../Common/HeartIcon/HeartIcon";
+import Headphones from "../Common/Headphones/Headphones";
 
 import AlbumService from "../../services/AlbumService";
 
@@ -49,7 +49,7 @@ const Album = (props) => {
                     }
                 )
             }
-        }, []
+        }, [id]
     )
 
     const onRatingChange = (value) => {
@@ -130,71 +130,71 @@ const Album = (props) => {
                         <Col md={8}>
                             <Card.Body>
                                 <Row>
-                                <Col md={8}>
-                                    <Card.Title className="fs-1">
-                                        {album.name}
-                                    </Card.Title>
-                                    <Card.Text className="fs-3">
-                                        <span className="text-muted fs-5">Исполнители: </span>
-                                        <span>{album.artists.map(
-                                            (artist, index) => (
-                                                <React.Fragment>
-                                                    <Link
-                                                        className="text-decoration-none"
-                                                        to={`/artists/${artist.id}/`}
-                                                        >
-                                                        {artist.username}
-                                                    </Link>
-                                                    {index < album.artists.length - 1 && ', '}
-                                                    </React.Fragment>
-                                            )
-                                        )}
-                                        </span>
-                                    </Card.Text>
-                                    <Card.Text className="fs-3">
-                                        <span className="text-muted fs-5">Жанры: </span>
-                                        <span>
-                                            {album.genres.map(
-                                                (genre, index) => (
+                                    <Col md={8} className="mb-3">
+                                        <Card.Title className="fs-1">
+                                            {album.name}
+                                        </Card.Title>
+                                        <Card.Text className="fs-3">
+                                            <span className="text-muted fs-5">Исполнители: </span>
+                                            <span>{album.artists.map(
+                                                (artist, index) => (
                                                     <React.Fragment>
-                                                        <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
-                                                            {genre.name}
+                                                        <Link
+                                                            className="text-decoration-none"
+                                                            to={`/artists/${artist.id}/`}
+                                                            >
+                                                            {artist.username}
                                                         </Link>
-                                                        {index < album.genres.length - 1 && ', '}
-                                                    </React.Fragment>
+                                                        {index < album.artists.length - 1 && ', '}
+                                                        </React.Fragment>
                                                 )
                                             )}
-                                        </span>
-                                    </Card.Text>
-                                    <Card.Text className="fs-3">
-                                        <span className="text-muted fs-5">Выпущен: </span>
-                                        <span>{moment(album.publication_date).format('Do MMMM YYYY')}</span>
-                                    </Card.Text>
-                                    <Card.Text className="fs-3">
-                                        <span className="text-muted fs-5">Средняя оценка: </span>
-                                        <span>
-                                            {album.average_rating !== "-" ? (
-                                                Intl.NumberFormat("en", {maximumFractionDigits: 2}).format(album.average_rating))
-                                                : (
-                                                    "-"
-                                                )
-                                            } / 10.0
-                                        </span>
-                                    </Card.Text>
-                                </Col>
-                                <Col md={3}>
-                                    <Row md={3}>
-                                        {token == null || token === '' ? (                                            
-                                            <>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <HeartIcon initialValue={userAlbumData.liked} onClick={onLikedClick}/>
-                                                <Headphones initialValue={userAlbumData.listened} onClick={onListenedClick}/>
-                                            </>
-                                        )}
-                                    </Row>
-                                </Col>
+                                            </span>
+                                        </Card.Text>
+                                        <Card.Text className="fs-3">
+                                            <span className="text-muted fs-5">Жанры: </span>
+                                            <span>
+                                                {album.genres.map(
+                                                    (genre, index) => (
+                                                        <React.Fragment>
+                                                            <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
+                                                                {genre.name}
+                                                            </Link>
+                                                            {index < album.genres.length - 1 && ', '}
+                                                        </React.Fragment>
+                                                    )
+                                                )}
+                                            </span>
+                                        </Card.Text>
+                                        <Card.Text className="fs-3">
+                                            <span className="text-muted fs-5">Выпущен: </span>
+                                            <span>{moment(album.publication_date).format('Do MMMM YYYY')}</span>
+                                        </Card.Text>
+                                        <Card.Text className="fs-3">
+                                            <span className="text-muted fs-5">Средняя оценка: </span>
+                                            <span>
+                                                {album.average_rating !== "-" ? (
+                                                    Intl.NumberFormat("en", {maximumFractionDigits: 2}).format(album.average_rating))
+                                                    : (
+                                                        "-"
+                                                    )
+                                                } / 10.0
+                                            </span>
+                                        </Card.Text>
+                                    </Col>
+                                    <Col md={3}>
+                                        <Row md={3}>
+                                            {token == null || token === '' ? (                                            
+                                                <>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <HeartIcon initialValue={userAlbumData.liked} onClick={onLikedClick}/>
+                                                    <Headphones initialValue={userAlbumData.listened} onClick={onListenedClick}/>
+                                                </>
+                                            )}
+                                        </Row>
+                                    </Col>
                                 </Row>
                                 {token == null || token === '' ? (
                                     <>

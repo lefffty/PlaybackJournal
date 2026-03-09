@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {FaHeadphones} from "react-icons/fa";
 
+import './Headphones.css';
+
 function Headphones({initialValue, onClick}){
     const [listened, setListened] = useState(initialValue);
 
@@ -22,6 +24,7 @@ function Headphones({initialValue, onClick}){
                 color={listened ? "blue" : "gray"}
                 size={30}
                 onClick={onListenedClick}
+                className="headphones"
             />
         </div>
     )

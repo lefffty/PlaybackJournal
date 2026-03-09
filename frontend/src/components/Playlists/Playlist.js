@@ -6,6 +6,11 @@ import {Card, Row, Col, ListGroup, Button, Modal} from 'react-bootstrap';
 import PlaylistService from "../../services/PlaylistService";
 import UserService from "../../services/UserService";
 
+import ScaleRating from "../Common/ScaleRating/ScaleRating";
+import HeartIcon from "../Common/HeartIcon/HeartIcon";
+import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
+
+
 const Playlist = (props) => {
     const params = useParams();
     const [show, setShow] = useState(false);
@@ -13,6 +18,10 @@ const Playlist = (props) => {
     const token = localStorage.getItem('auth_token');
     const [userId, setUserId] = useState(null);
     const [playlist, setPlaylist] = useState(null);
+    const [userPlaylistData, setUserPlaylistData] = useState({
+        rating: 0,
+        favourite: false,
+    })
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -22,6 +31,24 @@ const Playlist = (props) => {
             .then(
                 (response) => {
                     setPlaylist(response.data);
+                }
+            )
+            .catch(
+                (e) => {
+                    setError(e.toString());
+                }
+            )
+        },
+        [id]
+    )
+
+    useEffect(
+        () => {
+            PlaylistService.userPlaylist(id)
+            .then(
+                (response) => {
+                    setUserPlaylistData(response.data);
+                    console.log(response.data);
                 }
             )
             .catch(
@@ -51,6 +78,39 @@ const Playlist = (props) => {
         },
         [id]
     )
+
+    const onLikedClick = () => {
+        setUserPlaylistData(
+            prevstate => ({
+                ...prevstate,
+                favourite: !prevstate.favourite
+            })
+        )
+        PlaylistService.favouritePlaylist(id)
+        .catch(
+            (e) => {
+                setError(e.toString());
+            }
+        )
+    }
+
+    const onRatingChange = (value) => {
+        setUserPlaylistData(
+            prevstate => ({
+                ...prevstate,
+                rating: value
+            })
+        )
+        const data = {
+            rating: value
+        }
+        PlaylistService.ratePlaylist(id, data)
+        .catch(
+            (e) => {
+                setError(e.toString());
+            }
+        )
+    }
 
     const onDeleteBtnClick = () => {
         PlaylistService.deletePlaylist(id)
@@ -93,7 +153,7 @@ const Playlist = (props) => {
                         </Col>
                         <Col md={8}>
                             <Card.Body>
-                                <Row>
+                                <Row className="mb-3">
                                     <Col md={8}>
                                         <Card.Title className="fs-1">
                                             {playlist.name}
@@ -109,36 +169,64 @@ const Playlist = (props) => {
                                             <span>{playlist.description}</span>
                                             
                                         </Card.Text>
-                                        {userId === playlist.author.id
-                                            ? (
-                                                <>
-                                                    <Button className="me-2" onClick={onOpenHandle}>
-                                                        Удалить плейлист
-                                                    </Button>
-
-                                                    <Modal show={show} onHide={onCloseHandle}>
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title>Подтверждение</Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>Вы уверены, что хотите удалить плейлист?</Modal.Body>
-                                                        <Modal.Footer>
-                                                            <Button variant="primary" onClick={onDeleteBtnClick}>
-                                                                Да
-                                                            </Button>
-                                                            <Button variant="secondary" onClick={onCloseHandle}>
-                                                                Нет
-                                                            </Button>
-                                                        </Modal.Footer>
-                                                    </Modal>
-                                                </>
-                                            )
-                                            : (
-                                                <>
-                                                </>
-                                            )
-                                        }
+                                    </Col>
+                                    <Col md={3}>
+                                        <Row md={3}>
+                                            {token == null || token === ''
+                                                ? (
+                                                    <>
+                                                    </>
+                                                )
+                                                : (
+                                                    <>
+                                                        <HeartIcon initialValue={userPlaylistData.favourite} onClick={onLikedClick}/>
+                                                    </>
+                                                )
+                                            }
+                                        </Row>
                                     </Col>
                                 </Row>
+                                <Row className="mb-3">
+                                {userId === playlist.author.id
+                                    ? (
+                                        <>
+                                        </>
+                                    )
+                                    : (
+                                        <>
+                                            <ScaleRating initialValue={userPlaylistData.rating} onRatingChange={onRatingChange}/>
+                                        </>
+                                    )
+                                }
+                                </Row>
+                                {userId === playlist.author.id
+                                    ? (
+                                        <>
+                                            <Button className="me-2" onClick={onOpenHandle}>
+                                                Удалить плейлист
+                                            </Button>
+
+                                            <Modal show={show} onHide={onCloseHandle}>
+                                                <Modal.Header closeButton>
+                                                    <Modal.Title>Подтверждение</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>Вы уверены, что хотите удалить плейлист?</Modal.Body>
+                                                <Modal.Footer>
+                                                    <Button variant="primary" onClick={onDeleteBtnClick}>
+                                                        Да
+                                                    </Button>
+                                                    <Button variant="secondary" onClick={onCloseHandle}>
+                                                        Нет
+                                                    </Button>
+                                                </Modal.Footer>
+                                            </Modal>
+                                        </>
+                                    )
+                                    : (
+                                        <>
+                                        </>
+                                    )
+                                }
                             </Card.Body>
                         </Col>
                     </Row>

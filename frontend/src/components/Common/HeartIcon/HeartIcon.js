@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 
+import './HeartIcon.css';
+
 function HeartIcon({initialValue = true, onClick}) {
   const [liked, setLiked] = useState(initialValue);
 
@@ -22,6 +24,7 @@ function HeartIcon({initialValue = true, onClick}) {
         color={liked ? "red" : "gray"}
         size={30}
         onClick={onHeartClick}
+        className='heart-icon'
       />
     </div>
   );

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import {FaStar} from "react-icons/fa";
 import Container from "react-bootstrap/Container";
 
+import './ScaleRating.css';
+
 const ScaleRating = ({initialValue, onRatingChange, totalStars = 10}) => {
     const [rating, setRating] = useState(initialValue);
     const [hover, setHover] = useState(0);
@@ -19,13 +21,13 @@ const ScaleRating = ({initialValue, onRatingChange, totalStars = 10}) => {
                         const starValue = index + 1;
                         return (
                             <FaStar
-                                
                                 key={index}
                                 size={30}
                                 color={starValue <= (hover || rating) ? '#ad8611' : '#e4e5e9'}
                                 onClick={() => handleClick(starValue)}
                                 onMouseEnter={() => setHover(starValue)}
                                 onMouseLeave={() => setHover(0)}
+                                className="scale-rating"
                             />
                         )
                     }

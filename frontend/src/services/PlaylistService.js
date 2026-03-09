@@ -16,6 +16,18 @@ class PlaylistService{
     deletePlaylist(id){
         return AxiosInstance.delete(`api/playlists/${id}/`);
     }
+
+    userPlaylist(id){
+        return AxiosInstance.get(`api/playlists/${id}/user_playlist/`);
+    }
+
+    favouritePlaylist(id){
+        return AxiosInstance.post(`api/playlists/${id}/favourite/`);
+    }
+
+    ratePlaylist(id, data){
+        return AxiosInstance.post(`api/playlists/${id}/rated/`, data);
+    }
 }
 
 export default new PlaylistService();
