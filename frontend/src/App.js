@@ -15,9 +15,10 @@ import Avatar from './components/Users/Avatar';
 import Profile from './components/Users/Profile';
 import UserService from './services/UserService';
 
-import FavouriteList from './components/Users/UserLists/FavouriteList';
-import ListenedList from './components/Users/UserLists/ListenedList';
-import RatedList from './components/Users/UserLists/RatedList';
+import FavouritePlaylists from './components/Users/UserLists/FavouritePlaylists';
+import FavouriteAlbums from './components/Users/UserLists/FavouriteAlbums';
+import RatedAlbums from './components/Users/UserLists/RatedAlbums';
+import ListenedAlbums from './components/Users/UserLists/ListenedAlbums';
 
 import Albums from './components/Albums/Albums';
 import Album from './components/Albums/Album';
@@ -212,18 +213,18 @@ function App() {
           >
           </Route>
           <Route
-            path='/profile/favourite/'
-            element={<FavouriteList/>}
+            path='/profile/favourite/albums'
+            element={<FavouriteAlbums/>}
           >
           </Route>
           <Route
-            path='/profile/listened/'
-            element={<ListenedList/>}
+            path='/profile/listened/albums'
+            element={<ListenedAlbums/>}
           >
           </Route>
           <Route
-            path='/profile/rated/'
-            element={<RatedList/>}
+            path='/profile/rated/albums'
+            element={<RatedAlbums/>}
           >
           </Route>
           <Route
@@ -259,6 +260,11 @@ function App() {
           <Route
             path='/songs/:id/'
             element={<Song/>}
+          >
+          </Route>
+          <Route
+            path='/profile/favourite/playlists'
+            element={<FavouritePlaylists />}
           >
           </Route>
         </Routes>

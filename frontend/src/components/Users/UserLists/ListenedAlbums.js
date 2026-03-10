@@ -6,14 +6,14 @@ import moment from "moment";
 import UserService from "../../../services/UserService";
 import './AlbumsList.css';
 
-const ListenedList = (props) => {
+const ListenedAlbums = (props) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
 
     useEffect(
         () => {
-            UserService.fetchListened()
+            UserService.fetchListenedAlbums()
             .then(
                 (response) => {
                     setData(response.data);
@@ -65,9 +65,11 @@ const ListenedList = (props) => {
                                                 />
                                             </Link>
                                             <Link to={`/albums/${item.album.id}/`} className="text-decoration-none fs-4" style={{color: "black"}}>
-                                                <Col>
-                                                    {item.album.name}
-                                                </Col>
+                                                    <Card.Text
+                                                        className="album-title"
+                                                    >
+                                                        {item.album.name}
+                                                    </Card.Text>
                                             </Link>
                                             <Col>
                                                 {moment(item.album.publication_date).year()}
@@ -84,4 +86,4 @@ const ListenedList = (props) => {
     )
 };
 
-export default ListenedList;
+export default ListenedAlbums;

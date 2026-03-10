@@ -6,14 +6,14 @@ import moment from "moment";
 import UserService from "../../../services/UserService";
 import './AlbumsList.css';
 
-const FavouriteList = (props) => {
+const FavouriteAlbums = (props) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
 
     useEffect(
         () => {
-            UserService.fetchFavourite()
+            UserService.fetchFavouriteAlbums()
             .then(
                 (response) => {
                     setData(response.data);
@@ -65,7 +65,7 @@ const FavouriteList = (props) => {
                                                 />
                                             </Link>
                                             <Link to={`/albums/${item.album.id}/`} className="text-decoration-none fs-4" style={{color: "black"}}>
-                                                <Col>
+                                                <Col className="album-title">
                                                     {item.album.name}
                                                 </Col>
                                             </Link>
@@ -84,4 +84,4 @@ const FavouriteList = (props) => {
     )
 };
 
-export default FavouriteList;
+export default FavouriteAlbums;

@@ -6,14 +6,14 @@ import moment from "moment";
 import UserService from "../../../services/UserService";
 import './AlbumsList.css';
 
-const RatedList = (props) => {
+const RatedAlbums = (props) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
 
     useEffect(
         () => {
-            UserService.fetchRated()
+            UserService.fetchRatedAlbums()
             .then(
                 (response) => {
                     setData(response.data);
@@ -91,7 +91,11 @@ const RatedList = (props) => {
                                                     className="text-decoration-none fs-4 d-block"
                                                     style={{color: "black"}}
                                                 >
+                                                    <Card.Text
+                                                        className="album-title"
+                                                    >
                                                         {item.album.name}
+                                                    </Card.Text>
                                                 </Link>
                                                 </div>
                                             <div>
@@ -109,4 +113,4 @@ const RatedList = (props) => {
     )
 };
 
-export default RatedList;
+export default RatedAlbums;

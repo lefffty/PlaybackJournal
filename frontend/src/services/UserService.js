@@ -26,16 +26,20 @@ class UserService {
         return AxiosInstance.put("/api/users/me/avatar/", data);
     }
 
-    fetchListened(){
+    fetchListenedAlbums(){
         return AxiosInstance.get("/api/users/listened/albums/");
     }
 
-    fetchFavourite(){
+    fetchFavouriteAlbums(){
         return AxiosInstance.get("/api/users/favorite/albums/");
     }
 
-    fetchRated(){
+    fetchRatedAlbums(){
         return AxiosInstance.get("/api/users/rated/albums/");
+    }
+
+    fetchFavouritePlaylists(){
+        return AxiosInstance.get("/api/users/favourite/playlists/");
     }
 }
 

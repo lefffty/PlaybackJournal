@@ -5,3 +5,7 @@
 .album-cover {
     transition: transform 0.3s ease;
 }
+
+.album-title:hover {
+    text-decoration: underline;
+}
