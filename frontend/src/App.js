@@ -15,6 +15,7 @@ import Avatar from './components/Users/Avatar';
 import Profile from './components/Users/Profile';
 import UserService from './services/UserService';
 
+import RatedPlaylists from './components/Users/UserLists/RatedPlaylists';
 import FavouritePlaylists from './components/Users/UserLists/FavouritePlaylists';
 import FavouriteAlbums from './components/Users/UserLists/FavouriteAlbums';
 import RatedAlbums from './components/Users/UserLists/RatedAlbums';
@@ -265,6 +266,11 @@ function App() {
           <Route
             path='/profile/favourite/playlists'
             element={<FavouritePlaylists />}
+          >
+          </Route>
+          <Route
+              path='/profile/rated/playlists'
+              element={<RatedPlaylists />}
           >
           </Route>
         </Routes>

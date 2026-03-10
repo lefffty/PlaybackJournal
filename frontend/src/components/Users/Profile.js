@@ -84,12 +84,18 @@ const Profile = (props) => {
                     </Card>
                     <Card className="mx-auto mb-3" style={{ maxWidth: '900px'}}>
                         <Row className="g-0 mb-3">
+                            {/* <Card.Title className="ms-3 mt-1 fs-1">
+                                Альбомы
+                            </Card.Title> */}
+                            <Card.Header>
+                                Альбомы
+                            </Card.Header>
                             <Col md={4}>
                                 <Card.Header className="fs-4">
                                     <div className="d-flex align-items-end">
                                         <Link to={"/profile/favourite/albums"} className="text-decoration-none">
                                             <Card.Text className="mb-0 me-2" style={{color: "black", textAlign:"center"}}>
-                                                <b>Любимые альбомы</b>
+                                                <b>Любимые</b>
                                             </Card.Text>
                                         </Link>
                                         <Link to={"/profile/favourite/albums"} style={{color: "black"}}>
@@ -117,7 +123,7 @@ const Profile = (props) => {
                                     <div className="d-flex align-items-end">
                                         <Link to={"/profile/listened/albums"} className="text-decoration-none">
                                             <Card.Text className="mb-0 me-2" style={{color: "black", textAlign:"center"}}>
-                                                <b>Прослушанные альбомы</b>
+                                                <b>Прослушанные</b>
                                             </Card.Text>
                                         </Link>
                                         <Link to={"/profile/listened/albums"} style={{color: "black"}}>
@@ -127,16 +133,33 @@ const Profile = (props) => {
                                 </Card.Header>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col md={5}>
+                        <Row className="g-0 mb-3">
+                            <Card.Header>
+                                Плейлисты
+                            </Card.Header>
+                            <Col md={4}>
                                 <Card.Header className="fs-4">
                                     <div className="d-flex align-items-end">
                                         <Link to={"/profile/favourite/playlists"} className="text-decoration-none">
                                             <Card.Text className="mb-0 me-2" style={{color: "black", textAlign:"center"}}>
-                                                <b>Любимые плейлисты</b>
+                                                <b>Любимые</b>
                                             </Card.Text>
                                         </Link>
                                         <Link to={"/profile/favourite/playlists"} style={{color: "black"}}>
+                                            <FaAngleRight className="hover-shift"/>
+                                        </Link>
+                                    </div>
+                                </Card.Header>
+                            </Col>
+                            <Col md={5}>
+                                <Card.Header className="fs-4">
+                                    <div className="d-flex align-items-end">
+                                        <Link to={"/profile/rated/playlists"} className="text-decoration-none">
+                                            <Card.Text className="mb-0 me-2" style={{color: "black", textAlign:"center"}}>
+                                                <b>Оценки</b>
+                                            </Card.Text>
+                                        </Link>
+                                        <Link to={"/profile/rated/playlists"} style={{color: "black"}}>
                                             <FaAngleRight className="hover-shift"/>
                                         </Link>
                                     </div>

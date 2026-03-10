@@ -1,40 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Row, Badge } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import moment from "moment";
 
 import UserService from "../../../services/UserService";
 import './AlbumsList.css';
 
-const RatedAlbums = (props) => {
+const RatedPlaylists = (props) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
 
     useEffect(
         () => {
-            UserService.fetchRatedAlbums()
+            UserService.fetchRatedPlaylists()
             .then(
                 (response) => {
                     setData(response.data);
                 }
             )
+            .catch(
+                (e) => {
+                    setError(e.toString());
+                }
+            )
         },
-        [token],
+        [token]
     )
-
-    if (!data){
-        return (
-            <div>
-                Loading...
-            </div>
-        )
-    }
 
     if (error){
         return (
             <div>
-                Error: {error}
+                <h1>
+                    Error: {error}
+                </h1>
             </div>
         )
     }
@@ -44,18 +42,18 @@ const RatedAlbums = (props) => {
             <Container>
                 <Card>
                     <Card.Title className="fs-1 ms-3 mt-3">
-                        Оценки альбомов
+                        Оценки
                     </Card.Title>
                     <Card.Body>
-                        <Row className="g-0">
+                        <Row className="g-0 flex-nowrap" style={{flexWrap: "nowrap", gap: '10px'}}>
                             {data.map(
-                                (item) => (
-                                    (
-                                        <Col className="p-0" key={item.album.id}>
+                                (item) => {
+                                    return (
+                                        <Col className="p-0 flex-shrink-0" key={item.playlist.id}>
                                             <div style={{position: "relative", width: '240px', height: '240px'}}>
-                                                <Link to={`/albums/${item.album.id}/`}>
+                                                <Link to={`/playlists/${item.playlist.id}/`}>
                                                     <Card.Img
-                                                        src={"http://localhost:8000" + item.album.cover}
+                                                        src={"http://localhost:8000" + item.playlist.cover}
                                                         style={{
                                                             borderRadius: '5%',
                                                             width: '240px',
@@ -88,22 +86,19 @@ const RatedAlbums = (props) => {
                                                 </div>
                                             </div>
                                             <Link
-                                                to={`/albums/${item.album.id}/`}
+                                                to={`/playlists/${item.playlist.id}/`}
                                                 className="text-decoration-none fs-4 d-block"
-                                                style={{color: "black"}}
+                                                style={{color: "black", width: "240px"}}
                                             >
                                                 <Card.Text
                                                     className="album-title"
                                                 >
-                                                    {item.album.name}
+                                                    {item.playlist.name}
                                                 </Card.Text>
                                             </Link>
-                                            <div>
-                                                {moment(item.album.publication_date).year()}
-                                            </div>
                                         </Col>
                                     )
-                                )
+                                }
                             )}
                         </Row>
                     </Card.Body>
@@ -113,4 +108,4 @@ const RatedAlbums = (props) => {
     )
 };
 
-export default RatedAlbums;
+export default RatedPlaylists;

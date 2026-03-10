@@ -41,6 +41,10 @@ class UserService {
     fetchFavouritePlaylists(){
         return AxiosInstance.get("/api/users/favourite/playlists/");
     }
+
+    fetchRatedPlaylists(){
+        return AxiosInstance.get("/api/users/rated/playlists/");
+    }
 }
 
 export default new UserService();
