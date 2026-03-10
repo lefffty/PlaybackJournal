@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 import UserService from "../../../services/UserService";
+import './AlbumsList.css';
 
 const RatedList = (props) => {
     const [data, setData] = useState([]);
@@ -54,13 +55,14 @@ const RatedList = (props) => {
                                             <div style={{position: "relative"}}>
                                                 <Link to={`/albums/${item.album.id}/`}>
                                                     <Card.Img
-                                                    src={"http://localhost:8000" + item.album.cover}
-                                                    style={{
-                                                        borderRadius: '5%',
-                                                        width: '240px',
-                                                        height: '240px',
-                                                        objectFit: 'cover'
-                                                    }}    
+                                                        src={"http://localhost:8000" + item.album.cover}
+                                                        style={{
+                                                            borderRadius: '5%',
+                                                            width: '240px',
+                                                            height: '240px',
+                                                            objectFit: 'cover'
+                                                        }}
+                                                        className="album-cover"
                                                     />
                                                 </Link>
                                                 <div

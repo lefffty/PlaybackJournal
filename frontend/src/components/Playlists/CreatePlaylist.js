@@ -43,6 +43,13 @@ const CreatePlaylist = (props) => {
 
     useEffect(
         () => {
+            console.log(error);
+        },
+        [error]
+    )
+
+    useEffect(
+        () => {
             console.log(formData);
         },
         [formData]
@@ -94,10 +101,16 @@ const CreatePlaylist = (props) => {
             cover: formData.cover,
             songs: formData.songs.map((s) => ({id: s.id}))
         }
+        console.log(data);
         PlaylistService.createPlaylist(formData)
         .then(
-            (_) => {
-                navigate('/playlists/')
+            (response) => {
+                navigate(`/playlists/${response.data.id}/`)
+            }
+        )
+        .catch(
+            (e) => {
+                setError(e)
             }
         )
     }

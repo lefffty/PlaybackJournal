@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
+from collections import Counter
+
 
 from .models import (
     Playlist,
@@ -95,11 +97,14 @@ class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):
             song['song'].pk
             for song in value
         ]
+        ids_counter = Counter(ids)
 
-        if list(set(ids)) != ids:
-            raise serializers.ValidationError(
-                'Песни не должны повторяться!'
-            )
+        for _, val in ids_counter.items():
+            if val != 1:
+                raise serializers.ValidationError(
+                    'Песни не должны повторяться!'
+                )
+
         return value
 
     def _save_songs(self, playlist, _songs):
