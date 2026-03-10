@@ -12,11 +12,10 @@ from song.serializers import (
     SongSerializer,
     SongSimpleSerializer
 )
-from users.serializers import UserSimpleSerializer
 
 
 class PlaylistSimpleSerializer(serializers.ModelSerializer):
-    author = UserSimpleSerializer(read_only=True)
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Playlist
@@ -27,9 +26,14 @@ class PlaylistSimpleSerializer(serializers.ModelSerializer):
             'cover'
         )
 
+    def get_author(self, obj):
+        from users.serializers import UserSimpleSerializer
+        serializer = UserSimpleSerializer(obj.author, read_only=True)
+        return serializer.data
+
 
 class PlaylistSerializer(serializers.ModelSerializer):
-    author = UserSimpleSerializer(read_only=True)
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Playlist
@@ -41,10 +45,15 @@ class PlaylistSerializer(serializers.ModelSerializer):
             'cover',
         )
 
+    def get_author(self, obj):
+        from users.serializers import UserSimpleSerializer
+        serializer = UserSimpleSerializer(obj.author, read_only=True)
+        return serializer.data
+
 
 class PlaylistDetailSerializer(serializers.ModelSerializer):
     songs = SongSerializer(read_only=True, many=True)
-    author = UserSimpleSerializer(read_only=True)
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Playlist
@@ -56,6 +65,11 @@ class PlaylistDetailSerializer(serializers.ModelSerializer):
             'cover',
             'songs',
         )
+
+    def get_author(self, obj):
+        from users.serializers import UserSimpleSerializer
+        serializer = UserSimpleSerializer(obj.author, read_only=True)
+        return serializer.data
 
 
 class PlaylistCreateUpdateSerializer(serializers.ModelSerializer):

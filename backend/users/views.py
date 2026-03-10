@@ -23,10 +23,11 @@ from .serializers import (
     UserRatedAlbumsSerializer,
     UserListenedAlbumsSerializer,
     UserFavouriteAlbumsSerialzer,
+    UserRatedPlaylistsSerializer,
+    UserFavouritePlaylistsSerializer,
 )
-
-from albums.serializers import AlbumGenreSerializer
 from playlist.serializers import PlaylistSimpleSerializer
+from albums.serializers import AlbumGenreSerializer
 from artist.serializers import ArtistSimpleSerializer
 from song.serializers import SongSerializer
 
@@ -34,11 +35,10 @@ from albums.models import (
     FavouriteAlbum,
     ListenedAlbum,
     RatedAlbum,
+    Album
 )
-
+from playlist.models import RatedPlaylist, FavouritePlaylist, Playlist
 from artist.models import Artist
-from albums.models import Album
-from playlist.models import Playlist
 from song.models import Song
 
 User = get_user_model()
@@ -153,12 +153,12 @@ class SearchViewSet(
         )
 
 
-class UserAlbumsListsViewSet(
+class UserListsViewSet(
     viewsets.GenericViewSet
 ):
     permission_classes = [IsAuthenticated]
 
-    def _get_albums_list(
+    def _get_user_lists(
         self,
         request: HttpRequest,
         model: Model,
@@ -168,32 +168,48 @@ class UserAlbumsListsViewSet(
         objects = model.objects.filter(
             user=user,
         )
-        _serializer = serializer(objects, many=True)
+        _serializer = serializer(objects, read_only=True, many=True)
         return Response(
             _serializer.data,
             status=status.HTTP_200_OK
         )
 
     @action(detail=False, methods=['GET'], url_path='favorite/albums')
-    def favourite(self, request):
-        return self._get_albums_list(
+    def favourite_albums(self, request):
+        return self._get_user_lists(
             request,
             FavouriteAlbum,
             UserFavouriteAlbumsSerialzer,
         )
 
     @action(detail=False, methods=['GET'], url_path='listened/albums')
-    def listened(self, request):
-        return self._get_albums_list(
+    def listened_albums(self, request):
+        return self._get_user_lists(
             request,
             ListenedAlbum,
             UserListenedAlbumsSerializer,
         )
 
     @action(detail=False, methods=['GET'], url_path='rated/albums')
-    def rated(self, request):
-        return self._get_albums_list(
+    def rated_albums(self, request):
+        return self._get_user_lists(
             request,
             RatedAlbum,
             UserRatedAlbumsSerializer,
+        )
+
+    @action(detail=False, methods=['GET'], url_path='favourite/playlists')
+    def favourite_playlists(self, request):
+        return self._get_user_lists(
+            request,
+            FavouritePlaylist,
+            UserFavouritePlaylistsSerializer,
+        )
+
+    @action(detail=False, methods=['GET'], url_path='rated/playlists')
+    def rated_playlists(self, request):
+        return self._get_user_lists(
+            request,
+            RatedPlaylist,
+            UserRatedPlaylistsSerializer,
         )

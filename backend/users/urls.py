@@ -25,7 +25,7 @@ router.register(
 useralbums_router = DefaultRouter()
 useralbums_router.register(
     r'users',
-    views.UserAlbumsListsViewSet,
+    views.UserListsViewSet,
     basename='user_albums_list',
 )
 

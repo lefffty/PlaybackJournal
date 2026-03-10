@@ -12,8 +12,16 @@ from albums.models import (
     ListenedAlbum,
     RatedAlbum,
 )
+from playlist.models import (
+    RatedPlaylist,
+    FavouritePlaylist
+)
+
 from albums.serializers import (
     AlbumSimpleSerializer
+)
+from playlist.serializers import (
+    PlaylistDetailSerializer
 )
 
 User = get_user_model()
@@ -121,6 +129,27 @@ class UserListenedAlbumsSerializer(serializers.ModelSerializer):
         model = ListenedAlbum
         fields = (
             'album',
+        )
+
+
+class UserRatedPlaylistsSerializer(serializers.ModelSerializer):
+    playlist = PlaylistDetailSerializer(read_only=True)
+
+    class Meta:
+        model = RatedPlaylist
+        fields = (
+            'playlist',
+            'rating',
+        )
+
+
+class UserFavouritePlaylistsSerializer(serializers.ModelSerializer):
+    playlist = PlaylistDetailSerializer(read_only=True)
+
+    class Meta:
+        model = FavouritePlaylist
+        fields = (
+            'playlist',
         )
 
 
