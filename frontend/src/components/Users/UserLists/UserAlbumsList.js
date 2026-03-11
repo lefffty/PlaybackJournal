@@ -46,11 +46,11 @@ const UserAlbumsList = ({listType, cardTitle}) => {
                         {cardTitle}
                     </Card.Title>
                     <Card.Body>
-                        <Row className="g-0">
+                        <Row className="g-0 flex-nowrap" style={{flexWrap: "nowrap", gap: '10px'}}>
                             {data.map(
                                 (item) => (
                                     (
-                                        <Col className="p-0" key={item.album.id}>
+                                        <Col className="p-0 flex-shrink-0" key={item.album.id}>
                                             <div style={{position: "relative", width: '240px', height: '240px'}}>
                                                 <Link to={`/albums/${item.album.id}/`}>
                                                     <Card.Img
@@ -99,7 +99,7 @@ const UserAlbumsList = ({listType, cardTitle}) => {
                                             <Link
                                                 to={`/albums/${item.album.id}/`}
                                                 className="text-decoration-none fs-4 d-block"
-                                                style={{color: "black"}}
+                                                style={{color: "black", width: "240px"}}
                                             >
                                                 <Card.Text
                                                     className="album-title"

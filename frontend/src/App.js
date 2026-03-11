@@ -15,8 +15,7 @@ import Avatar from './components/Users/Avatar';
 import Profile from './components/Users/Profile/Profile';
 import UserService from './services/UserService';
 
-import RatedPlaylists from './components/Users/UserLists/RatedPlaylists';
-import FavouritePlaylists from './components/Users/UserLists/FavouritePlaylists';
+import UserPlaylistsList from './components/Users/UserLists/UserPlaylistsList';
 
 import UserAlbumsList from './components/Users/UserLists/UserAlbumsList';
 
@@ -213,21 +212,6 @@ function App() {
           >
           </Route>
           <Route
-            path='/profile/favourite/albums'
-            element={<UserAlbumsList listType={"favouriteAlbums"} cardTitle={"Любимые альбомы"}/>}
-          >
-          </Route>
-          <Route
-            path='/profile/listened/albums'
-            element={<UserAlbumsList listType={"listenedAlbums"} cardTitle={"Прослушанные альбомы"}/>}
-          >
-          </Route>
-          <Route
-            path='/profile/rated/albums'
-            element={<UserAlbumsList listType={"ratedAlbums"} cardTitle={"Оценки альбомов"}/>}
-          >
-          </Route>
-          <Route
             path='/genre/:id/artists/'
             element={<GenreArtistsList/>}
           >
@@ -263,13 +247,28 @@ function App() {
           >
           </Route>
           <Route
+            path='/profile/favourite/albums'
+            element={<UserAlbumsList listType={"favouriteAlbums"} cardTitle={"Любимые альбомы"}/>}
+          >
+          </Route>
+          <Route
+            path='/profile/listened/albums'
+            element={<UserAlbumsList listType={"listenedAlbums"} cardTitle={"Прослушанные альбомы"}/>}
+          >
+          </Route>
+          <Route
+            path='/profile/rated/albums'
+            element={<UserAlbumsList listType={"ratedAlbums"} cardTitle={"Оценки альбомов"}/>}
+          >
+          </Route>
+          <Route
             path='/profile/favourite/playlists'
-            element={<FavouritePlaylists />}
+            element={<UserPlaylistsList listType={"favouritePlaylists"} cardTitle={"Любимые плейлисты"}/>}
           >
           </Route>
           <Route
               path='/profile/rated/playlists'
-              element={<RatedPlaylists />}
+            element={<UserPlaylistsList listType={"ratedPlaylists"} cardTitle={"Оценки плейлистов"}/>}
           >
           </Route>
         </Routes>
