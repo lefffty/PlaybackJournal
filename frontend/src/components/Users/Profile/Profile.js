@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import moment from 'moment';
 import { Card, Row, Col } from 'react-bootstrap';
 import Alert from 'react-bootstrap/Alert';
-import {FaUser, FaAt, FaCalendarAlt, FaEnvelope, FaAngleRight} from 'react-icons/fa';
+import {FaUser, FaAt, FaCalendarAlt, FaEnvelope} from 'react-icons/fa';
 import Container from 'react-bootstrap/Container';
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
-import ProfileListLink from './ProfileListLink';
+import ProfileLinksGroup from "./ProfileLinksGroup";
 import UserService from "../../../services/UserService";
 
 const Profile = (props) => {
@@ -84,21 +84,18 @@ const Profile = (props) => {
                         </Row>
                     </Card>
                     <Card className="mx-auto" style={{ maxWidth: '900px'}}>
-                        <Row className="g-0">
-                            <Card.Header>
-                                Альбомы
-                            </Card.Header>
-                            <ProfileListLink cardText={"Любимые"} link={"/profile/favourite/albums"} md={4}/>
-                            <ProfileListLink cardText={"Оценки"} link={"/profile/rated/albums"} md={3}/>
-                            <ProfileListLink cardText={"Прослушанные"} link={"/profile/listened/albums"} md={5}/>
-                        </Row>
-                        <Row className="g-0 mb-3">
-                            <Card.Header>
-                                Плейлисты
-                            </Card.Header>
-                            <ProfileListLink cardText={"Любимые"} link={"/profile/favourite/playlists"} md={4}/>
-                            <ProfileListLink cardText={"Оценки"} link={"/profile/rated/playlists"} md={5}/>
-                        </Row>
+                        <ProfileLinksGroup 
+                            groupHeader={"Альбомы"}
+                            cardsTexts={["Любимые", "Оценки", "Прослушанные"]}
+                            links={["/profile/favourite/albums", "/profile/rated/albums", "/profile/listened/albums"]}
+                            mds={[4, 3, 5]}
+                        />
+                        <ProfileLinksGroup
+                            groupHeader={"Плейлисты"}
+                            cardsTexts={["Любимые", "Оценки"]}
+                            links={["/profile/favourite/playlists", "/profile/rated/playlists"]}
+                            mds={[4, 5]}
+                        />
                     </Card>
                 </>
             )}
