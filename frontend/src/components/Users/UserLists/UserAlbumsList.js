@@ -1,35 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Row, Badge } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-import UserService from "../../../services/UserService";
-import './AlbumsList.css';
+import './UserList.css';
+import UserListFunction from './Utils/UserListFunction';
 
-const RatedAlbums = (props) => {
+const UserAlbumsList = ({listType, cardTitle}) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
 
+    const fetchFunction = UserListFunction(listType);
+
     useEffect(
         () => {
-            UserService.fetchRatedAlbums()
+            fetchFunction()
             .then(
                 (response) => {
                     setData(response.data);
                 }
             )
+            .catch(
+                (e) => {
+                    setError(e.toString());
+                }
+            )
         },
-        [token],
+        [token]
     )
-
-    if (!data){
-        return (
-            <div>
-                Loading...
-            </div>
-        )
-    }
 
     if (error){
         return (
@@ -44,7 +43,7 @@ const RatedAlbums = (props) => {
             <Container>
                 <Card>
                     <Card.Title className="fs-1 ms-3 mt-3">
-                        Оценки альбомов
+                        {cardTitle}
                     </Card.Title>
                     <Card.Body>
                         <Row className="g-0">
@@ -65,27 +64,37 @@ const RatedAlbums = (props) => {
                                                         className="album-cover"
                                                     />
                                                 </Link>
-                                                <div
-                                                    style={{
-                                                        position: 'absolute',
-                                                        top: '10px',
-                                                        right: '10px',
-                                                        width: '40px',
-                                                        height: '40px',
-                                                        borderRadius: '50%',
-                                                        backgroundColor: '#f5efe0',
-                                                        color: '#000',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        fontWeight: 'bold',
-                                                        fontSize: '1.2rem',
-                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                                                        zIndex: 10
-                                                    }}
-                                                >
-                                                    {item.rating}
-                                                </div>
+                                                {'rating' in item
+                                                    ? (
+                                                        <>
+                                                            <div
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '10px',
+                                                                    right: '10px',
+                                                                    width: '40px',
+                                                                    height: '40px',
+                                                                    borderRadius: '50%',
+                                                                    backgroundColor: '#f5efe0',
+                                                                    color: '#000',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    fontWeight: 'bold',
+                                                                    fontSize: '1.2rem',
+                                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                                                                    zIndex: 10
+                                                                }}
+                                                            >
+                                                                {item.rating}
+                                                            </div>
+                                                        </>
+                                                    )
+                                                    : (
+                                                        <>
+                                                        </>
+                                                    )
+                                                }
                                             </div>
                                             <Link
                                                 to={`/albums/${item.album.id}/`}
@@ -113,4 +122,4 @@ const RatedAlbums = (props) => {
     )
 };
 
-export default RatedAlbums;
+export default UserAlbumsList;

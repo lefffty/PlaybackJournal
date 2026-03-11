@@ -3,7 +3,7 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import UserService from "../../../services/UserService";
-import './AlbumsList.css';
+import './UserList.css';
 
 const RatedPlaylists = (props) => {
     const [data, setData] = useState([]);

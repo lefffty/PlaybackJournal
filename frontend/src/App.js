@@ -17,9 +17,8 @@ import UserService from './services/UserService';
 
 import RatedPlaylists from './components/Users/UserLists/RatedPlaylists';
 import FavouritePlaylists from './components/Users/UserLists/FavouritePlaylists';
-import FavouriteAlbums from './components/Users/UserLists/FavouriteAlbums';
-import RatedAlbums from './components/Users/UserLists/RatedAlbums';
-import ListenedAlbums from './components/Users/UserLists/ListenedAlbums';
+
+import UserAlbumsList from './components/Users/UserLists/UserAlbumsList';
 
 import Albums from './components/Albums/Albums';
 import Album from './components/Albums/Album';
@@ -215,17 +214,17 @@ function App() {
           </Route>
           <Route
             path='/profile/favourite/albums'
-            element={<FavouriteAlbums/>}
+            element={<UserAlbumsList listType={"favouriteAlbums"} cardTitle={"Любимые альбомы"}/>}
           >
           </Route>
           <Route
             path='/profile/listened/albums'
-            element={<ListenedAlbums/>}
+            element={<UserAlbumsList listType={"listenedAlbums"} cardTitle={"Прослушанные альбомы"}/>}
           >
           </Route>
           <Route
             path='/profile/rated/albums'
-            element={<RatedAlbums/>}
+            element={<UserAlbumsList listType={"ratedAlbums"} cardTitle={"Оценки альбомов"}/>}
           >
           </Route>
           <Route
