@@ -15,9 +15,7 @@ import Avatar from './components/Users/Avatar';
 import Profile from './components/Users/Profile/Profile';
 import UserService from './services/UserService';
 
-import UserPlaylistsList from './components/Users/UserLists/UserPlaylistsList';
-
-import UserAlbumsList from './components/Users/UserLists/UserAlbumsList';
+import UserList from './components/Users/UserLists/UserList';
 
 import Albums from './components/Albums/Albums';
 import Album from './components/Albums/Album';
@@ -248,27 +246,27 @@ function App() {
           </Route>
           <Route
             path='/profile/favourite/albums'
-            element={<UserAlbumsList listType={"favouriteAlbums"} cardTitle={"Любимые альбомы"}/>}
+            element={<UserList listType={"favouriteAlbums"} cardTitle={"Любимые альбомы"}/>}
           >
           </Route>
           <Route
             path='/profile/listened/albums'
-            element={<UserAlbumsList listType={"listenedAlbums"} cardTitle={"Прослушанные альбомы"}/>}
+            element={<UserList listType={"listenedAlbums"} cardTitle={"Прослушанные альбомы"}/>}
           >
           </Route>
           <Route
             path='/profile/rated/albums'
-            element={<UserAlbumsList listType={"ratedAlbums"} cardTitle={"Оценки альбомов"}/>}
+            element={<UserList listType={"ratedAlbums"} cardTitle={"Оценки альбомов"}/>}
           >
           </Route>
           <Route
             path='/profile/favourite/playlists'
-            element={<UserPlaylistsList listType={"favouritePlaylists"} cardTitle={"Любимые плейлисты"}/>}
+            element={<UserList listType={"favouritePlaylists"} cardTitle={"Любимые плейлисты"}/>}
           >
           </Route>
           <Route
               path='/profile/rated/playlists'
-            element={<UserPlaylistsList listType={"ratedPlaylists"} cardTitle={"Оценки плейлистов"}/>}
+            element={<UserList listType={"ratedPlaylists"} cardTitle={"Оценки плейлистов"}/>}
           >
           </Route>
         </Routes>

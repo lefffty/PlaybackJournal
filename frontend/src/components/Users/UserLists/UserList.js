@@ -6,7 +6,7 @@ import moment from "moment";
 import './UserList.css';
 import UserListFunction from './Utils/UserListFunction';
 
-const UserAlbumsList = ({listType, cardTitle}) => {
+const UserList = ({listType, cardTitle}) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
@@ -38,6 +38,9 @@ const UserAlbumsList = ({listType, cardTitle}) => {
         )
     }
 
+    const itemKey = listType.includes('Albums') ? 'album' : 'playlist';
+    const showYear = listType.includes('Albums');
+
     return (
         <div>
             <Container>
@@ -46,15 +49,16 @@ const UserAlbumsList = ({listType, cardTitle}) => {
                         {cardTitle}
                     </Card.Title>
                     <Card.Body>
-                        <Row className="g-0 flex-nowrap" style={{flexWrap: "nowrap", gap: '10px'}}>
+                        <Row className="g-0" style={{rowGap: "20px",  gap: '10px'}}>
                             {data.map(
-                                (item) => (
-                                    (
-                                        <Col className="p-0 flex-shrink-0" key={item.album.id}>
+                                (item) => {
+                                    const entity = item[itemKey];
+                                    return (
+                                        <Col className="p-0 flex-shrink-0" key={entity.id}>
                                             <div style={{position: "relative", width: '240px', height: '240px'}}>
-                                                <Link to={`/albums/${item.album.id}/`}>
+                                                <Link to={`/${itemKey}s/${entity.id}/`}>
                                                     <Card.Img
-                                                        src={"http://localhost:8000" + item.album.cover}
+                                                        src={"http://localhost:8000" + entity.cover}
                                                         style={{
                                                             borderRadius: '5%',
                                                             width: '240px',
@@ -97,22 +101,24 @@ const UserAlbumsList = ({listType, cardTitle}) => {
                                                 }
                                             </div>
                                             <Link
-                                                to={`/albums/${item.album.id}/`}
+                                                to={`/${itemKey}s/${entity.id}/`}
                                                 className="text-decoration-none fs-4 d-block"
                                                 style={{color: "black", width: "240px"}}
                                             >
                                                 <Card.Text
                                                     className="album-title"
                                                 >
-                                                    {item.album.name}
+                                                    {entity.name}
                                                 </Card.Text>
                                             </Link>
-                                            <div>
-                                                {moment(item.album.publication_date).year()}
-                                            </div>
+                                            {showYear && (
+                                                <div>
+                                                    {moment(item.album.publication_date).year()}
+                                                </div>
+                                            )}
                                         </Col>
                                     )
-                                )
+                                }
                             )}
                         </Row>
                     </Card.Body>
@@ -122,4 +128,4 @@ const UserAlbumsList = ({listType, cardTitle}) => {
     )
 };
 
-export default UserAlbumsList;
+export default UserList;
