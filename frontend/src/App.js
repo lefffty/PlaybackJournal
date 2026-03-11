@@ -12,7 +12,7 @@ import SignUp from './components/Users/SignUp';
 import Login from './components/Users/Login';
 import Password from './components/Users/Password';
 import Avatar from './components/Users/Avatar';
-import Profile from './components/Users/Profile';
+import Profile from './components/Users/Profile/Profile';
 import UserService from './services/UserService';
 
 import RatedPlaylists from './components/Users/UserLists/RatedPlaylists';
