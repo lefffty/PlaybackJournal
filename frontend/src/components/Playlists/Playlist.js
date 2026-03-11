@@ -206,6 +206,12 @@ const Playlist = (props) => {
                                                 Удалить плейлист
                                             </Button>
 
+                                            <Link to={`/playlists/${id}/edit/`}>
+                                                <Button>
+                                                    Редактировать плейлист
+                                                </Button>
+                                            </Link>
+
                                             <Modal show={show} onHide={onCloseHandle}>
                                                 <Modal.Header closeButton>
                                                     <Modal.Title>Подтверждение</Modal.Title>

@@ -30,7 +30,7 @@ import ArtistList from './components/Artists/ArtistList';
 
 import Playlists from './components/Playlists/Playlists';
 import Playlist from './components/Playlists/Playlist';
-import CreatePlaylist from './components/Playlists/CreatePlaylist';
+import CreateEditPlaylist from './components/Playlists/CreatePlaylist';
 
 import SearchField from './components/Common/SearchField';
 import SearchResults from './components/Search/SearchResults';
@@ -230,7 +230,12 @@ function App() {
           </Route>
           <Route
             path='/playlists/create/'
-            element={<CreatePlaylist/>}
+            element={<CreateEditPlaylist />}
+          >
+          </Route>
+          <Route
+            path='/playlists/:id/edit/'
+            element={<CreateEditPlaylist />}
           >
           </Route>
           <Route

@@ -28,6 +28,10 @@ class PlaylistService{
     ratePlaylist(id, data){
         return AxiosInstance.post(`api/playlists/${id}/rated/`, data);
     }
+
+    updatePlaylist(id, data){
+        return AxiosInstance.patch(`api/playlists/${id}/`, data);
+    }
 }
 
 export default new PlaylistService();

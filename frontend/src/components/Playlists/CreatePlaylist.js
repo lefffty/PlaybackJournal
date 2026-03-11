@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Card, ListGroup, ListGroupItem, Button } from "react-bootstrap";
 
 import SongService from '../../services/SongService';
 import PlaylistService from '../../services/PlaylistService';
 
 
-const CreatePlaylist = (props) => {
+const CreateEditPlaylist = (props) => {
     const token = localStorage.getItem('auth_token');
     const [formData, setFormData] = useState({
         name: '',
@@ -17,7 +17,10 @@ const CreatePlaylist = (props) => {
         songs: [],
     })
     const navigate = useNavigate();
+    const { id } = useParams();
+    const isEditMode = !!id;
     const [coverFile, setCoverFile] = useState(null);
+    const [initialCoverUrl, setInitialCoverUrl] = useState('');
     const [error, setError] = useState('');
     const [songs, setSongs] = useState([]);
     const [query, setQuery] = useState('');
@@ -40,6 +43,26 @@ const CreatePlaylist = (props) => {
         },
         []
     );
+
+    useEffect(
+        () => {
+            if (isEditMode){
+                PlaylistService.fetchPlaylist(id)
+                .then(
+                    (response) => {
+                        const playlist = response.data;
+                        setFormData({
+                            name: playlist.name,
+                            description: playlist.description,
+                            songs: playlist.songs.map(song => ({id: song.id, name: song.name}))
+                        })
+                        setInitialCoverUrl(playlist.cover);
+                    }
+                )
+            }
+        },
+        [id, isEditMode]
+    )
 
     useEffect(
         () => {
@@ -98,21 +121,23 @@ const CreatePlaylist = (props) => {
         const data = {
             name: formData.name,
             description: formData.description,
-            cover: formData.cover,
             songs: formData.songs.map((s) => ({id: s.id}))
         }
-        console.log(data);
-        PlaylistService.createPlaylist(formData)
-        .then(
-            (response) => {
-                navigate(`/playlists/${response.data.id}/`)
-            }
-        )
-        .catch(
-            (e) => {
-                setError(e)
-            }
-        )
+
+        if (coverFile){
+            data.cover = formData.cover;
+        }
+
+        if (isEditMode){
+            PlaylistService.updatePlaylist(id, data)
+            .then(() => navigate(`/playlists/${id}/`))
+            .catch(e => setError(e.toString()));
+        }
+        else{
+            PlaylistService.createPlaylist(data)
+            .then(response => navigate(`/playlists/${response.data.id}/`))
+            .catch(e => setError(e.toString()));
+        }
     }
 
     const onCoverFileChange = (e) => {
@@ -139,7 +164,7 @@ const CreatePlaylist = (props) => {
             )
             : (
                 <Card>
-                    <Card.Header><b>Создать плейлист</b></Card.Header>
+                    <Card.Header><b>{isEditMode ? "Редактировать плейлист" : "Создать плейлист"}</b></Card.Header>
                     <Card.Body>
                         <Form>
                             <Form.Group className="mb-3">
@@ -222,7 +247,7 @@ const CreatePlaylist = (props) => {
                                 )}
                             </Form.Group>
                             <Button type="submit" onClick={handleSubmit}>
-                                Создать
+                                {isEditMode ? "Сохранить" : "Создать"}
                             </Button>
                         </Form>
                     </Card.Body>
@@ -233,4 +258,4 @@ const CreatePlaylist = (props) => {
     )
 };
 
-export default CreatePlaylist;
+export default CreateEditPlaylist;
