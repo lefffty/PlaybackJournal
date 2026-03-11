@@ -45,17 +45,22 @@ const UserList = ({listType, cardTitle}) => {
         <div>
             <Container>
                 <Card>
-                    <Card.Title className="fs-1 ms-3 mt-3">
-                        {cardTitle}
-                    </Card.Title>
                     <Card.Body>
-                        <Row className="g-0" style={{rowGap: "20px",  gap: '10px'}}>
+                        <Card.Title className="fs-1 ms-3 mt-3">
+                            {cardTitle}
+                        </Card.Title>
+                        <Row className="g-0" style={{rowGap: "10px",  gap: '90px'}}>
                             {data.map(
                                 (item) => {
                                     const entity = item[itemKey];
                                     return (
-                                        <Col className="p-0 flex-shrink-0" key={entity.id}>
-                                            <div style={{position: "relative", width: '240px', height: '240px'}}>
+                                        <Col
+                                            className="p-0 flex-shrink-0 flex-grow-0"
+                                            key={entity.id}
+                                        >
+                                            <div
+                                                style={{position: "relative", width: '240px', height: '240px'}}
+                                            >
                                                 <Link to={`/${itemKey}s/${entity.id}/`}>
                                                     <Card.Img
                                                         src={"http://localhost:8000" + entity.cover}
@@ -113,7 +118,7 @@ const UserList = ({listType, cardTitle}) => {
                                             </Link>
                                             {showYear && (
                                                 <div>
-                                                    {moment(item.album.publication_date).year()}
+                                                    {moment(entity.publication_date).year()}
                                                 </div>
                                             )}
                                         </Col>

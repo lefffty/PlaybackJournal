@@ -133,5 +133,6 @@ class AlbumGenreSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'cover'
+            'cover',
+            'publication_date',
         )

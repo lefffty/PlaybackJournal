@@ -22,8 +22,7 @@ import Album from './components/Albums/Album';
 
 import Genres from './components/Genres/Genres';
 import Genre from './components/Genres/Genre';
-import GenreAlbumsList from './components/Genres/GenreLists/GenreAlbumsList';
-import GenreArtistsList from './components/Genres/GenreLists/GenreArtistsList';
+import GenreList from './components/Genres/GenreLists/GenreList';
 
 import Artists from './components/Artists/Artists';
 import Artist from './components/Artists/Artist';
@@ -211,12 +210,12 @@ function App() {
           </Route>
           <Route
             path='/genre/:id/artists/'
-            element={<GenreArtistsList/>}
+            element={<GenreList listType={"genreArtists"} cardTitle={"Исполнители"}/>}
           >
           </Route>
           <Route
             path='/genre/:id/albums/'
-            element={<GenreAlbumsList/>}
+            element={<GenreList listType={"genreAlbums"} cardTitle={"Альбомы"}/>}
           >
           </Route>
           <Route
