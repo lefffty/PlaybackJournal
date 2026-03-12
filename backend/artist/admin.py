@@ -5,7 +5,8 @@ from .models import (
     Artist,
     RelatedArtists,
     ArtistGenre,
-    ArtistSong
+    ArtistSong,
+    FavouriteArtist,
 )
 from .inlines import (
     RelatedArtistsInline,
@@ -43,8 +44,8 @@ class RelatedArtistsAdmin(admin.ModelAdmin):
         'related_artist',
     )
     search_fields = (
-        'artist',
-        'related_artist',
+        'artist__name',
+        'related_artist__name',
     )
 
 
@@ -56,8 +57,8 @@ class ArtistGenreAdmin(admin.ModelAdmin):
         'genre',
     )
     search_fields = (
-        'artist',
-        'genre',
+        'artist__name',
+        'genre__name',
     )
 
 
@@ -67,4 +68,17 @@ class ArtistSongAdmin(admin.ModelAdmin):
         'id',
         'artist',
         'song',
+    )
+
+
+@admin.register(FavouriteArtist)
+class FavouriteArtistAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'user',
+        'artist',
+    )
+    search_fields = (
+        'user__username',
+        'artist__username',
     )

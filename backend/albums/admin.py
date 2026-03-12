@@ -41,10 +41,21 @@ class AlbumAdmin(admin.ModelAdmin):
     )
     fieldsets = (
         (None, {
-            'fields': ('name', 'publication_date', 'display_songs', 'display_genres', 'cover', 'display_cover')
+            'fields': (
+                'name',
+                'publication_date',
+                'display_songs',
+                'display_genres',
+                'cover',
+                'display_cover'
+            )
         }),
         ('Статистика', {
-            'fields': ('display_favorites', 'display_listens', 'display_rated'),
+            'fields': (
+                'display_favorites',
+                'display_listens',
+                'display_rated'
+            ),
         }),
     )
     inlines = (AlbumSongInline, AlbumGenreInline, AlbumArtistInline)
@@ -95,19 +106,14 @@ class AbstractUserAlbumAdmin(admin.ModelAdmin):
         'album',
     )
     search_fields = (
-        'user',
-        'album',
+        'user__username',
+        'album__name',
     )
 
 
 @admin.register(RatedAlbum)
 class RatedAlbumAdmin(AbstractUserAlbumAdmin):
-    list_display = (
-        'id',
-        'user',
-        'album',
-        'rating'
-    )
+    list_display = AbstractUserAlbumAdmin.list_display + ('rating',)
     readonly_fields = (
         'rating',
     )
@@ -124,15 +130,15 @@ class ListenedAlbumAdmin(AbstractUserAlbumAdmin):
 
 
 @admin.register(AlbumSong)
-class AlbumSong(admin.ModelAdmin):
+class AlbumSongAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'album',
         'song',
     )
     search_fields = (
-        'album',
-        'song',
+        'album__name',
+        'song__name',
     )
 
 
@@ -144,8 +150,8 @@ class AlbumArtistAdmin(admin.ModelAdmin):
         'artist',
     )
     search_fields = (
-        'album',
-        'artist',
+        'album__name',
+        'artist__username',
     )
 
 
@@ -157,6 +163,6 @@ class AlbumGenreAdmin(admin.ModelAdmin):
         'genre',
     )
     search_fields = (
-        'album',
-        'genre',
+        'album__name',
+        'genre__name',
     )

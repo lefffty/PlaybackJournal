@@ -23,8 +23,10 @@ class UserAdmin(admin.ModelAdmin):
         'display_avatar',
     )
     search_fields = (
-        'username', 'first_name',
-        'last_name', 'email',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
     )
     readonly_fields = (
         'registration_date',
