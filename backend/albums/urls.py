@@ -3,7 +3,7 @@ from django.urls import path, include
 
 from .views import (
     AlbumListDetailViewSet,
-    AlbumCreateUserViewSet,
+    UserAlbumsPreferencesViewSet,
     UserAlbumViewSet
 )
 
@@ -16,7 +16,7 @@ router.register(
 )
 router.register(
     r'albums',
-    AlbumCreateUserViewSet,
+    UserAlbumsPreferencesViewSet,
     basename='album_user',
 )
 router.register(

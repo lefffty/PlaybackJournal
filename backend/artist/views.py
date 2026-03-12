@@ -4,9 +4,11 @@ from rest_framework import (
 )
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Model
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 
 from .serializers import (
@@ -15,7 +17,10 @@ from .serializers import (
     AlbumArtistSerializer,
     RelatedArtistSerializer
 )
-from .models import Artist
+from .models import (
+    Artist,
+    FavouriteArtist
+)
 
 
 class ArtistViewSet(
@@ -63,3 +68,38 @@ class ArtistDiscographyViewSet(
             read_only=True
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserArtistsPreferencesViewSet(
+    viewsets.GenericViewSet
+):
+    permission_classes = [IsAuthenticated]
+
+    def _create_user_genre_item(self, request: HttpRequest, pk: int, model: Model):
+        user = request.user
+        artist = get_object_or_404(Artist, pk=pk)
+
+        filter_kwargs = {
+            'user': user,
+            'artist': artist
+        }
+        instance = model.objects.filter(**filter_kwargs)
+
+        if instance.exists():
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            model.objects.create(**filter_kwargs)
+            return Response(status=status.HTTP_201_CREATED)
+
+    @action(
+        detail=True,
+        methods=['POST'],
+        url_path='favourite',
+    )
+    def favourite_genre(self, request: HttpRequest, pk: int):
+        return self._create_user_genre_item(
+            request,
+            pk,
+            FavouriteArtist
+        )

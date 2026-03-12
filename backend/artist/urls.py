@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     ArtistViewSet,
     ArtistDiscographyViewSet,
+    UserArtistsPreferencesViewSet,
 )
 
 
@@ -17,6 +18,11 @@ router.register(
     r'artists',
     ArtistDiscographyViewSet,
     basename='artists_discography',
+)
+router.register(
+    r'artists',
+    UserArtistsPreferencesViewSet,
+    basename='user_artists_preferences',
 )
 
 urlpatterns = [

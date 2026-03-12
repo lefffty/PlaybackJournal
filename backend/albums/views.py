@@ -73,12 +73,12 @@ class UserAlbumViewSet(
         return Response(response, status=status.HTTP_200_OK)
 
 
-class AlbumCreateUserViewSet(
+class UserAlbumsPreferencesViewSet(
     viewsets.GenericViewSet,
 ):
     permission_classes = [IsAuthenticated]
 
-    def _create_delete_album_user(self, request: HttpRequest, pk, model: Model):
+    def _create_user_album_item(self, request: HttpRequest, pk, model: Model):
         album = get_object_or_404(Album, pk=pk)
         user = request.user
 
@@ -122,8 +122,8 @@ class AlbumCreateUserViewSet(
         methods=['POST'],
         url_path='favourite'
     )
-    def favourite_albums(self, request, pk):
-        return self._create_delete_album_user(
+    def favourite_album(self, request, pk):
+        return self._create_user_album_item(
             request,
             pk,
             FavouriteAlbum,
@@ -134,8 +134,8 @@ class AlbumCreateUserViewSet(
         methods=['POST'],
         url_path='listened'
     )
-    def listened_albums(self, request, pk):
-        return self._create_delete_album_user(
+    def listened_album(self, request, pk):
+        return self._create_user_album_item(
             request,
             pk,
             ListenedAlbum,
@@ -146,8 +146,8 @@ class AlbumCreateUserViewSet(
         methods=['POST'],
         url_path='rated'
     )
-    def rated_albums(self, request: HttpRequest, pk):
-        return self._create_delete_album_user(
+    def rated_album(self, request: HttpRequest, pk):
+        return self._create_user_album_item(
             request,
             pk,
             RatedAlbum,
