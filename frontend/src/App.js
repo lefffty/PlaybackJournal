@@ -249,6 +249,11 @@ function App() {
           >
           </Route>
           <Route
+            path='/profile/favourite/artists'
+            element={<UserList listType={"favouriteArtists"} cardTitle={"Любимые исполнители"}/>}
+          >
+          </Route>
+          <Route
             path='/profile/favourite/albums'
             element={<UserList listType={"favouriteAlbums"} cardTitle={"Любимые альбомы"}/>}
           >

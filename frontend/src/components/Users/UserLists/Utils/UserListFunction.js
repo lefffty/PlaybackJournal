@@ -18,6 +18,9 @@ function UserListFunction(listType){
         case "ratedPlaylists":
             func = UserService.fetchRatedPlaylists
             break;
+        case "favouriteArtists":
+            func = UserService.fetchFavouriteArtists
+            break;
         default:
             break;
     }

@@ -96,6 +96,12 @@ const Profile = (props) => {
                             links={["/profile/favourite/playlists", "/profile/rated/playlists"]}
                             mds={[4, 5]}
                         />
+                        <ProfileLinksGroup
+                            groupHeader={"Исполнители"}
+                            cardsTexts={["Любимые"]}
+                            links={["/profile/favourite/artists"]}
+                            mds={[4]}
+                        />
                     </Card>
                 </>
             )}

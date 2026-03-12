@@ -31,7 +31,7 @@ class UserService {
     }
 
     fetchFavouriteAlbums(){
-        return AxiosInstance.get("/api/users/favorite/albums/");
+        return AxiosInstance.get("/api/users/favourite/albums/");
     }
 
     fetchRatedAlbums(){
@@ -44,6 +44,10 @@ class UserService {
 
     fetchRatedPlaylists(){
         return AxiosInstance.get("/api/users/rated/playlists/");
+    }
+
+    fetchFavouriteArtists(){
+        return AxiosInstance.get("/api/users/favourite/artists/");
     }
 }
 

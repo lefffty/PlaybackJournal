@@ -38,18 +38,28 @@ const UserList = ({listType, cardTitle}) => {
         )
     }
 
-    const itemKey = listType.includes('Albums') ? 'album' : 'playlist';
+    const itemKey = listType.includes('Albums')
+        ? 'album'
+        : listType.includes('Playlists')
+            ? 'playlist'
+            : 'artist'
+    ;
+    const imageBorderRadius = listType.includes('Artists') ? '50%' : '5%';
     const showYear = listType.includes('Albums');
+    const nameKey = listType.includes('Artists') ? 'username' : 'name';
+    const imageKey = listType.includes('Artists') ? 'avatar' : 'cover';
+    const alignText = listType.includes('Artists') ? 'center' : 'left';
+    const showArtists = listType.includes('Albums');
 
     return (
         <div>
             <Container>
                 <Card>
                     <Card.Body>
-                        <Card.Title className="fs-1 ms-3 mt-3">
+                        <Card.Title className="fs-1 ms-2 mt-3">
                             {cardTitle}
                         </Card.Title>
-                        <Row className="g-0" style={{rowGap: "10px",  gap: '90px'}}>
+                        <Row className="g-0 ms-2" style={{rowGap: "10px",  gap: '90px'}}>
                             {data.map(
                                 (item) => {
                                     const entity = item[itemKey];
@@ -63,9 +73,9 @@ const UserList = ({listType, cardTitle}) => {
                                             >
                                                 <Link to={`/${itemKey}s/${entity.id}/`}>
                                                     <Card.Img
-                                                        src={"http://localhost:8000" + entity.cover}
+                                                        src={"http://localhost:8000" + entity[imageKey]}
                                                         style={{
-                                                            borderRadius: '5%',
+                                                            borderRadius: imageBorderRadius,
                                                             width: '240px',
                                                             height: '240px',
                                                             objectFit: 'cover'
@@ -112,10 +122,30 @@ const UserList = ({listType, cardTitle}) => {
                                             >
                                                 <Card.Text
                                                     className="album-title"
+                                                    style={{
+                                                        textAlign: alignText
+                                                    }}
                                                 >
-                                                    {entity.name}
+                                                    {entity[nameKey]}
                                                 </Card.Text>
                                             </Link>
+                                            {showArtists && (
+                                                <span>
+                                                    {entity.artists.map(
+                                                        (artist, index) => (
+                                                            <React.Fragment>
+                                                                <Link
+                                                                    to={`/artists/${artist.id}/`}
+                                                                    className="text-muted text-decoration-none"
+                                                                >
+                                                                    {artist.username}
+                                                                </Link>
+                                                                {index < entity.artists.length - 1 && ', '}
+                                                            </React.Fragment>
+                                                        )
+                                                    )}
+                                                </span>
+                                            )}
                                             {showYear && (
                                                 <div>
                                                     {moment(entity.publication_date).year()}

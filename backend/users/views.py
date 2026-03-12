@@ -69,8 +69,6 @@ class UserProfileViewSet(
 
     @action(detail=False, methods=['GET'], url_path='me')
     def profile(self, request):
-        """
-        """
         serializer = UserProfileSerializer(
             request.user
         )
@@ -182,7 +180,7 @@ class UserListsViewSet(
             status=status.HTTP_200_OK
         )
 
-    @action(detail=False, methods=['GET'], url_path='favorite/albums')
+    @action(detail=False, methods=['GET'], url_path='favourite/albums')
     def favourite_albums(self, request):
         return self._get_user_lists(
             request,
