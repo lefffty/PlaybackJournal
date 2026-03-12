@@ -16,12 +16,18 @@ from playlist.models import (
     RatedPlaylist,
     FavouritePlaylist
 )
+from artist.models import (
+    FavouriteArtist,
+)
 
 from albums.serializers import (
     AlbumSimpleSerializer
 )
 from playlist.serializers import (
     PlaylistDetailSerializer
+)
+from artist.serializers import (
+    ArtistSimpleSerializer
 )
 
 User = get_user_model()
@@ -159,4 +165,14 @@ class UserSimpleSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'username',
+        )
+
+
+class UserFavouriteArtistsSerializer(serializers.ModelSerializer):
+    artist = ArtistSimpleSerializer(read_only=True)
+
+    class Meta:
+        model = FavouriteArtist
+        fields = (
+            'artist',
         )

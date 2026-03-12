@@ -24,7 +24,8 @@ from .serializers import (
     UserListenedAlbumsSerializer,
     UserFavouriteAlbumsSerialzer,
     UserRatedPlaylistsSerializer,
-    UserFavouritePlaylistsSerializer,
+    UserFavouriteArtistsSerializer,
+    UserFavouritePlaylistsSerializer
 )
 from playlist.serializers import PlaylistSimpleSerializer
 from albums.serializers import AlbumGenreSerializer
@@ -37,8 +38,15 @@ from albums.models import (
     RatedAlbum,
     Album
 )
-from playlist.models import RatedPlaylist, FavouritePlaylist, Playlist
-from artist.models import Artist
+from playlist.models import (
+    Playlist,
+    RatedPlaylist,
+    FavouritePlaylist
+)
+from artist.models import (
+    Artist,
+    FavouriteArtist
+)
 from song.models import Song
 
 User = get_user_model()
@@ -212,4 +220,12 @@ class UserListsViewSet(
             request,
             RatedPlaylist,
             UserRatedPlaylistsSerializer,
+        )
+
+    @action(detail=False, methods=['GET'], url_path='favourite/artists')
+    def favourite_artists(self, request):
+        return self._get_user_lists(
+            request,
+            FavouriteArtist,
+            UserFavouriteArtistsSerializer,
         )
