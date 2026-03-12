@@ -129,6 +129,12 @@ class FavouriteArtist(models.Model):
     class Meta:
         verbose_name = 'Любимый исполнитель'
         verbose_name_plural = 'Любимые исполнители'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'artist'],
+                name='unique_%(class)s'
+            )
+        ]
 
     def __str__(self):
         return f'{self.user.username} - {self.artist.username}'
