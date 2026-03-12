@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 from .constants import (
     ARTIST_USERNAME_MAX_LENGTH,
@@ -6,6 +7,8 @@ from .constants import (
 )
 from song.models import Song
 from genre.models import Genre
+
+User = get_user_model()
 
 
 class Artist(models.Model):
@@ -92,13 +95,13 @@ class ArtistGenre(models.Model):
 class ArtistSong(models.Model):
     artist = models.ForeignKey(
         Artist,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
         verbose_name='Исполнитель',
         related_name='song_artists',
     )
     song = models.ForeignKey(
         Song,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
         verbose_name='Песня',
     )
 
@@ -108,3 +111,24 @@ class ArtistSong(models.Model):
 
     def __str__(self) -> str:
         return f'{self.artist.username} исполнитель песни {self.song.name}'
+
+
+class FavouriteArtist(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+        related_name='user_favourite_artists',
+    )
+    artist = models.ForeignKey(
+        Artist,
+        on_delete=models.CASCADE,
+        verbose_name='Исполнитель',
+    )
+
+    class Meta:
+        verbose_name = 'Любимый исполнитель'
+        verbose_name_plural = 'Любимые исполнители'
+
+    def __str__(self):
+        return f'{self.user.username} - {self.artist.username}'

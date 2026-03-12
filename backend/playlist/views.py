@@ -137,6 +137,7 @@ class UserPlaylistViewSet(
 
         if FavouritePlaylist.objects.filter(user=user, playlist=playlist).exists():
             response['favourite'] = True
+
         if RatedPlaylist.objects.filter(user=user, playlist=playlist).exists():
             instance = RatedPlaylist.objects.get(user=user, playlist=playlist)
             response['rating'] = instance.rating
