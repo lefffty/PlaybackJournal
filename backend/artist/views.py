@@ -70,6 +70,30 @@ class ArtistDiscographyViewSet(
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class UserArtistViewSet(
+    viewsets.GenericViewSet
+):
+    permission_classes = [IsAuthenticated]
+
+    @action(
+        detail=True,
+        url_path='user_artist'
+    )
+    def user_artist(self, request: HttpRequest, pk: int):
+        user = request.user
+        artist = get_object_or_404(Artist, pk=pk)
+        filter_kwargs = {
+            'user': user,
+            'artist': artist
+        }
+        data = {
+            'favourite': False
+        }
+        if FavouriteArtist.objects.filter(**filter_kwargs).exists():
+            data['favourite'] = True
+        return Response(data, status=status.HTTP_200_OK)
+
+
 class UserArtistsPreferencesViewSet(
     viewsets.GenericViewSet
 ):
