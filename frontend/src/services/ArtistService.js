@@ -16,6 +16,14 @@ class ArtistService{
     readSimilar(id) {
         return AxiosInstance.get(`/api/artists/${id}/similar/`);
     }
+
+    userArtist(id){
+        return AxiosInstance.get(`/api/artists/${id}/user_artist/`);
+    }
+
+    favouriteArtist(id){
+        return AxiosInstance.post(`/api/artists/${id}/favourite/`);
+    }
 }
 
 export default new ArtistService();

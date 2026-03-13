@@ -5,13 +5,20 @@ import { FaAngleRight } from "react-icons/fa";
 
 import '../Albums/Album.css';
 import './ArtistList.css';
+
+import HeartIcon from "../Common/HeartIcon/HeartIcon";
+
 import ArtistService from '../../services/ArtistService';
 
 const Artist = (props) => {
     const [artist, setArtist] = useState(null);
     const params = useParams();
     const id = params.id;
+    const token = localStorage.getItem('auth_token');
     const [error, setError] = useState('');
+    const [userArtistData, setUserArtistData] = useState({
+        favourite: false,
+    });
 
     useEffect(
         () => {
@@ -30,6 +37,33 @@ const Artist = (props) => {
         },
         [id]
     );
+
+    useEffect(
+        () => {
+            if (token){
+                ArtistService.userArtist(id)
+                .then(
+                    (response) => {
+                        setUserArtistData(response.data);
+                    }
+                )
+            }
+        },
+        [id]
+    )
+
+    const onFavouriteClick = (_) => {
+        setUserArtistData(
+            prevstate => ({
+                ...prevstate,
+                favourite: !prevstate.favourite
+            })
+        );
+        ArtistService.favouriteArtist(id)
+        .catch(
+            (e) => setError(e.toString())
+        )
+    }
 
     if (!artist){
         return (
@@ -59,27 +93,43 @@ const Artist = (props) => {
                         </Col>
                         <Col md={8}>
                             <Card.Body>
-                                <Card.Title className="fs-1">
-                                    {artist.username}
-                                </Card.Title>
-                                <Card.Text>
-                                    {artist.description}
-                                </Card.Text>
-                                <Card.Text className="fs-4">
-                                    <span><b>Жанры</b>: </span>
-                                    <span>
-                                        {artist.genres.map(
-                                            (genre, index) => (
-                                                <React.Fragment>
-                                                    <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
-                                                        {genre.name}
-                                                    </Link>
-                                                    {index < artist.genres.length - 1 && ', '}
-                                                </React.Fragment>
-                                            )
-                                        )}
-                                    </span>
-                                </Card.Text>
+                                <Row>
+                                    <Col md={8} className="mb-3">
+                                        <Card.Title className="fs-1">
+                                            {artist.username}
+                                        </Card.Title>
+                                        <Card.Text>
+                                            {artist.description}
+                                        </Card.Text>
+                                        <Card.Text className="fs-4">
+                                            <span><b>Жанры</b>: </span>
+                                            <span>
+                                                {artist.genres.map(
+                                                    (genre, index) => (
+                                                        <React.Fragment>
+                                                            <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
+                                                                {genre.name}
+                                                            </Link>
+                                                            {index < artist.genres.length - 1 && ', '}
+                                                        </React.Fragment>
+                                                    )
+                                                )}
+                                            </span>
+                                        </Card.Text>
+                                    </Col>
+                                    <Col md={3}>
+                                        <Row md={3}>
+                                            {token == null || token === '' ? (                                            
+                                                <>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <HeartIcon initialValue={userArtistData.favourite} onClick={onFavouriteClick}/>
+                                                </>
+                                            )}
+                                        </Row>
+                                    </Col>
+                                </Row>
                             </Card.Body>
                         </Col>
                     </Row>
