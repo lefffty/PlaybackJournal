@@ -28,7 +28,7 @@ class GenreListDetailViewSet(
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
-        if self.action in ('retrieve'):
+        if self.action in ('retrieve',):
             return GenreSerializer
         return GenreSimpleSerializer
 
@@ -60,6 +60,35 @@ class GenreListsViewSet(
 
 
 class UserGenreViewSet(
+    viewsets.GenericViewSet
+):
+    permission_classes = [IsAuthenticated]
+
+    @action(
+        detail=True,
+        methods=['GET'],
+        url_path='user_genre'
+    )
+    def user_genre(self, request: HttpRequest, pk: int):
+        user = request.user
+        genre = get_object_or_404(Genre, pk=pk)
+
+        filter_kwargs = {
+            'user': user,
+            'genre': genre,
+        }
+
+        data = {
+            'favourite': False,
+        }
+
+        if FavouriteGenre.objects.filter(**filter_kwargs).exists():
+            data['favourite'] = True
+
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class UserGenrePreferencesViewSet(
     viewsets.GenericViewSet
 ):
     permission_classes = [IsAuthenticated]

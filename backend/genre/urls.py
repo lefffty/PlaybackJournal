@@ -17,6 +17,11 @@ router.register(
 )
 router.register(
     r'genres',
+    views.UserGenrePreferencesViewSet,
+    basename='user_genre_preferences',
+)
+router.register(
+    r'genres',
     views.UserGenreViewSet,
     basename='user_genre',
 )
