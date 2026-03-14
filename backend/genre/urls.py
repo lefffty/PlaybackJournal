@@ -1,19 +1,24 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 
-from .views import GenreListDetailViewSet, GenreListsViewSet
+from . import views
 
 
 router = DefaultRouter()
 router.register(
     r'genres',
-    GenreListDetailViewSet,
+    views.GenreListDetailViewSet,
     basename='genre_list_detail',
 )
 router.register(
     r'genres',
-    GenreListsViewSet,
+    views.GenreListsViewSet,
     basename='genre_lists',
+)
+router.register(
+    r'genres',
+    views.UserGenreViewSet,
+    basename='user_genre',
 )
 
 urlpatterns = [
