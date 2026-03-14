@@ -60,13 +60,13 @@ class UserAlbumViewSet(
         album = get_object_or_404(Album, pk=pk)
         response = {
             'listened': False,
-            'liked': False,
+            'favourite': False,
             'rating': 0,
         }
         if ListenedAlbum.objects.filter(user=user, album=album).exists():
             response['listened'] = True
         if FavouriteAlbum.objects.filter(user=user, album=album).exists():
-            response['liked'] = True
+            response['favourite'] = True
         if RatedAlbum.objects.filter(user=user, album=album).exists():
             instance = RatedAlbum.objects.get(user=user, album=album)
             response['rating'] = instance.rating

@@ -4,11 +4,11 @@ import { FaHeart } from 'react-icons/fa';
 import './HeartIcon.css';
 
 function HeartIcon({initialValue = true, onClick}) {
-  const [liked, setLiked] = useState(initialValue);
+  const [favourite, setFavourite] = useState(initialValue);
 
   const onHeartClick = () => {
-    setLiked(!liked);
-    if (onClick) onClick(!liked);
+    setFavourite(!favourite);
+    if (onClick) onClick(!favourite);
   }
 
   return (
@@ -21,7 +21,7 @@ function HeartIcon({initialValue = true, onClick}) {
       }}
     >
       <FaHeart
-        color={liked ? "red" : "gray"}
+        color={favourite ? "red" : "gray"}
         size={30}
         onClick={onHeartClick}
         className='heart-icon'

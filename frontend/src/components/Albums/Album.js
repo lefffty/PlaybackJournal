@@ -18,7 +18,7 @@ const Album = (props) => {
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
     const [userAlbumData, setUserAlbumData] = useState({
-        liked: false,
+        favourite: false,
         listened: false,
         rating: 0,
     });
@@ -85,11 +85,11 @@ const Album = (props) => {
         )
     }
 
-    const onLikedClick = (_) => {
+    const onFavouriteClick = (_) => {
         setUserAlbumData(
             prevstate => ({
                 ...prevstate,
-                liked: !prevstate.liked,
+                favourite: !prevstate.favourite,
             })
         )
         AlbumService.favouriteAlbum(album.id)
@@ -189,7 +189,7 @@ const Album = (props) => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <HeartIcon initialValue={userAlbumData.liked} onClick={onLikedClick}/>
+                                                    <HeartIcon initialValue={userAlbumData.favourite} onClick={onFavouriteClick}/>
                                                     <Headphones initialValue={userAlbumData.listened} onClick={onListenedClick}/>
                                                 </>
                                             )}

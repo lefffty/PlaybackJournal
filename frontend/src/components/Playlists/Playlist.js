@@ -79,7 +79,7 @@ const Playlist = (props) => {
         [id]
     )
 
-    const onLikedClick = () => {
+    const onFavouriteClick = () => {
         setUserPlaylistData(
             prevstate => ({
                 ...prevstate,
@@ -179,7 +179,7 @@ const Playlist = (props) => {
                                                 )
                                                 : (
                                                     <>
-                                                        <HeartIcon initialValue={userPlaylistData.favourite} onClick={onLikedClick}/>
+                                                        <HeartIcon initialValue={userPlaylistData.favourite} onClick={onFavouriteClick}/>
                                                     </>
                                                 )
                                             }
