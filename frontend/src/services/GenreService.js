@@ -17,6 +17,14 @@ class GenreService {
     fetchGenreArtists(id){
         return AxiosInstance.get(`api/genres/${id}/artists/`);
     }
+
+    userGenre(id){
+        return AxiosInstance.get(`api/genres/${id}/user_genre/`);
+    }
+
+    favouriteGenre(id){
+        return AxiosInstance.post(`api/genres/${id}/favourite/`);
+    }
 }
 
 export default new GenreService();

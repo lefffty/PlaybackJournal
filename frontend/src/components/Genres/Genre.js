@@ -7,11 +7,16 @@ import {FaAngleRight} from 'react-icons/fa';
 import GenreService from "../../services/GenreService";
 import './Genre.css';
 
+import HeartIcon from "../Common/HeartIcon/HeartIcon";
+
 const Genre = (props) => {
     const params = useParams(null);
     const id = params.id;
     const token = localStorage.getItem('auth_token');
     const [genre, setGenre] = useState(null);
+    const [userGenreData, setUserGenreData] = useState({
+        favourite: false,
+    });
     const [error, setError] = useState('');
 
     useEffect(
@@ -30,6 +35,36 @@ const Genre = (props) => {
         },
         []
     )
+
+    useEffect(
+        () => {
+            GenreService.userGenre(id)
+            .then(
+                (response) => {
+                    setUserGenreData(response.data);
+                }
+            )
+            .catch(
+                (e) => {
+                    setError(e.toString());
+                }
+            )
+        },
+        [id]
+    )
+
+    const onFavouriteClick = (_) => {
+        setUserGenreData(
+            (prevstate) => ({
+                ...prevstate,
+                favourite: !prevstate.favourite,
+            })
+        )
+        GenreService.favouriteGenre(id)
+        .catch(
+            e => setError(e.toString())
+        )
+    }
 
     if (!genre){
         return (
@@ -50,18 +85,31 @@ const Genre = (props) => {
     return (
         <div>
             <Container>
-                <Card>
+                <Card className="mb-3">
                     <Card.Body>
                         <Row md={2}>
-                            <Col>
+                            <Col md={9}>
                                 <Card.Title className="fs-2">
                                     {genre.name}
                                 </Card.Title>
+                                <Card.Text className="fs-4">
+                                    {genre.description}
+                                </Card.Text>
+                            </Col>
+                            <Col md={2}>
+                                {token != null || token !== ''
+                                    ? (
+                                        <>
+                                            <HeartIcon initialValue={userGenreData.favourite} onClick={onFavouriteClick}/>
+                                        </>
+                                    )
+                                    : (
+                                        <>
+                                        </>
+                                    )
+                                }
                             </Col>
                         </Row>
-                        <Card.Text className="fs-4">
-                            {genre.description}
-                        </Card.Text>
                         <Card.Header className="fs-3 mb-3">
                             <div className="d-flex align-items-end" style={{height: '50px'}}>
                                 <Link to={`/genre/${genre.id}/artists/`} style={{color: "black"}} className="text-decoration-none">
