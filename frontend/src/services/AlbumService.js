@@ -22,6 +22,10 @@ class AlbumService{
         return AxiosInstance.post(`/api/albums/${id}/favourite/`);
     }
 
+    wishlistAlbum(id){
+        return AxiosInstance.post(`/api/albums/${id}/wishlist/`)
+    }
+
     userAlbum(id){
         return AxiosInstance.get(`/api/albums/${id}/user_album/`)
     }

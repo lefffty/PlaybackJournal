@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import {ListGroup, Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
 
+import WishlistIcon from "../Common/WishlistIcon/WishlistIcon";
 import ScaleRating from "../Common/ScaleRating/ScaleRating";
 import HeartIcon from "../Common/HeartIcon/HeartIcon";
 import Headphones from "../Common/Headphones/Headphones";
@@ -20,6 +21,7 @@ const Album = (props) => {
     const [userAlbumData, setUserAlbumData] = useState({
         favourite: false,
         listened: false,
+        wishlist: false,
         rating: 0,
     });
 
@@ -77,11 +79,24 @@ const Album = (props) => {
                 listened: !prevstate.listened,
             })
         )
-        AlbumService.listenAlbum(album.id)
+        AlbumService.listenAlbum(id)
         .catch(
             (e) => {
                 console.log(e.toString());
             }
+        )
+    }
+
+    const onWishlistClick = (_) => {
+        setUserAlbumData(
+            prevstate => ({
+                ...prevstate,
+                wishlist: !prevstate.wishlist,
+            })
+        )
+        AlbumService.wishlistAlbum(id)
+        .catch(
+            e => setError(e.toString())
         )
     }
 
@@ -92,7 +107,7 @@ const Album = (props) => {
                 favourite: !prevstate.favourite,
             })
         )
-        AlbumService.favouriteAlbum(album.id)
+        AlbumService.favouriteAlbum(id)
         .catch(
             (e) => {
                 console.log(e.toString());
@@ -189,6 +204,7 @@ const Album = (props) => {
                                                 </>
                                             ) : (
                                                 <>
+                                                    <WishlistIcon initialValue={userAlbumData.wishlist} onClick={onWishlistClick}/>
                                                     <HeartIcon initialValue={userAlbumData.favourite} onClick={onFavouriteClick}/>
                                                     <Headphones initialValue={userAlbumData.listened} onClick={onListenedClick}/>
                                                 </>
