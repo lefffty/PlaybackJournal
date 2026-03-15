@@ -59,19 +59,26 @@ class UserAlbumViewSet(
     def user_album(self, request: HttpRequest, pk):
         user = request.user
         album = get_object_or_404(Album, pk=pk)
-        response = {
+        data = {
             'listened': False,
             'favourite': False,
             'rating': 0,
+            'wishlist': False,
         }
-        if ListenedAlbum.objects.filter(user=user, album=album).exists():
-            response['listened'] = True
-        if FavouriteAlbum.objects.filter(user=user, album=album).exists():
-            response['favourite'] = True
-        if RatedAlbum.objects.filter(user=user, album=album).exists():
-            instance = RatedAlbum.objects.get(user=user, album=album)
-            response['rating'] = instance.rating
-        return Response(response, status=status.HTTP_200_OK)
+        filter_kwargs = {
+            'user': user,
+            'album': album,
+        }
+        if WishlistAlbum.objects.filter(**filter_kwargs).exists():
+            data['wishlist'] = True
+        if ListenedAlbum.objects.filter(**filter_kwargs).exists():
+            data['listened'] = True
+        if FavouriteAlbum.objects.filter(**filter_kwargs).exists():
+            data['favourite'] = True
+        if RatedAlbum.objects.filter(**filter_kwargs).exists():
+            instance = RatedAlbum.objects.get(**filter_kwargs)
+            data['rating'] = instance.rating
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class UserAlbumsPreferencesViewSet(
