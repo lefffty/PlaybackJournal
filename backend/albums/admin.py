@@ -36,6 +36,7 @@ class AlbumAdmin(admin.ModelAdmin):
         'display_cover',
         'display_songs',
         'display_genres',
+        'display_wishlist',
         'display_listens',
         'display_favorites',
         'display_rated',
@@ -55,7 +56,8 @@ class AlbumAdmin(admin.ModelAdmin):
             'fields': (
                 'display_favorites',
                 'display_listens',
-                'display_rated'
+                'display_rated',
+                'display_wishlist',
             ),
         }),
     )
@@ -86,6 +88,10 @@ class AlbumAdmin(admin.ModelAdmin):
             for album_genre in album.album_genres.all()
         ]
         return '<br>'.join(genres) if genres else '-'
+
+    @admin.display(description='Количество добавлений в "Буду слушать"')
+    def display_wishlist(self, obj):
+        return obj.wishlistalbums.count()
 
     @admin.display(description='Количество прослушиваний альбома')
     def display_listens(self, obj):

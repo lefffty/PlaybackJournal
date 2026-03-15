@@ -34,6 +34,7 @@ class UserAdmin(admin.ModelAdmin):
         'display_favorites',
         'display_listens',
         'display_rated',
+        'display_wishlist',
         'display_favourite_playlists_count',
         'display_rated_playlists_count',
     )
@@ -53,6 +54,7 @@ class UserAdmin(admin.ModelAdmin):
                 'display_favorites',
                 'display_listens',
                 'display_rated',
+                'display_wishlist',
                 'display_favourite_playlists_count',
                 'display_rated_playlists_count',
             ),
@@ -81,6 +83,10 @@ class UserAdmin(admin.ModelAdmin):
     @admin.display(description='Количество оценок плейлистов')
     def display_rated_playlists_count(self, obj):
         return obj.ratedplaylists.count()
+
+    @admin.display(description='Количество альбомов в "Альбомы к прослушиванию"')
+    def display_wishlist(self, obj):
+        return obj.wishlistalbums.count()
 
     @admin.display(description='Количество прослушанных альбомов')
     def display_listens(self, obj):
