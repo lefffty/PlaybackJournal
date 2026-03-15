@@ -21,6 +21,7 @@ from .serializers import (
 from .models import (
     FavouriteAlbum,
     ListenedAlbum,
+    WishlistAlbum,
     RatedAlbum,
     Album,
 )
@@ -139,6 +140,18 @@ class UserAlbumsPreferencesViewSet(
             request,
             pk,
             ListenedAlbum,
+        )
+
+    @action(
+        detail=True,
+        methods=['POST'],
+        url_path='wishlist'
+    )
+    def wishlist_album(self, request, pk):
+        return self._create_user_album_item(
+            request,
+            pk,
+            WishlistAlbum,
         )
 
     @action(
