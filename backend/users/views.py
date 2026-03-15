@@ -21,6 +21,7 @@ from .serializers import (
     AvatarSerializer,
     NewPasswordSerializer,
     UserRatedAlbumsSerializer,
+    UserWishlistAlbumsSerializer,
     UserListenedAlbumsSerializer,
     UserFavouriteAlbumsSerialzer,
     UserRatedPlaylistsSerializer,
@@ -35,6 +36,7 @@ from song.serializers import SongSerializer
 from albums.models import (
     FavouriteAlbum,
     ListenedAlbum,
+    WishlistAlbum,
     RatedAlbum,
     Album
 )
@@ -186,6 +188,14 @@ class UserListsViewSet(
             request,
             FavouriteAlbum,
             UserFavouriteAlbumsSerialzer,
+        )
+
+    @action(detail=False, methods=['GET'], url_path='wishlist/albums')
+    def wishlist_albums(self, request):
+        return self._get_user_lists(
+            request,
+            WishlistAlbum,
+            UserWishlistAlbumsSerializer,
         )
 
     @action(detail=False, methods=['GET'], url_path='listened/albums')

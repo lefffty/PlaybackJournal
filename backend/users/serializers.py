@@ -10,6 +10,7 @@ from drf_extra_fields.fields import Base64ImageField
 from albums.models import (
     FavouriteAlbum,
     ListenedAlbum,
+    WishlistAlbum,
     RatedAlbum,
 )
 from playlist.models import (
@@ -112,6 +113,16 @@ class UserFavouriteAlbumsSerialzer(serializers.ModelSerializer):
 
     class Meta:
         model = FavouriteAlbum
+        fields = (
+            'album',
+        )
+
+
+class UserWishlistAlbumsSerializer(serializers.ModelSerializer):
+    album = AlbumSimpleSerializer(read_only=True)
+
+    class Meta:
+        model = WishlistAlbum
         fields = (
             'album',
         )
