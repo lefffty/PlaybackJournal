@@ -86,9 +86,9 @@ const Profile = (props) => {
                     <Card className="mx-auto" style={{ maxWidth: '900px'}}>
                         <ProfileLinksGroup 
                             groupHeader={"Альбомы"}
-                            cardsTexts={["Любимые", "Оценки", "Прослушанные"]}
-                            links={["/profile/favourite/albums", "/profile/rated/albums", "/profile/listened/albums"]}
-                            mds={[4, 3, 5]}
+                            cardsTexts={["Любимые", "Оценки", "Прослушанные", "Буду слушать"]}
+                            links={["/profile/favourite/albums", "/profile/rated/albums", "/profile/listened/albums", "/profile/wishlist/albums"]}
+                            mds={[3, 2, 4, 3]}
                         />
                         <ProfileLinksGroup
                             groupHeader={"Плейлисты"}
