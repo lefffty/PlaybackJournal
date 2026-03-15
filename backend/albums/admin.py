@@ -6,6 +6,7 @@ from .models import (
     RatedAlbum,
     FavouriteAlbum,
     ListenedAlbum,
+    WishlistAlbum,
     AlbumArtist,
     AlbumGenre,
     AlbumSong,
@@ -117,6 +118,11 @@ class RatedAlbumAdmin(AbstractUserAlbumAdmin):
     readonly_fields = (
         'rating',
     )
+
+
+@admin.register(WishlistAlbum)
+class WishlistAlbumAdmin(AbstractUserAlbumAdmin):
+    pass
 
 
 @admin.register(FavouriteAlbum)

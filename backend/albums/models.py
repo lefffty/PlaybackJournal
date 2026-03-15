@@ -34,7 +34,6 @@ class Album(models.Model):
     )
     genres = models.ManyToManyField(
         Genre,
-
         through='AlbumGenre',
         verbose_name='Жанры'
     )
@@ -106,6 +105,15 @@ class ListenedAlbum(AbstractUserAlbumModel):
         verbose_name_plural = 'Прослушанные альбомы'
 
     def __str__(self) -> str:
+        return f'{self.user.username} - {self.album.name}'
+
+
+class WishlistAlbum(AbstractUserAlbumModel):
+    class Meta(AbstractUserAlbumModel.Meta):
+        verbose_name = 'Альбом к прослушиванию'
+        verbose_name_plural = 'Альбомы к прослушиванию'
+
+    def __str__(self):
         return f'{self.user.username} - {self.album.name}'
 
 
