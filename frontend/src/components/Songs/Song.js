@@ -3,12 +3,15 @@ import {Link, useParams} from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import {Card, Col, Row} from 'react-bootstrap';
 
+import ScaleRating from "../Common/ScaleRating/ScaleRating";
 import SongService from "../../services/SongService";
 
 const Song = (props) => {
     const params = useParams();
     const id = params.id;
+    const token = localStorage.getItem('auth_token');
     const [song, setSong] = useState(null);
+    const [songRating, setSongRating] = useState(null);
     const [error, setError] = useState('');
 
     useEffect(
@@ -17,6 +20,7 @@ const Song = (props) => {
             .then(
                 (response) => {
                     setSong(response.data);
+                    setSongRating(response.data.rating);
                 }
             )
             .catch(
@@ -78,6 +82,12 @@ const Song = (props) => {
                                     </>
                                 )
                             }
+                            {token && (
+                                <ScaleRating
+                                    initialValue={songRating}
+                                    frozen={true}
+                                />
+                            )}
                         </Card.Body>
                     </Col>
                 </Row>

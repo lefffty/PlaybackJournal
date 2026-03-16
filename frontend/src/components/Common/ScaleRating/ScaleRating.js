@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import {FaStar} from "react-icons/fa";
-import Container from "react-bootstrap/Container";
 
 import './ScaleRating.css';
 
-const ScaleRating = ({initialValue, onRatingChange, totalStars = 10}) => {
+const ScaleRating = ({initialValue, onRatingChange, totalStars = 10, frozen = false}) => {
     const [rating, setRating] = useState(initialValue);
     const [hover, setHover] = useState(0);
 
@@ -24,9 +23,9 @@ const ScaleRating = ({initialValue, onRatingChange, totalStars = 10}) => {
                                 key={index}
                                 size={30}
                                 color={starValue <= (hover || rating) ? '#ad8611' : '#e4e5e9'}
-                                onClick={() => handleClick(starValue)}
-                                onMouseEnter={() => setHover(starValue)}
-                                onMouseLeave={() => setHover(0)}
+                                onClick={frozen === false ? () => handleClick(starValue) : null}
+                                onMouseEnter={frozen === false ? () => setHover(starValue) : null}
+                                onMouseLeave={frozen === false ? () => setHover(0) : null}
                                 className="scale-rating"
                             />
                         )
