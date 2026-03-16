@@ -11,6 +11,7 @@ import HeartIcon from "../Common/HeartIcon/HeartIcon";
 import Headphones from "../Common/Headphones/Headphones";
 
 import AlbumService from "../../services/AlbumService";
+import SongService from "../../services/SongService";
 
 const Album = (props) => {
     const params = useParams();
@@ -24,6 +25,7 @@ const Album = (props) => {
         wishlist: false,
         rating: 0,
     });
+    const [userSongsData, setUserSongsData] = useState({});
 
     useEffect(
         () => {
@@ -31,6 +33,12 @@ const Album = (props) => {
             .then(
                 (response) => {
                     setAlbum(response.data);
+                    const songs = response.data.songs;
+                    const initialRatings = {};
+                    songs.forEach(song => {
+                        initialRatings[song.id] = song.rating;
+                    })
+                    setUserSongsData(initialRatings);
                 }
             )
             .catch(
@@ -53,6 +61,24 @@ const Album = (props) => {
             }
         }, [id]
     )
+
+    const onSongRatingChange = (songId, value) => {
+        const data = {
+            rating: value
+        }
+
+        setUserSongsData(
+            prev => ({
+                ...prev,
+                [songId]: value
+            })
+        )
+
+        SongService.rateSong(songId, data)
+        .catch(
+            e => setError(e.toString())
+        )
+    }
 
     const onRatingChange = (value) => {
         setUserAlbumData(
@@ -237,12 +263,24 @@ const Album = (props) => {
                                             <Col xs={1} className="text-muted fs-5">
                                                 {index + 1}
                                             </Col>
-                                            <Col xs={8} className="fs-5">
+                                            <Col xs={3} className="fs-5">
                                                 <Link to={`/songs/${song.id}/`} className="text-decoration-none">
                                                     {song.name}
                                                 </Link>
                                             </Col>
-                                            <Col xs={3} className="text-end fs-5">
+                                            <Col xs={6}>
+                                            {token ? (
+                                                <ScaleRating
+                                                    initialValue={userSongsData[song.id]}
+                                                    onRatingChange={(value) => onSongRatingChange(song.id, value)}
+                                                />
+                                            ):
+                                                (
+                                                <>
+                                                </>
+                                            )}
+                                            </Col>  
+                                            <Col xs={2} className="text-end fs-5">
                                                 {song.duration}
                                             </Col>
                                         </Row>

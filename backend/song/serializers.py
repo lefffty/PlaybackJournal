@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Song
+from .models import Song, RatedSong
 from artist.serializers import ArtistAlbumCreateSerializer
 
 
@@ -17,6 +17,7 @@ class SongListSerializer(serializers.ModelSerializer):
 class SongSerializer(serializers.ModelSerializer):
     cover = serializers.SerializerMethodField()
     album = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Song
@@ -26,7 +27,20 @@ class SongSerializer(serializers.ModelSerializer):
             'duration',
             'cover',
             'album',
+            'rating',
         )
+
+    def get_rating(self, obj):
+        request = self.context.get('request')
+        user = request.user
+        filter_kwargs = {
+            'user': user,
+            'song': obj
+        }
+        instance = RatedSong.objects.filter(**filter_kwargs)
+        if instance.exists():
+            return instance[0].rating
+        return 0
 
     def get_album(self, obj):
         from albums.serializers import AlbumGenreSerializer
