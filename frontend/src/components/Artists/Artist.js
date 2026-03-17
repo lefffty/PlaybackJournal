@@ -94,7 +94,7 @@ const Artist = (props) => {
                         <Col md={8}>
                             <Card.Body>
                                 <Row>
-                                    <Col md={8} className="mb-3">
+                                    <Col md={11} className="mb-3">
                                         <Card.Title className="fs-1">
                                             {artist.username}
                                         </Card.Title>
@@ -117,8 +117,8 @@ const Artist = (props) => {
                                             </span>
                                         </Card.Text>
                                     </Col>
-                                    <Col md={3}>
-                                        <Row md={3}>
+                                    <Col md={1}>
+                                        <Row>
                                             {token == null || token === '' ? (                                            
                                                 <>
                                                 </>

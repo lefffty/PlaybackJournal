@@ -64,6 +64,9 @@ const ArtistList = (props) => {
         )
     }
 
+    const alignText = dataType === 'similar' ? 'center' : 'left';
+    const showArtists = dataType === 'similar' ? false : true;
+
     var border_radius = '';
     if (dataType === 'similar'){
         border_radius = '50%';
@@ -76,15 +79,19 @@ const ArtistList = (props) => {
             <Container>
                 <Card className="mb-3">
                     <Card.Body>
-                        <Card.Title className="fs-1">
+                        <Card.Title className="fs-1 ms-2 mt-3">
                             {dataType === 'similar' ? 'Похожие исполнители' : 'Дискография'}
                         </Card.Title>
-                        <Card.Body>
-                            <Row className="g-0">
-                                {data.map(
-                                    (item) => {
-                                        return (
-                                            <Col style={{textAlign: "center"}}>
+                        <Row className="g-0 ms-2" style={{rowGap: "10px",  gap: '90px'}}>
+                            {data.map(
+                                (item) => {
+                                    return (
+                                        <Col
+                                            className="p-0 flex-shrink-0 flex-grow-0"
+                                        >
+                                            <div
+                                                style={{position: "relative", width: '240px', height: '240px'}}
+                                            >
                                                 <Link
                                                     to={dataType === 'similar'
                                                         ? `/artists/${item.id}/`
@@ -105,33 +112,59 @@ const ArtistList = (props) => {
                                                         className="album-cover"
                                                     />
                                                 </Link>
-                                                <Link
-                                                    to={dataType === 'similar'
-                                                        ? `/artists/${item.id}/`
-                                                        : `/albums/${item.id}/`
-                                                    }
-                                                    className="text-decoration-none fs-5"
-                                                    style={{color: "black"}}
+                                            </div>
+                                            <Link
+                                                to={dataType === 'similar'
+                                                    ? `/artists/${item.id}/`
+                                                    : `/albums/${item.id}/`
+                                                }
+                                                className="text-decoration-none fs-4 d-block"
+                                                style={{color: "black", width: "240px"}}
+                                            >
+                                                <Card.Text
+                                                    className="album-title"
+                                                    style={{
+                                                        textAlign: alignText
+                                                    }}
                                                 >
-                                                    <Col>
-                                                        {dataType === 'similar'
-                                                            ? item.username
-                                                            : item.name
-                                                        }
-                                                    </Col>
-                                                    <Col>
-                                                        {dataType === 'similar'
-                                                            ? ''
-                                                            : moment(item.publication_date).year()
-                                                        }
-                                                    </Col>
-                                                </Link>
-                                            </Col>
-                                        )
-                                    }
-                                )}
-                            </Row>
-                        </Card.Body>
+                                                    {dataType === 'similar'
+                                                        ? item.username
+                                                        : item.name
+                                                    }
+                                                </Card.Text>
+                                            </Link>
+                                            {showArtists && (
+                                                <span>
+                                                    {item.artists.map(
+                                                        (artist, index) => (
+                                                            <React.Fragment>
+                                                                <Link
+                                                                    to={`/artists/${artist.id}/`}
+                                                                    className="text-muted text-decoration-none"
+                                                                >
+                                                                    {artist.username}
+                                                                </Link>
+                                                                {index < item.artists.length - 1 && ', '}
+                                                            </React.Fragment>
+                                                        )
+                                                    )}
+                                                </span>
+                                            )}
+                                            {dataType === 'similar'
+                                                ? <>
+                                                </>
+                                                :
+                                                <>
+                                                    <div>
+                                                        {moment(item.publication_date).year()}
+                                                    </div>
+                                                </>
+                                            }
+                                        </Col>
+                                    )
+                                }
+                            )}
+                        </Row>
                     </Card.Body>
                 </Card>
             </Container>

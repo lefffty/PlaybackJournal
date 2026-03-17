@@ -32,6 +32,8 @@ class SongSerializer(serializers.ModelSerializer):
 
     def get_rating(self, obj):
         request = self.context.get('request')
+        if not request:
+            return 0
         user = request.user
         filter_kwargs = {
             'user': user,

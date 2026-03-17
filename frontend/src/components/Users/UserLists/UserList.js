@@ -54,7 +54,7 @@ const UserList = ({listType, cardTitle}) => {
     return (
         <div>
             <Container>
-                <Card>
+                <Card className="mb-3">
                     <Card.Body>
                         <Card.Title className="fs-1 ms-2 mt-3">
                             {cardTitle}
@@ -71,7 +71,9 @@ const UserList = ({listType, cardTitle}) => {
                                             <div
                                                 style={{position: "relative", width: '240px', height: '240px'}}
                                             >
-                                                <Link to={`/${itemKey}s/${entity.id}/`}>
+                                                <Link
+                                                    to={`/${itemKey}s/${entity.id}/`}
+                                                >
                                                     <Card.Img
                                                         src={"http://localhost:8000" + entity[imageKey]}
                                                         style={{

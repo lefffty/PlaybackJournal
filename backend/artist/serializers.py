@@ -18,6 +18,15 @@ class ArtistSimpleSerializer(serializers.ModelSerializer):
         )
 
 
+class ArtistDiscography(serializers.ModelSerializer):
+    class Meta:
+        model = Artist
+        fields = (
+            'id',
+            'username',
+        )
+
+
 class RelatedArtistSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='related_artist.username')
     avatar = serializers.ImageField(source='related_artist.avatar')
@@ -33,10 +42,13 @@ class RelatedArtistSerializer(serializers.ModelSerializer):
 
 
 class AlbumArtistSerializer(serializers.ModelSerializer):
+    artists = ArtistDiscography(many=True, read_only=True)
+
     class Meta:
         model = Album
         fields = (
             'id',
+            'artists',
             'publication_date',
             'cover',
             'name',
