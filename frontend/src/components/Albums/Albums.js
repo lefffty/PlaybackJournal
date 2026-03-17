@@ -32,7 +32,7 @@ const Albums = (props) => {
                         if (response.data.count % itemsPerPage === 0){
                             setMaxPage(divisionResult)
                         } else{
-                            setMaxPage(divisionResult + 1);
+                            setMaxPage(Math.trunc(divisionResult) + 1);
                         }
                     }
                 }

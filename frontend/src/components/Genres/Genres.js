@@ -27,7 +27,12 @@ const Genres = (props) => {
                     setNextPage(response.data.next);
                     if (!totalItems){
                         setTotalItems(response.data.count);
-                        setMaxPage(Math.trunc(response.data.count / itemsPerPage) + 1);
+                        const divisionResult = response.data.count / itemsPerPage;
+                        if (response.data.count % itemsPerPage === 0){
+                            setMaxPage(divisionResult);
+                        } else{
+                            setMaxPage(Math.trunc(divisionResult) + 1);
+                        }
                     }
                 }
             )
