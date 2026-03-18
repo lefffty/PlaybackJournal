@@ -9,6 +9,7 @@ from .models import (
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'title',
         'text',
         'type',
@@ -55,6 +56,7 @@ class ReviewAdmin(admin.ModelAdmin):
 @admin.register(ReviewComment)
 class ReviewCommentAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'text',
         'author',
         'review',
@@ -66,6 +68,7 @@ class ReviewCommentAdmin(admin.ModelAdmin):
         'review__title',
     )
     fields = (
+        'id',
         'author',
         'text',
         'review',

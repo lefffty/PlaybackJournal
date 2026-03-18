@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from statistics import mean
+from typing import MutableMapping
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
 
@@ -95,7 +96,7 @@ class AlbumCreateSerializer(serializers.ModelSerializer):
         }
 
     @atomic
-    def create(self, validated_data: dict):
+    def create(self, validated_data: MutableMapping):
         songs = validated_data.pop('songs')
         genres = validated_data.pop('genres')
         artists = validated_data.pop('artists')

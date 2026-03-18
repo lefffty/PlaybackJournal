@@ -48,6 +48,7 @@ urlpatterns = [
     path('api/', include('artist.urls')),
     path('api/', include('genre.urls')),
     path('api/', include('song.urls')),
+    path('api/', include('review.urls')),
 ]
 
 if settings.DEBUG:
