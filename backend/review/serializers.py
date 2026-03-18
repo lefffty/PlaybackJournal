@@ -1,11 +1,10 @@
 from rest_framework import serializers
 
-from users.serializers import UserSimpleSerializer
 from .models import Review
 
 
 class ReviewListSerializer(serializers.ModelSerializer):
-    author = UserSimpleSerializer(read_only=True)
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
@@ -16,6 +15,12 @@ class ReviewListSerializer(serializers.ModelSerializer):
             'author',
             'updated_at',
         )
+
+    def get_author(self, obj: Review):
+        from users.serializers import UserSimpleSerializer
+        author = obj.author
+        serializer = UserSimpleSerializer(author)
+        return serializer.data
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):

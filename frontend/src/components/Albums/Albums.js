@@ -135,7 +135,12 @@ const Albums = (props) => {
             {albums.map(
                 (album) => {
                     return (
-                        <Card className="w-75 mb-3 mx-auto">
+                        <Card
+                            className="w-75 mb-3 mx-auto border-0 album-card"
+                            style={{
+                                backgroundColor: '#f0f0f0b7'
+                            }}
+                        >
                             <Row className="g-0">
                                 <Col md={4}>
                                 <Card.Img

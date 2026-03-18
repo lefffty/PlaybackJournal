@@ -10,6 +10,9 @@ import ScaleRating from "../Common/ScaleRating/ScaleRating";
 import HeartIcon from "../Common/HeartIcon/HeartIcon";
 import Headphones from "../Common/Headphones/Headphones";
 
+import Review from "../Reviews/Review";
+import Reviews from "../Statistics/Reviews/Reviews";
+
 import AlbumService from "../../services/AlbumService";
 import SongService from "../../services/SongService";
 
@@ -25,6 +28,12 @@ const Album = (props) => {
         wishlist: false,
         rating: 0,
     });
+    const [reviewsStatistics, setReviewsStatistics] = useState({
+        negative: 0,
+        neutral: 0,
+        positive: 0,  
+    })
+    const [isStatistics, setIsStatistics] = useState(false);
     const [userSongsData, setUserSongsData] = useState({});
 
     useEffect(
@@ -38,6 +47,11 @@ const Album = (props) => {
                     songs.forEach(song => {
                         initialRatings[song.id] = song.rating;
                     })
+                    const statistics = response.data.statistics;
+                    if (statistics.total !== 0){
+                        setReviewsStatistics(statistics);
+                        setIsStatistics(true);
+                    }
                     setUserSongsData(initialRatings);
                 }
             )
@@ -250,7 +264,7 @@ const Album = (props) => {
                         </Col>
                     </Row>
                 </Card>
-                <Card>
+                <Card className="mb-3">
                     <Card.Body>
                         <ListGroup variant="flush">
                             <Card.Title>
@@ -263,12 +277,12 @@ const Album = (props) => {
                                             <Col xs={1} className="text-muted fs-5">
                                                 {index + 1}
                                             </Col>
-                                            <Col xs={3} className="fs-5">
+                                            <Col xs={5} className="fs-5">
                                                 <Link to={`/songs/${song.id}/`} className="text-decoration-none">
                                                     {song.name}
                                                 </Link>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={5}>
                                             {token ? (
                                                 <ScaleRating
                                                     initialValue={userSongsData[song.id]}
@@ -280,7 +294,7 @@ const Album = (props) => {
                                                 </>
                                             )}
                                             </Col>  
-                                            <Col xs={2} className="text-end fs-5">
+                                            <Col xs={1} className="text-end fs-5">
                                                 {song.duration}
                                             </Col>
                                         </Row>
@@ -290,6 +304,27 @@ const Album = (props) => {
                         </ListGroup>
                     </Card.Body>
                 </Card>
+                {isStatistics === true ? (
+                    <>
+                        <Card.Title className="mb-3 fs-3">
+                            Рецензии слушателей
+                        </Card.Title>
+                        <Row className="g-0">
+                            <Col md={8} className="pe-3">
+                                {album.reviews.map(
+                                    (review) => <Review review={review}/>
+                                )}
+                            </Col>
+                            <Col md={4} className="statistics-block" style={{top: '20px'}}>
+                                <Reviews stats={reviewsStatistics} />
+                            </Col>
+                        </Row>
+                    </>
+                ) : (
+                    <>
+                    </>
+                )}
+
             </Container>
         </div>
     )

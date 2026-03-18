@@ -9,9 +9,9 @@ User = get_user_model()
 
 class Review(models.Model):
     class ReviewType(models.TextChoices):
-        POSITIVE = 'Положительная'
-        NEGATIVE = 'Негативная'
-        NEUTRAL = 'Нейтральная'
+        POSITIVE = 'positive'
+        NEGATIVE = 'negative'
+        NEUTRAL = 'neutral'
 
     title = models.CharField(
         verbose_name='Заголовок рецензии',

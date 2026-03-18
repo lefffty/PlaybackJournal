@@ -175,6 +175,7 @@ class UserSimpleSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             'id',
+            'avatar',
             'username',
         )
 
