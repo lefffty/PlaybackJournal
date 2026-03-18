@@ -61,3 +61,39 @@ class Review(models.Model):
             self.album.name,
             reprlib.repr(self.text)
         )
+
+
+class ReviewComment(models.Model):
+    text = models.TextField(
+        verbose_name='Текст комментария',
+        null=False,
+        blank=False,
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Автор комментария',
+    )
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Комментируемая рецензия',
+    )
+    created_at = models.DateTimeField(
+        verbose_name='Дата и время написания комментария',
+        auto_now_add=True,
+    )
+
+    class Meta:
+        verbose_name = 'Комментарий к рецензии'
+        verbose_name_plural = 'Комментарии к рецензии'
+
+    def __str__(self):
+        representation = '{} - {} - {}'
+        return representation.format(
+            self.author.username,
+            self.review.title,
+            reprlib.repr(self.text)
+        )
