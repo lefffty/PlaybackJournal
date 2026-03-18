@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'genre.apps.GenreConfig',
     'playlist.apps.PlaylistConfig',
     'song.apps.SongConfig',
+    'review.apps.ReviewConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
