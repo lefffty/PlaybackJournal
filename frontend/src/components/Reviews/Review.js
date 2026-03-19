@@ -1,9 +1,10 @@
 import React from "react";
 import {Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 
-const Review = ({review}) => {
+const Review = ({review, albumId = 0}) => {
     const typeToColor = {
         negative: '#ff72722f',
         positive: '#bcffa66c',
@@ -11,12 +12,10 @@ const Review = ({review}) => {
     }
 
     const reviewColor = typeToColor[review.type];
-    console.log(reviewColor)
-
     return (
         <Col md={12}>
             <Card
-                className="mb-3"
+                className="mb-3 border-0"
                 style={{
                     backgroundColor: reviewColor
                 }}
@@ -39,12 +38,27 @@ const Review = ({review}) => {
                         </span>
                     </Col>
                     <Col md={4}>
-                        <span>
-                            {moment(review.updated_at).format('D MMMM YYYY [г.] HH:mm')}
-                        </span>
+                        <div
+                            style={{
+                                textAlign: "center"
+                            }}
+                        >
+                            <div>
+                                {moment(review.updated_at).format('D MMMM YYYY [г.] HH:mm')}
+                            </div>
+                            {albumId !== 0 ? (
+                                <>
+                                    <Link to={`/albums/${albumId}/reviews/${review.id}`}>
+                                        Прямая ссылка
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                </>
+                            )}
+                        </div>
                     </Col>
                 </Row>
-                <hr></hr>
                 <Card.Body
                     style={{
                         textAlign: "left",

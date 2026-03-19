@@ -174,7 +174,7 @@ const Album = (props) => {
     return (
         <div>
             <Container>
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Row className="g-0">
                         <Col md={4} className="d-flex">
                             <Card.Img
@@ -264,7 +264,7 @@ const Album = (props) => {
                         </Col>
                     </Row>
                 </Card>
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Card.Body>
                         <ListGroup variant="flush">
                             <Card.Title>
@@ -312,7 +312,7 @@ const Album = (props) => {
                         <Row className="g-0">
                             <Col md={8} className="pe-3">
                                 {album.reviews.map(
-                                    (review) => <Review review={review}/>
+                                    (review) => <Review review={review} albumId={id}/>
                                 )}
                             </Col>
                             <Col md={4} className="statistics-block" style={{top: '20px'}}>

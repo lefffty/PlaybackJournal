@@ -35,6 +35,8 @@ import CreateEditPlaylist from './components/Playlists/CreatePlaylist';
 import SearchField from './components/Common/SearchField';
 import SearchResults from './components/Search/SearchResults';
 
+import ReviewDetail from './components/Reviews/ReviewDetail';
+
 import Song from './components/Songs/Song';
 
 
@@ -279,8 +281,13 @@ function App() {
           >
           </Route>
           <Route
-              path='/profile/rated/playlists'
+            path='/profile/rated/playlists'
             element={<UserList listType={"ratedPlaylists"} cardTitle={"Оценки плейлистов"}/>}
+          >
+          </Route>
+          <Route
+            path='/albums/:albumId/reviews/:reviewId/'
+            element={<ReviewDetail />}
           >
           </Route>
         </Routes>

@@ -7,7 +7,7 @@ const Reviews = ({ stats }) => {
 
   return (
     <div className="statistics-sticky">
-      <Card className="shadow-sm">
+      <Card className="shadow-sm border-0">
         <Card.Body>
           <Card.Title className="text-center mb-4">Статистика отзывов</Card.Title>
           

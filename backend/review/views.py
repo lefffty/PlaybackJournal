@@ -4,6 +4,7 @@ from rest_framework.serializers import Serializer
 from .serializers import (
     ReviewCreateSerializer,
     ReviewUpdateSerializer,
+    ReviewDetailSerializer,
 )
 from .permissions import IsOwnerOrReadOnly
 from .models import Review
@@ -14,6 +15,7 @@ class ReviewModelViewSet(
     mixins.CreateModelMixin,
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin
 ):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Review.objects.all()
@@ -21,7 +23,10 @@ class ReviewModelViewSet(
     def get_serializer_class(self):
         if self.action in ('create',):
             return ReviewCreateSerializer
-        return ReviewUpdateSerializer
+        elif self.action in ('retrieve', ):
+            return ReviewDetailSerializer
+        else:
+            return ReviewUpdateSerializer
 
     def get_permissions(self):
         if self.action in ('create',):

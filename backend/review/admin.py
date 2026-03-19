@@ -68,7 +68,6 @@ class ReviewCommentAdmin(admin.ModelAdmin):
         'review__title',
     )
     fields = (
-        'id',
         'author',
         'text',
         'review',
