@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import {Card, ButtonGroup, Button} from 'react-bootstrap';
 
+import './Genre.css';
+
 import GenreService from "../../services/GenreService";
 import { Link } from "react-router-dom";
 
@@ -134,7 +136,7 @@ const Genres = (props) => {
             {genres.map(
                 (genre) => {
                     return (
-                        <Card className="w-75 mb-3 mx-auto">
+                        <Card className="w-75 mb-3 mx-auto border-0 genre-card">
                             <Card.Body>
                                 <Card.Title>
                                     <Link to={`/genres/${genre.id}/`} className="text-decoration-none">

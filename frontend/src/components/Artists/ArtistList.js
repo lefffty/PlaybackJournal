@@ -77,12 +77,12 @@ const ArtistList = (props) => {
     return (
         <div>
             <Container>
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Card.Body>
-                        <Card.Title className="fs-1 ms-2 mt-3">
+                        <Card.Title className="fs-1 ms-3 mt-3">
                             {dataType === 'similar' ? 'Похожие исполнители' : 'Дискография'}
                         </Card.Title>
-                        <Row className="g-0 ms-2" style={{rowGap: "10px",  gap: '90px'}}>
+                        <Row className="g-0 ms-3 mt-4" style={{rowGap: "10px",  gap: '90px'}}>
                             {data.map(
                                 (item) => {
                                     return (

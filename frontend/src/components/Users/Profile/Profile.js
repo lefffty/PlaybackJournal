@@ -41,7 +41,7 @@ const Profile = (props) => {
                 </Alert>
             ) : (
                 <>
-                    <Card className="mx-auto mb-3" style={{ maxWidth: '900px'}}>
+                    <Card className="mx-auto mb-3 border-0" style={{ maxWidth: '900px'}}>
                         <Row className="g-0">
                             <Col md={4}>
                                 <Card.Img
@@ -83,7 +83,7 @@ const Profile = (props) => {
                             </Col>
                         </Row>
                     </Card>
-                    <Card className="mx-auto" style={{ maxWidth: '900px'}}>
+                    <Card className="mx-auto border-0" style={{ maxWidth: '900px'}}>
                         <ProfileLinksGroup 
                             groupHeader={"Альбомы"}
                             cardsTexts={["Любимые", "Оценки", "Прослушанные", "Буду слушать"]}

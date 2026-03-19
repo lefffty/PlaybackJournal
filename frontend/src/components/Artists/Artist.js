@@ -84,7 +84,7 @@ const Artist = (props) => {
     return (
         <div>
             <Container>
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Row className="g-0">
                         <Col md={4}>
                             <Card.Img
@@ -134,7 +134,7 @@ const Artist = (props) => {
                         </Col>
                     </Row>
                 </Card>
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Card.Body>
                         <Card.Header className="fs-3 mb-3">
                             <div className="d-flex align-items-end" style={{height: '50px'}}>
@@ -196,7 +196,7 @@ const Artist = (props) => {
                         </Row>
                     </Card.Body>
                 </Card>
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Card.Body>
                         <Card.Header  className="fs-3 mb-3">
                             <div className="d-flex align-items-end">

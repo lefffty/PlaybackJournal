@@ -3,6 +3,8 @@ import {Card, Row, Col, ButtonGroup, Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
+import './Artist.css';
+
 import ArtistService from "../../services/ArtistService";
 
 const Artists = (props) => {
@@ -130,7 +132,7 @@ const Artists = (props) => {
                 {artists.map(
                     (artist) => (
                         <Col key={artist.id} xs={12} className="mb-3">
-                            <Card style={{maxWidth: "50%", maxHeight: "100%"}} className="mx-auto">
+                            <Card style={{maxWidth: "50%", maxHeight: "100%"}} className="mx-auto border-0 artist-card">
                                 <Link to={`/artists/${artist.id}/`}>
                                     <Card.Img
                                         src={artist.avatar}

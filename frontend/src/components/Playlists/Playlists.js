@@ -3,6 +3,8 @@ import Container from 'react-bootstrap/Container';
 import { FaPlus } from "react-icons/fa";
 import {Button, Card, Col, Row, ButtonGroup} from 'react-bootstrap';
 
+import './Playlist.css';
+
 import PlaylistService from '../../services/PlaylistService';
 import { Link } from "react-router-dom";
 
@@ -139,7 +141,7 @@ const Playlists = (props) => {
                 {data.map(
                     (playlist) => {
                         return (
-                            <Card className="w-75 mb-3 mx-auto">
+                            <Card className="w-75 mb-3 mx-auto playlist-card border-0">
                                 <Row className="g-0">
                                     <Col md={4}>
                                         <Card.Img

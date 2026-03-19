@@ -85,7 +85,7 @@ const Genre = (props) => {
     return (
         <div>
             <Container>
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Card.Body>
                         <Row md={2}>
                             <Col md={9}>

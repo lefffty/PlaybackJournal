@@ -13,3 +13,11 @@
 .album-cover {
     transition: transform 0.3s ease;
 }
+
+.genre-card:hover {
+  transform: scale(1.05);
+}
+
+.genre-card {
+  transition: transform 0.3s ease;
+}

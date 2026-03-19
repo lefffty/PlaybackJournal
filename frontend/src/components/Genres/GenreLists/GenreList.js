@@ -57,12 +57,12 @@ const GenreList = ({listType, cardTitle}) => {
     return (
         <div>
             <Container>
-                <Card>
+                <Card className="border-0">
                     <Card.Body>
                         <Card.Title className="fs-1 ms-3 mt-3">
                             {cardTitle}
                         </Card.Title>
-                        <Row className="g-0" style={{rowGap: "10px",  gap: '90px'}}>
+                        <Row className="g-0 mt-4 ms-2" style={{rowGap: "10px",  gap: '90px'}}>
                             {data.map(
                                 (item) => {
                                     return (
@@ -85,7 +85,7 @@ const GenreList = ({listType, cardTitle}) => {
                                             </Link>
                                             <Link
                                                 to={`/${path}s/${item.id}/`}
-                                                className="text-decoration-none fs-5"
+                                                className="text-decoration-none fs-4"
                                                 style={{color: "black"}}
                                             >
                                                 <Col>

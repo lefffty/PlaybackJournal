@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Card, Row, Col, ListGroup, Button, Modal} from 'react-bootstrap';
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 import PlaylistService from "../../services/PlaylistService";
 import UserService from "../../services/UserService";
 
 import ScaleRating from "../Common/ScaleRating/ScaleRating";
 import HeartIcon from "../Common/HeartIcon/HeartIcon";
-import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
+
 
 
 const Playlist = (props) => {
@@ -143,7 +144,7 @@ const Playlist = (props) => {
     return (
         <div>
             <Container className="w-75">
-                <Card className="mb-3">
+                <Card className="mb-3 border-0">
                     <Row className="g-0">
                         <Col md={4} className="d-flex">
                             <Card.Img
@@ -202,15 +203,13 @@ const Playlist = (props) => {
                                 {userId === playlist.author.id
                                     ? (
                                         <>
-                                            <Button className="me-2" onClick={onOpenHandle}>
-                                                Удалить плейлист
-                                            </Button>
-
                                             <Link to={`/playlists/${id}/edit/`}>
-                                                <Button>
-                                                    Редактировать плейлист
-                                                </Button>
+                                                <FaEdit size={26} title="Редактировать плейлист"/>
                                             </Link>
+
+                                            <span className="me-2 ms-4" style={{cursor: "pointer"}} onClick={onOpenHandle}>
+                                                <FaTrash size={26} title="Удалить плейлист"/>
+                                            </span>
 
                                             <Modal show={show} onHide={onCloseHandle}>
                                                 <Modal.Header closeButton>
@@ -237,7 +236,7 @@ const Playlist = (props) => {
                         </Col>
                     </Row>
                 </Card>
-                <Card>
+                <Card className="border-0">
                     <Card.Body>
                         <ListGroup variant="flush">
                             <Card.Title>

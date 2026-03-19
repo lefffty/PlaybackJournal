@@ -1,0 +1,7 @@
+.playlist-card:hover {
+  transform: scale(1.05);
+}
+
+.playlist-card {
+  transition: transform 0.3s ease;
+}
