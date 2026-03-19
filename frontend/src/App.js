@@ -290,6 +290,11 @@ function App() {
             element={<ReviewDetail />}
           >
           </Route>
+          <Route
+            path='/profile/reviews/'
+            element={<UserList listType={"reviews"} cardTitle={"Рецензии"}/>}
+          >
+          </Route>
         </Routes>
       </div>
       <footer className='text-center text-lg-start bg-light text-muted mt-4'>

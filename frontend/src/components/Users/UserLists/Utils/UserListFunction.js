@@ -24,6 +24,9 @@ function UserListFunction(listType){
         case "wishlistAlbums":
             func = UserService.fetchWishlistAlbums
             break;
+        case "reviews":
+            func = UserService.fetchReviews
+            break;
         default:
             break;
     }

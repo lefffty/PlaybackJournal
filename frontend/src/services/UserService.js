@@ -53,6 +53,10 @@ class UserService {
     fetchFavouriteArtists(){
         return AxiosInstance.get("/api/users/favourite/artists/");
     }
+
+    fetchReviews(){
+        return AxiosInstance.get("http://localhost:8000/api/users/reviews/");
+    }
 }
 
 export default new UserService();

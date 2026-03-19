@@ -32,6 +32,7 @@ from playlist.serializers import PlaylistSimpleSerializer
 from albums.serializers import AlbumGenreSerializer
 from artist.serializers import ArtistSimpleSerializer
 from song.serializers import SongSerializer
+from review.serializers import ReviewListSerializer
 
 from albums.models import (
     FavouriteAlbum,
@@ -177,6 +178,15 @@ class UserListsViewSet(
             user=user,
         )
         _serializer = serializer(objects, read_only=True, many=True)
+        return Response(
+            _serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=False, methods=['GET'], url_path='reviews')
+    def reviews(self, request: HttpRequest):
+        reviews = request.user.reviews.all()
+        _serializer = ReviewListSerializer(reviews, many=True, read_only=True)
         return Response(
             _serializer.data,
             status=status.HTTP_200_OK
