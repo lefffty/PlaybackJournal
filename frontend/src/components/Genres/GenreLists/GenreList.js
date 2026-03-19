@@ -53,6 +53,7 @@ const GenreList = ({listType, cardTitle}) => {
     const imageBorderRadius = listType.includes('Albums') ? '5%' : '50%';
     const textAlignment = listType.includes('Albums') ? 'left' : 'center';
     const showYear = listType.includes('Albums');
+    const showArtists = listType.includes('Albums');
 
     return (
         <div>
@@ -88,10 +89,27 @@ const GenreList = ({listType, cardTitle}) => {
                                                 className="text-decoration-none fs-4"
                                                 style={{color: "black"}}
                                             >
-                                                <Col>
+                                                <Card.Text className="mb-0">
                                                     {item[nameKey]}
-                                                </Col>
+                                                </Card.Text>
                                             </Link>
+                                            {showArtists && (
+                                                <span>
+                                                    {item.artists.map(
+                                                        (artist, index) => (
+                                                            <React.Fragment>
+                                                                <Link
+                                                                    to={`/artists/${artist.id}/`}
+                                                                    className="text-muted text-decoration-none"
+                                                                >
+                                                                    {artist.username}
+                                                                </Link>
+                                                                {index < item.artists.length - 1 && ', '}
+                                                            </React.Fragment>
+                                                        )
+                                                    )}
+                                                </span>
+                                            )}
                                             {showYear && (
                                                 <div>
                                                     {moment(item.publication_date).year()}

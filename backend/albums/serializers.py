@@ -145,10 +145,13 @@ class AlbumCreateSerializer(serializers.ModelSerializer):
 
 
 class AlbumGenreSerializer(serializers.ModelSerializer):
+    artists = ArtistSimpleSerializer(many=True, read_only=True)
+
     class Meta:
         model = Album
         fields = (
             'id',
+            'artists',
             'name',
             'cover',
             'publication_date',
