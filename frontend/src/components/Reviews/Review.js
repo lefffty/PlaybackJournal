@@ -40,7 +40,8 @@ const Review = ({review, albumId = 0}) => {
                     <Col md={4}>
                         <div
                             style={{
-                                textAlign: "center"
+                                textAlign: "right",
+                                marginRight: '20px'
                             }}
                         >
                             <div>
@@ -48,8 +49,11 @@ const Review = ({review, albumId = 0}) => {
                             </div>
                             {albumId !== 0 ? (
                                 <>
-                                    <Link to={`/albums/${albumId}/reviews/${review.id}`}>
-                                        Прямая ссылка
+                                    <Link
+                                        to={`/albums/${albumId}/reviews/${review.id}`}
+                                        className="text-muted text-decoration-none"
+                                    >
+                                        прямая ссылка
                                     </Link>
                                 </>
                             ) : (
@@ -59,6 +63,7 @@ const Review = ({review, albumId = 0}) => {
                         </div>
                     </Col>
                 </Row>
+                <hr></hr>
                 <Card.Body
                     style={{
                         textAlign: "left",

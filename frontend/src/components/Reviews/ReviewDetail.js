@@ -4,6 +4,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 
 import Review from "./Review";
+import CommentForm from "./CommentForm";
 import Comments from "./Comments";
 import ReviewService from "../../services/ReviewService";
 
@@ -12,6 +13,8 @@ const ReviewDetail = (props) => {
     const [review, setReview] = useState(null);
     const [error, setError] = useState('');
     const params = useParams();
+    const token = localStorage.getItem('auth_token');
+    const albumId = params.albumId;
     const reviewId = params.reviewId;
 
     useEffect(
@@ -68,6 +71,17 @@ const ReviewDetail = (props) => {
                     </Row>
                 </Col>
             </Container>
+            {token !== null || token !== ''
+                ? (
+                    <>
+                        <CommentForm reviewId={reviewId} albumId={albumId}/>
+                    </>
+                )
+                : (
+                    <>
+                    </>
+                )
+            }
         </Container>
     )
 }
