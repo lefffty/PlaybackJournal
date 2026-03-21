@@ -17,20 +17,22 @@ const ReviewDetail = (props) => {
     const albumId = params.albumId;
     const reviewId = params.reviewId;
 
+    const fetchReview = () => {
+        ReviewService.fetchReview(reviewId)
+        .then(response => setReview(response.data))
+        .catch(e => setError(e.toString()))
+    }
+
     useEffect(
         () => {
-            ReviewService.fetchReview(reviewId)
-            .then(
-                (response) => {
-                    setReview(response.data);
-                }
-            )
-            .catch(
-                e => setError(e.toString())
-            )
+            fetchReview();
         },
-        []
+        [reviewId]
     )
+
+    const handleCommentAdded = () => {
+        fetchReview();
+    }
 
     if (error){
         return (
@@ -74,7 +76,7 @@ const ReviewDetail = (props) => {
             {token !== null || token !== ''
                 ? (
                     <>
-                        <CommentForm reviewId={reviewId} albumId={albumId}/>
+                        <CommentForm reviewId={reviewId} onCommentAdded={handleCommentAdded}/>
                     </>
                 )
                 : (
