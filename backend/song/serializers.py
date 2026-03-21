@@ -35,6 +35,8 @@ class SongSerializer(serializers.ModelSerializer):
         if not request:
             return 0
         user = request.user
+        if not user.is_authenticated:
+            return 0
         filter_kwargs = {
             'user': user,
             'song': obj

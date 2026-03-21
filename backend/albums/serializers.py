@@ -61,7 +61,11 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     def get_statistics(self, obj: Album):
         entries = obj.reviews.values('type').annotate(total=Count('id'))
-        stats = {}
+        stats = {
+            'positive': 0,
+            'negative': 0,
+            'neutral': 0,
+        }
         for entry in entries:
             stats[entry['type']] = entry['total']
         stats['total'] = obj.reviews.count()

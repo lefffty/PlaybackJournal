@@ -73,7 +73,7 @@ const ReviewDetail = (props) => {
                     </Row>
                 </Col>
             </Container>
-            {token !== null || token !== ''
+            {token !== null && token !== ''
                 ? (
                     <>
                         <CommentForm reviewId={reviewId} onCommentAdded={handleCommentAdded}/>

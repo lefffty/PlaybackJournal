@@ -38,17 +38,19 @@ const Genre = (props) => {
 
     useEffect(
         () => {
-            GenreService.userGenre(id)
-            .then(
-                (response) => {
-                    setUserGenreData(response.data);
-                }
-            )
-            .catch(
-                (e) => {
-                    setError(e.toString());
-                }
-            )
+            if (token){
+                GenreService.userGenre(id)
+                .then(
+                    (response) => {
+                        setUserGenreData(response.data);
+                    }
+                )
+                .catch(
+                    (e) => {
+                        setError(e.toString());
+                    }
+                )
+            }
         },
         [id]
     )
@@ -97,7 +99,7 @@ const Genre = (props) => {
                                 </Card.Text>
                             </Col>
                             <Col md={2}>
-                                {token != null || token !== ''
+                                {token != null && token !== ''
                                     ? (
                                         <>
                                             <HeartIcon initialValue={userGenreData.favourite} onClick={onFavouriteClick}/>

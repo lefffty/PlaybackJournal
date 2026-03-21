@@ -45,18 +45,20 @@ const Playlist = (props) => {
 
     useEffect(
         () => {
-            PlaylistService.userPlaylist(id)
-            .then(
-                (response) => {
-                    setUserPlaylistData(response.data);
-                    console.log(response.data);
-                }
-            )
-            .catch(
-                (e) => {
-                    setError(e.toString());
-                }
-            )
+            if (token){                
+                PlaylistService.userPlaylist(id)
+                .then(
+                    (response) => {
+                        setUserPlaylistData(response.data);
+                        console.log(response.data);
+                    }
+                )
+                .catch(
+                    (e) => {
+                        setError(e.toString());
+                    }
+                )
+            }
         },
         [id]
     )
