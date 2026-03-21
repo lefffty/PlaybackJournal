@@ -5,6 +5,10 @@ class ReviewsService {
         return AxiosInstance.get(`http://localhost:8000/api/reviews/${id}/`);
     }
 
+    fetchComments(id){
+        return AxiosInstance.get(`http://localhost:8000/api/reviews/${id}/comments/`);
+    }
+
     createReview(data){
         return AxiosInstance.post(`http://localhost:8000/api/reviews/`, data);
     }

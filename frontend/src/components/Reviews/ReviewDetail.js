@@ -10,12 +10,22 @@ import ReviewService from "../../services/ReviewService";
 
 
 const ReviewDetail = (props) => {
+    const [comments, setComments] = useState([]);
     const [review, setReview] = useState(null);
     const [error, setError] = useState('');
     const params = useParams();
     const token = localStorage.getItem('auth_token');
     const albumId = params.albumId;
     const reviewId = params.reviewId;
+
+    const fetchComments = () => {
+        ReviewService.fetchComments(reviewId)
+        .then(
+            (response) => {
+                setComments(response.data);
+            }
+        )
+    }
 
     const fetchReview = () => {
         ReviewService.fetchReview(reviewId)
@@ -25,13 +35,20 @@ const ReviewDetail = (props) => {
 
     useEffect(
         () => {
+            fetchComments();
+        },
+        [reviewId]
+    )
+
+    useEffect(
+        () => {
             fetchReview();
         },
         [reviewId]
     )
 
     const handleCommentAdded = () => {
-        fetchReview();
+        fetchComments();
     }
 
     if (error){
@@ -65,11 +82,11 @@ const ReviewDetail = (props) => {
                                 alignItems: "start"
                             }}
                         >
-                            <b>Комментарии ({review.comments.length})</b>
+                            <b>Комментарии ({comments.length})</b>
                         </Card>
                     </Row>
                     <Row>
-                        <Comments comments={review.comments}/>
+                        <Comments comments={comments}/>
                     </Row>
                 </Col>
             </Container>

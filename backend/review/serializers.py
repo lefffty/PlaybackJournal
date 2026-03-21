@@ -51,7 +51,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
 
 
 class ReviewDetailSerializer(serializers.ModelSerializer):
-    comments = ReviewCommentSerializer(read_only=True, many=True)
+    # comments = ReviewCommentSerializer(read_only=True, many=True)
     author = serializers.SerializerMethodField()
 
     class Meta:
@@ -63,7 +63,7 @@ class ReviewDetailSerializer(serializers.ModelSerializer):
             'type',
             'author',
             'updated_at',
-            'comments',
+            # 'comments',
         )
 
     def get_author(self, obj: Review):
