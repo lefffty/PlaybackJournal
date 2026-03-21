@@ -29,6 +29,14 @@ class AlbumService{
     userAlbum(id){
         return AxiosInstance.get(`/api/albums/${id}/user_album/`)
     }
+
+    fetchStatistics(id){
+        return AxiosInstance.get(`/api/albums/${id}/album_reviews_statistics/`);
+    }
+
+    fetchReviews(id){
+        return AxiosInstance.get(`/api/albums/${id}/album_reviews/`);
+    }
 }
 
 export default new AlbumService();

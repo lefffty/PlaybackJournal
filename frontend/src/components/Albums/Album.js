@@ -23,6 +23,7 @@ const Album = (props) => {
     const [album, setAlbum] = useState(null);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
+    const [reviews, setReviews] = useState([]);
     const [userAlbumData, setUserAlbumData] = useState({
         favourite: false,
         listened: false,
@@ -30,6 +31,7 @@ const Album = (props) => {
         rating: 0,
     });
     const [reviewsStatistics, setReviewsStatistics] = useState({
+        total: 0,
         negative: 0,
         neutral: 0,
         positive: 0,  
@@ -47,11 +49,6 @@ const Album = (props) => {
                 songs.forEach(song => {
                     initialRatings[song.id] = song.rating;
                 })
-                const statistics = response.data.statistics;
-                if (statistics.total !== 0){
-                    setReviewsStatistics(statistics);
-                    setIsStatistics(true);
-                }
                 setUserSongsData(initialRatings);
             }
         )
@@ -62,6 +59,43 @@ const Album = (props) => {
         )
     }
 
+    const fetchReviews = () => {
+        AlbumService.fetchReviews(id)
+        .then(
+            (response) => {
+                const data = response.data;
+                setReviews(data);
+            }
+        )
+        .catch(
+            (e) => setError(e.toString())
+        )
+    }
+
+    const fetchAlbumReviews = () => {
+        AlbumService.fetchStatistics(id)
+        .then(
+            (response) => {
+                const data = response.data;
+                setReviewsStatistics(data);
+                if (data.total){
+                    setIsStatistics(true);
+                    fetchReviews();
+                }
+            }
+        )
+        .catch(
+            (e) => setError(e.toString())
+        )
+    }
+
+    useEffect(
+        () => {
+            fetchAlbumReviews();
+        },
+        [id]
+    )
+
     useEffect(
         () => {
             fetchAlbum();
@@ -69,7 +103,7 @@ const Album = (props) => {
     )
 
     const handleReviewAdded = () => {
-        fetchAlbum();
+        fetchAlbumReviews();
     }
 
     useEffect(
@@ -320,7 +354,7 @@ const Album = (props) => {
                         </Card.Title>
                         <Row className="g-0">
                             <Col md={8} className="pe-3">
-                                {album.reviews.map(
+                                {reviews.map(
                                     (review) => <Review review={review} albumId={id}/>
                                 )}
                             </Col>

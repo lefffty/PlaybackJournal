@@ -3,7 +3,6 @@ from statistics import mean
 from typing import MutableMapping
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
-from django.db.models import Count
 
 from .models import (
     AlbumArtist,
@@ -41,8 +40,6 @@ class AlbumSerializer(serializers.ModelSerializer):
     )
     songs = SongSerializer(read_only=True, many=True)
     average_rating = serializers.SerializerMethodField()
-    reviews = ReviewListSerializer(many=True, read_only=True)
-    statistics = serializers.SerializerMethodField()
 
     class Meta:
         model = Album
@@ -53,23 +50,9 @@ class AlbumSerializer(serializers.ModelSerializer):
             'average_rating',
             'cover',
             'songs',
-            'reviews',
-            'statistics',
             'artists',
             'genres',
         )
-
-    def get_statistics(self, obj: Album):
-        entries = obj.reviews.values('type').annotate(total=Count('id'))
-        stats = {
-            'positive': 0,
-            'negative': 0,
-            'neutral': 0,
-        }
-        for entry in entries:
-            stats[entry['type']] = entry['total']
-        stats['total'] = obj.reviews.count()
-        return stats
 
     def get_average_rating(self, obj: Album):
         instances = RatedAlbum.objects.filter(album=obj)

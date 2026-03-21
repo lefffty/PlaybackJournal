@@ -10,10 +10,11 @@ from rest_framework.permissions import (
     IsAuthenticated,
     AllowAny,
 )
-from django.db.models import Model
+from django.db.models import Model, Count
 from django.shortcuts import get_object_or_404
 from django.http import HttpRequest
 
+from review.serializers import ReviewListSerializer
 from .serializers import (
     AlbumCreateSerializer,
     AlbumSerializer,
@@ -45,6 +46,35 @@ class AlbumListDetailViewSet(
         if self.action in ('create'):
             return [IsAuthenticated()]
         return [AllowAny()]
+
+    @action(
+        detail=True,
+        methods=['GET'],
+        url_path='album_reviews'
+    )
+    def get_album_reviews(self, request: HttpRequest, pk: int):
+        album = get_object_or_404(Album, pk=pk)
+        reviews = album.reviews.all()
+        serializer = ReviewListSerializer(reviews, many=True, read_only=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=True,
+        methods=['GET'],
+        url_path='album_reviews_statistics'
+    )
+    def get_album_statistics(self, request: HttpRequest, pk: int):
+        album = get_object_or_404(Album, pk=pk)
+        entries = album.reviews.values('type').annotate(total=Count('id'))
+        stats = {
+            'positive': 0,
+            'negative': 0,
+            'neutral': 0,
+        }
+        for entry in entries:
+            stats[entry['type']] = entry['total']
+        stats['total'] = album.reviews.count()
+        return Response(stats, status=status.HTTP_200_OK)
 
 
 class UserAlbumViewSet(
