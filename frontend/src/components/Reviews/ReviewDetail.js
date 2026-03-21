@@ -4,7 +4,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 
 import Review from "./Review";
-import CommentForm from "./CommentForm";
+import CommentForm from "./Forms/CommentForm";
 import Comments from "./Comments";
 import ReviewService from "../../services/ReviewService";
 

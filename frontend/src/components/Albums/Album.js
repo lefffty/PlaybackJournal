@@ -11,6 +11,7 @@ import HeartIcon from "../Common/HeartIcon/HeartIcon";
 import Headphones from "../Common/Headphones/Headphones";
 
 import Review from "../Reviews/Review";
+import ReviewForm from "../Reviews/Forms/ReviewForm";
 import Reviews from "../Statistics/Reviews/Reviews";
 
 import AlbumService from "../../services/AlbumService";
@@ -36,32 +37,40 @@ const Album = (props) => {
     const [isStatistics, setIsStatistics] = useState(false);
     const [userSongsData, setUserSongsData] = useState({});
 
+    const fetchAlbum = () => {
+        AlbumService.readAlbum(id)
+        .then(
+            (response) => {
+                setAlbum(response.data);
+                const songs = response.data.songs;
+                const initialRatings = {};
+                songs.forEach(song => {
+                    initialRatings[song.id] = song.rating;
+                })
+                const statistics = response.data.statistics;
+                if (statistics.total !== 0){
+                    setReviewsStatistics(statistics);
+                    setIsStatistics(true);
+                }
+                setUserSongsData(initialRatings);
+            }
+        )
+        .catch(
+            (e) => {
+                setError(e.toString());
+            }
+        )
+    }
+
     useEffect(
         () => {
-            AlbumService.readAlbum(id)
-            .then(
-                (response) => {
-                    setAlbum(response.data);
-                    const songs = response.data.songs;
-                    const initialRatings = {};
-                    songs.forEach(song => {
-                        initialRatings[song.id] = song.rating;
-                    })
-                    const statistics = response.data.statistics;
-                    if (statistics.total !== 0){
-                        setReviewsStatistics(statistics);
-                        setIsStatistics(true);
-                    }
-                    setUserSongsData(initialRatings);
-                }
-            )
-            .catch(
-                (e) => {
-                    setError(e.toString());
-                }
-            )
+            fetchAlbum();
         }, [id]
     )
+
+    const handleReviewAdded = () => {
+        fetchAlbum();
+    }
 
     useEffect(
         () => {
@@ -324,7 +333,19 @@ const Album = (props) => {
                     <>
                     </>
                 )}
-
+                {token  && token !== ''
+                    ? (
+                        <div
+                            className="mt-3 w-50"
+                        >
+                            <ReviewForm albumId={id} onReviewAdded={handleReviewAdded}/>
+                        </div>
+                    )
+                    : (
+                        <>
+                        </>
+                    )
+                }
             </Container>
         </div>
     )

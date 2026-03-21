@@ -3,7 +3,6 @@ import { Card, Row, Col } from 'react-bootstrap';
 import './Reviews.css';
 
 const Reviews = ({ stats }) => {
-  console.log(stats);
   const calculatePercent = (value) => ((value / stats.total) * 100).toFixed(2);
 
   return (

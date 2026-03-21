@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import { Button, Card, Form } from 'react-bootstrap';
 
-import ReviewService from "../../services/ReviewService";
+import ReviewService from "../../../services/ReviewService";
 
 const CommentForm = ({reviewId, onCommentAdded}) => {
     const [error, setError] = useState(false);
