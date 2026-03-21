@@ -3,6 +3,15 @@ from rest_framework import serializers
 from .models import Review, ReviewComment
 
 
+class ReviewCommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewComment
+        fields = (
+            'text',
+            'review',
+        )
+
+
 class ReviewCommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
 

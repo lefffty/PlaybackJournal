@@ -5,9 +5,12 @@ from .serializers import (
     ReviewCreateSerializer,
     ReviewUpdateSerializer,
     ReviewDetailSerializer,
+    ReviewCommentCreateSerializer
 )
 from .permissions import IsOwnerOrReadOnly
-from .models import Review
+from .models import (
+    Review,
+)
 
 
 class ReviewModelViewSet(
@@ -32,6 +35,20 @@ class ReviewModelViewSet(
         if self.action in ('create',):
             return [permissions.IsAuthenticated]
         return [IsOwnerOrReadOnly()]
+
+    def perform_create(self, serializer: Serializer):
+        serializer.save(author=self.request.user)
+
+
+class ReviewCommentViewSet(
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin
+):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action in ('create', ):
+            return ReviewCommentCreateSerializer
 
     def perform_create(self, serializer: Serializer):
         serializer.save(author=self.request.user)

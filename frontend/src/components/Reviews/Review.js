@@ -63,7 +63,7 @@ const Review = ({review, albumId = 0}) => {
                     style={{
                         textAlign: "left",
                     }}
-                    className="pt-0"
+                    className="pt-0 ms-4 mt-2"
                 >
                     <Card.Title className="fs-3">
                         {review.title}
