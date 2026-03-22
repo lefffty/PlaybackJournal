@@ -2,12 +2,18 @@ from rest_framework.routers import DefaultRouter
 from django.urls import include, path
 
 from .views import (
+    ReactionViewSet,
     ReviewModelViewSet,
     ReviewCommentViewSet,
 )
 
 
 router = DefaultRouter()
+router.register(
+    r'reviews',
+    ReactionViewSet,
+    basename='reactions',
+)
 router.register(
     r'reviews',
     ReviewModelViewSet,
