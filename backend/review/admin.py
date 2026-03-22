@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import (
     Review,
     ReviewComment,
+    ReviewUserVote,
 )
 
 
@@ -71,4 +72,24 @@ class ReviewCommentAdmin(admin.ModelAdmin):
         'author',
         'text',
         'review',
+    )
+
+
+@admin.register(ReviewUserVote)
+class ReviewUserVoteAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'user',
+        'review',
+        'reaction',
+    )
+    search_fields = (
+        'reaction',
+        'user__username',
+        'review__title',
+    )
+    fields = (
+        'user',
+        'review',
+        'reaction',
     )

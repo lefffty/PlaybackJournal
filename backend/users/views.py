@@ -177,6 +177,8 @@ class UserListsViewSet(
         objects = model.objects.filter(
             user=user,
         )
+        if model == RatedAlbum:
+            objects = objects.order_by('-rating')
         _serializer = serializer(objects, read_only=True, many=True)
         return Response(
             _serializer.data,

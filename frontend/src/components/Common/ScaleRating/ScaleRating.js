@@ -15,6 +15,7 @@ const ScaleRating = ({initialValue, onRatingChange, totalStars = 10, frozen = fa
 
     const handleReset = () => {
         if (frozen) return;
+        if (rating === 0) return;
         setRating(0);
         if (onRatingChange) onRatingChange(0)
     }

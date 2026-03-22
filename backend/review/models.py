@@ -97,3 +97,35 @@ class ReviewComment(models.Model):
             self.review.title,
             reprlib.repr(self.text)
         )
+
+
+class ReviewUserVote(models.Model):
+    class ReviewReaction(models.TextChoices):
+        USEFUL = 'useful',
+        NOT_USEFUL = 'not_useful',
+
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        verbose_name='Рецензия',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+    )
+    reaction = models.CharField(
+        max_length=20,
+        verbose_name='Реакция на рецензию',
+        choices=ReviewReaction.choices
+    )
+
+    class Meta:
+        verbose_name = 'Реакция на рецензию'
+        verbose_name_plural = 'Реакции на рецензию'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['review', 'user'],
+                name='unique_%(class)s'
+            )
+        ]
