@@ -134,7 +134,10 @@ class UserAlbumsPreferencesViewSet(
                         {'detail': 'Необходимо указать оценку.'},
                         status=status.HTTP_400_BAD_REQUEST
                     )
-                if not (0 <= rating <= 10):
+                if rating == 0:
+                    instance.delete()
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+                if not (0 < rating <= 10):
                     return Response(
                         {
                             'detail': 'Оценка должна быть в диапазоне от 0 до 10'
@@ -150,7 +153,7 @@ class UserAlbumsPreferencesViewSet(
             return Response(status=status.HTTP_201_CREATED)
         else:
             if instance.exists():
-                instance[0].delete()
+                instance.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             model.objects.create(**params)
             return Response(status=status.HTTP_201_CREATED)
