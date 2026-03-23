@@ -129,3 +129,35 @@ class ReviewUserVote(models.Model):
                 name='unique_%(class)s'
             )
         ]
+
+
+class CommentUserVote(models.Model):
+    class ReviewReaction(models.TextChoices):
+        MINUS = 'minus'
+        PLUS = 'plus'
+
+    comment = models.ForeignKey(
+        ReviewComment,
+        on_delete=models.CASCADE,
+        verbose_name='Комментарий',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
+    reaction = models.CharField(
+        max_length=20,
+        choices=ReviewReaction.choices,
+        verbose_name='Реакция на комментарий'
+    )
+
+    class Meta:
+        verbose_name = 'Реакция на комментарий'
+        verbose_name_plural = 'Реакции на комментарий'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['comment', 'user'],
+                name='unique_%(class)s',
+            )
+        ]

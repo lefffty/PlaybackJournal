@@ -4,6 +4,7 @@ from .models import (
     Review,
     ReviewComment,
     ReviewUserVote,
+    CommentUserVote,
 )
 
 
@@ -92,4 +93,24 @@ class ReviewUserVoteAdmin(admin.ModelAdmin):
         'user',
         'review',
         'reaction',
+    )
+
+
+@admin.register(CommentUserVote)
+class CommentUserVoteAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'user',
+        'comment',
+        'reaction',
+    )
+    search_fields = (
+        'reaction',
+        'user__username',
+        'comment__text',
+    )
+    fields = (
+        'user',
+        'comment',
+        'reaction'
     )
