@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {Row, Col} from 'react-bootstrap';
-import './ReviewReaction.css';
+import './Reaction.css';
 import {FaThumbsUp, FaThumbsDown} from 'react-icons/fa';
 
-import ReviewService from "../../../services/ReviewService";
+import ReviewService from "../../../../services/ReviewService";
 
 const ReviewReaction = ({initialState = '', reviewId = null}) => {
     const [reaction, setReaction] = useState(initialState);
     const [error, setError] = useState('');
-
-    useEffect(
-        () => {
-            console.log(reaction)
-        },
-        [reaction]
-    )
 
     const handleLikeClick = () => {
         const newReaction = reaction === 'useful' ? '' : 'useful';

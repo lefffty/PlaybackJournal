@@ -19,6 +19,7 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewComment
         fields = (
+            'id',
             'text',
             'author',
             'created_at',

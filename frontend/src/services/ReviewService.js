@@ -13,6 +13,10 @@ class ReviewsService {
         return AxiosInstance.post(`api/reactions/${id}/review/`, data);
     }
 
+    reactionComment(id, data){
+        return AxiosInstance.post(`api/reactions/${id}/comment/`, data);
+    }
+
     createReview(data){
         return AxiosInstance.post(`api/reviews/`, data);
     }

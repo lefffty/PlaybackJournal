@@ -3,7 +3,7 @@ import {Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
-import ReviewReaction from "../Common/ReviewReaction/ReviewReaction";
+import ReviewReaction from "../Common/Reactions/Review/Reaction";
 
 const Review = ({review, albumId = 0}) => {
     const typeToColor = {
