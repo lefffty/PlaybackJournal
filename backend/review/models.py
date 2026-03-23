@@ -51,6 +51,14 @@ class Review(models.Model):
         auto_now=True,
     )
 
+    @property
+    def useful_count(self):
+        return self.reactions.filter(reaction=ReviewUserVote.ReviewReaction.USEFUL).count()
+
+    @property
+    def not_useful_count(self):
+        return self.reactions.filter(reaction=ReviewUserVote.ReviewReaction.NOT_USEFUL).count()
+
     class Meta:
         verbose_name = 'Рецензия'
         verbose_name_plural = 'Рецензии'

@@ -5,13 +5,25 @@ import {FaThumbsUp, FaThumbsDown} from 'react-icons/fa';
 
 import ReviewService from "../../../../services/ReviewService";
 
-const ReviewReaction = ({initialState = '', reviewId = null}) => {
+const ReviewReaction = ({
+    initialState = '',
+    reviewId = null,
+    usefulCount = 0,
+    notUsefulCount = 0
+}) => {
+    const [usefulCounter, setUsefulCounter] = useState(usefulCount);
+    const [notUsefulCounter, setNotUsefulCounter] = useState(notUsefulCount);
     const [reaction, setReaction] = useState(initialState);
     const [error, setError] = useState('');
 
     const handleLikeClick = () => {
         const newReaction = reaction === 'useful' ? '' : 'useful';
+        const action = reaction === 'useful' ? -1 : 1;
+        setUsefulCounter(usefulCounter + action);
         setReaction(newReaction);
+        if (reaction === 'not_useful'){
+            setNotUsefulCounter(notUsefulCounter - 1);
+        }
         const data = {
             reaction: newReaction,
         }
@@ -24,7 +36,12 @@ const ReviewReaction = ({initialState = '', reviewId = null}) => {
 
     const handleDislikeClick = () => {
         const newReaction = reaction === 'not_useful' ? '' : 'not_useful';
+        const action = reaction === 'not_useful' ? -1 : 1;
+        setNotUsefulCounter(notUsefulCounter + action);
         setReaction(newReaction);
+        if (reaction === 'useful'){
+            setUsefulCounter(usefulCounter - 1);
+        }
         const data = {
             reaction: newReaction,
         }
@@ -46,7 +63,7 @@ const ReviewReaction = ({initialState = '', reviewId = null}) => {
                     backgroundColor: 'white',
                     borderRadius: '50px',
                     height: '40px',
-                    width: '130px',
+                    width: '150px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'flex-start',
@@ -58,6 +75,7 @@ const ReviewReaction = ({initialState = '', reviewId = null}) => {
             >
                 <FaThumbsUp size={22} color={likeColor}/>
                 <span style={{ fontSize: '14px', color: '#555', textAlign: "center" }}><b>Полезно</b></span>
+                <span style={{ fontSize: '14px', color: '#555', textAlign: "start" }}><b>{usefulCounter}</b></span>
             </Col>
             <Col
                 xs="auto"
@@ -66,7 +84,7 @@ const ReviewReaction = ({initialState = '', reviewId = null}) => {
                     backgroundColor: 'white',
                     borderRadius: '50px',
                     height: '40px',
-                    width: '130px',
+                    width: '150px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'start',
@@ -78,6 +96,7 @@ const ReviewReaction = ({initialState = '', reviewId = null}) => {
             >
                 <FaThumbsDown size={22} color={dislikeColor}/>
                 <span style={{ fontSize: '14px', color: '#555', textAlign: "center" }}><b>Нет</b></span>
+                <span style={{ fontSize: '14px', color: '#555', textAlign: "start" }}><b>{notUsefulCounter}</b></span>
             </Col>
         </Row>
     )

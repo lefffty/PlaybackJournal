@@ -85,7 +85,12 @@ const Review = ({review, albumId = 0}) => {
                         marginBottom: '30px',
                     }}
                 >
-                    <ReviewReaction initialState={review.reaction} reviewId={review.id}/>
+                    <ReviewReaction
+                        initialState={review.reaction}
+                        reviewId={review.id}
+                        usefulCount={review.useful_count}
+                        notUsefulCount={review.not_useful_count}
+                    />
                 </div>
             </Card>
         </Col>

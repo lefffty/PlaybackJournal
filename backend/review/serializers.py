@@ -62,6 +62,8 @@ class ReviewListSerializer(serializers.ModelSerializer):
             'text',
             'type',
             'author',
+            'useful_count',
+            'not_useful_count',
             'reaction',
             'updated_at',
         )
@@ -102,6 +104,8 @@ class ReviewDetailSerializer(serializers.ModelSerializer):
             'type',
             'author',
             'reaction',
+            'useful_count',
+            'not_useful_count',
             'updated_at',
         )
 
