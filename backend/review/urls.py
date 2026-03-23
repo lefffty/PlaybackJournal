@@ -10,7 +10,7 @@ from .views import (
 
 router = DefaultRouter()
 router.register(
-    r'reviews',
+    r'reactions',
     ReactionViewSet,
     basename='reactions',
 )

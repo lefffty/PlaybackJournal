@@ -17,6 +17,8 @@ from .permissions import IsOwnerOrReadOnly
 from .models import (
     Review,
     ReviewUserVote,
+    ReviewComment,
+    CommentUserVote,
 )
 
 
@@ -54,7 +56,7 @@ class ReviewModelViewSet(
         review = get_object_or_404(Review, pk=pk)
         comments = review.comments.all()
         serializer = ReviewCommentSerializer(
-            comments, many=True, read_only=True)
+            comments, many=True, read_only=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -85,11 +87,13 @@ class ReactionViewSet(
         related: Model,
     ):
         user = request.user
-        review = get_object_or_404(source, pk=pk)
+        obj = get_object_or_404(source, pk=pk)
+
+        objKey = 'review' if source == Review else 'comment'
 
         filter_kwargs = {
             'user': user,
-            'review': review
+            objKey: obj
         }
 
         instance = related.objects.filter(**filter_kwargs)
@@ -109,11 +113,20 @@ class ReactionViewSet(
         related.objects.create(**filter_kwargs)
         return Response(status=status.HTTP_201_CREATED)
 
-    @action(detail=True, methods=['POST'], url_path='review_reaction')
+    @action(detail=True, methods=['POST'], url_path='review')
     def review_reaction(self, request: HttpRequest, pk: int):
         return self._create_user_reaction(
             request,
             pk,
             Review,
             ReviewUserVote,
+        )
+
+    @action(detail=True, methods=['POST'], url_path='comment')
+    def comment_reaction(self, request: HttpRequest, pk: int):
+        return self._create_user_reaction(
+            request,
+            pk,
+            ReviewComment,
+            CommentUserVote,
         )

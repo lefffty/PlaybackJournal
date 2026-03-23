@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Review, ReviewComment, ReviewUserVote
+from .models import Review, ReviewComment, ReviewUserVote, CommentUserVote
 
 
 class ReviewCommentCreateSerializer(serializers.ModelSerializer):
@@ -14,6 +14,7 @@ class ReviewCommentCreateSerializer(serializers.ModelSerializer):
 
 class ReviewCommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
+    reaction = serializers.SerializerMethodField()
 
     class Meta:
         model = ReviewComment
@@ -21,7 +22,24 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
             'text',
             'author',
             'created_at',
+            'reaction',
         )
+
+    def get_reaction(self, obj: ReviewComment):
+        request = self.context.get('request')
+        if not request:
+            return ''
+        user = request.user
+        if not user.is_authenticated:
+            return ''
+        filter_kwargs = {
+            'user': user,
+            'comment': obj
+        }
+        instance = CommentUserVote.objects.filter(**filter_kwargs)
+        if instance.exists():
+            return instance[0].reaction
+        return ''
 
     def get_author(self, obj: ReviewComment):
         from users.serializers import UserSimpleSerializer
