@@ -23,6 +23,8 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
             'text',
             'author',
             'created_at',
+            'plus_count',
+            'minus_count',
             'reaction',
         )
 

@@ -1,3 +1,4 @@
+from __future__ import annotations
 from django.db import models
 from django.contrib.auth import get_user_model
 import reprlib
@@ -90,6 +91,14 @@ class ReviewComment(models.Model):
         verbose_name = 'Комментарий к рецензии'
         verbose_name_plural = 'Комментарии к рецензии'
 
+    @property
+    def plus_count(self):
+        return self.reactions.filter(reaction=CommentUserVote.ReviewReaction.PLUS).count()
+
+    @property
+    def minus_count(self):
+        return self.reactions.filter(reaction=CommentUserVote.ReviewReaction.MINUS).count()
+
     def __str__(self):
         representation = '{} - {} - {}'
         return representation.format(
@@ -108,6 +117,7 @@ class ReviewUserVote(models.Model):
         Review,
         on_delete=models.CASCADE,
         verbose_name='Рецензия',
+        related_name='reactions',
     )
     user = models.ForeignKey(
         User,
@@ -140,6 +150,7 @@ class CommentUserVote(models.Model):
         ReviewComment,
         on_delete=models.CASCADE,
         verbose_name='Комментарий',
+        related_name='reactions',
     )
     user = models.ForeignKey(
         User,

@@ -25,7 +25,6 @@ const Comments = ({ comments }) => {
                   />
                 </div>
 
-                {/* Блок с именем, датой и реакцией */}
                 <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <FaRegUser className="me-2" />
@@ -34,11 +33,15 @@ const Comments = ({ comments }) => {
                       {moment(comment.created_at).format('D MMMM YYYY [г.] HH:mm')}
                     </div>
                   </div>
-                  <CommentReaction commentId={comment.id} initialState={comment.reaction} />
+                  <CommentReaction
+                    commentId={comment.id}
+                    initialState={comment.reaction}
+                    plusCount={comment.plus_count}
+                    minusCount={comment.minus_count}
+                  />
                 </div>
               </div>
 
-              {/* Текст комментария */}
               <div style={{ marginLeft: '90px', marginTop: '10px' }}>
                 {comment.text}
               </div>
