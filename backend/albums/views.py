@@ -55,7 +55,14 @@ class AlbumListDetailViewSet(
     def get_album_reviews(self, request: HttpRequest, pk: int):
         album = get_object_or_404(Album, pk=pk)
         reviews = album.reviews.all()
-        serializer = ReviewListSerializer(reviews, many=True, read_only=True)
+        serializer = ReviewListSerializer(
+            reviews,
+            many=True,
+            read_only=True,
+            context={
+                'request': request
+            }
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(

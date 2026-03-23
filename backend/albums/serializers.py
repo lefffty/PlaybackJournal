@@ -16,9 +16,6 @@ from artist.serializers import (
     ArtistAlbumCreateSerializer,
     ArtistSimpleSerializer,
 )
-from review.serializers import (
-    ReviewListSerializer
-)
 from genre.serializers import (
     GenreAlbumCreateSerializer,
     GenreSimpleSerializer,

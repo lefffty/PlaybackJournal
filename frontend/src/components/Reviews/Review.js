@@ -3,6 +3,7 @@ import {Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
+import ReviewReaction from "../Common/ReviewReaction/ReviewReaction";
 
 const Review = ({review, albumId = 0}) => {
     const typeToColor = {
@@ -77,6 +78,15 @@ const Review = ({review, albumId = 0}) => {
                         {review.text}
                     </Card.Text>
                 </Card.Body>
+                <div
+                    className="d-flex justify-content-end"
+                    style={{
+                        marginRight: '50px',
+                        marginBottom: '30px',
+                    }}
+                >
+                    <ReviewReaction initialState={review.reaction} reviewId={review.id}/>
+                </div>
             </Card>
         </Col>
     )

@@ -1,0 +1,10 @@
+.review-reaction {
+  transition: transform 0.35s ease, background-color 0.35s ease;
+  background-color: rgb(250, 175, 175);
+  cursor: pointer;
+}
+
+.review-reaction:hover {
+  transform: scale(1.18);
+  background-color: rgb(250, 175, 175);
+}
