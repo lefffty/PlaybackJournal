@@ -15,6 +15,7 @@ const ReviewDetail = (props) => {
     const [error, setError] = useState('');
     const params = useParams();
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
     const albumId = params.albumId;
     const reviewId = params.reviewId;
 
@@ -90,17 +91,11 @@ const ReviewDetail = (props) => {
                     </Row>
                 </Col>
             </Container>
-            {token !== null && token !== ''
-                ? (
-                    <>
-                        <CommentForm reviewId={reviewId} onCommentAdded={handleCommentAdded}/>
-                    </>
-                )
-                : (
-                    <>
-                    </>
-                )
-            }
+            {isAuthenticated && (
+                <>
+                    <CommentForm reviewId={reviewId} onCommentAdded={handleCommentAdded}/>
+                </>
+            )}
         </Container>
     )
 }

@@ -15,6 +15,7 @@ const Artist = (props) => {
     const params = useParams();
     const id = params.id;
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
     const [error, setError] = useState('');
     const [userArtistData, setUserArtistData] = useState({
         favourite: false,
@@ -119,10 +120,7 @@ const Artist = (props) => {
                                     </Col>
                                     <Col md={1}>
                                         <Row>
-                                            {token == null || token === '' ? (                                            
-                                                <>
-                                                </>
-                                            ) : (
+                                            {isAuthenticated && (                                            
                                                 <>
                                                     <HeartIcon initialValue={userArtistData.favourite} onClick={onFavouriteClick}/>
                                                 </>

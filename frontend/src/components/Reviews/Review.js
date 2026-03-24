@@ -7,6 +7,7 @@ import ReviewReaction from "../Common/Reactions/Review/Reaction";
 
 const Review = ({review, albumId = 0}) => {
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
     const typeToColor = {
         negative: '#ff72722f',
         positive: '#bcffa66c',
@@ -89,7 +90,7 @@ const Review = ({review, albumId = 0}) => {
                         marginBottom: '30px',
                     }}
                 >
-                    {token && (
+                    {isAuthenticated && (
                             <ReviewReaction
                                 initialState={review.reaction}
                                 reviewId={review.id}

@@ -13,6 +13,7 @@ import UserService from "../../../services/UserService";
 const Profile = (props) => {
     const [profile, setProfile] = useState('');
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
 
     useEffect(
         () => {
@@ -35,7 +36,7 @@ const Profile = (props) => {
 
     return (
         <Container>
-            {token == null || token === "" ? (
+            {!isAuthenticated ? (
                 <Alert variant="warning">
                     You are not logged in. Please <Link to={"/login/"}>login</Link>.
                 </Alert>

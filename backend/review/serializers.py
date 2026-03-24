@@ -105,6 +105,7 @@ class ReviewDetailSerializer(serializers.ModelSerializer):
             'type',
             'author',
             'reaction',
+            'album',
             'useful_count',
             'not_useful_count',
             'updated_at',

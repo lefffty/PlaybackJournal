@@ -18,6 +18,7 @@ const Password = (props) => {
         new_password: '',
     });
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
 
     const validate = () => {
         const newErrors = {};
@@ -55,7 +56,7 @@ const Password = (props) => {
 
     return (
         <Container>
-            {token == null || token === '' ?
+            {!isAuthenticated ?
             (
                 <Alert variant="warning">
                     You are not logged in. Please <Link to={"/login/"}>login</Link>.

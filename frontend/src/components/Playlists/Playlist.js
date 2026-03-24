@@ -13,10 +13,10 @@ import HeartIcon from "../Common/HeartIcon/HeartIcon";
 
 
 const Playlist = (props) => {
-    const params = useParams();
     const [show, setShow] = useState(false);
-    const id = params.id;
+    const {id} = useParams();
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
     const [userId, setUserId] = useState(null);
     const [playlist, setPlaylist] = useState(null);
     const [userPlaylistData, setUserPlaylistData] = useState({
@@ -186,17 +186,11 @@ const Playlist = (props) => {
                                     </Col>
                                     <Col md={3}>
                                         <Row md={3}>
-                                            {token == null || token === ''
-                                                ? (
-                                                    <>
-                                                    </>
-                                                )
-                                                : (
-                                                    <>
-                                                        <HeartIcon initialValue={userPlaylistData.favourite} onClick={onFavouriteClick}/>
-                                                    </>
-                                                )
-                                            }
+                                            {isAuthenticated && (
+                                                <>
+                                                    <HeartIcon initialValue={userPlaylistData.favourite} onClick={onFavouriteClick}/>
+                                                </>
+                                            )}
                                         </Row>
                                     </Col>
                                 </Row>

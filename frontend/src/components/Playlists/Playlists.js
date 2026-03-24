@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 const Playlists = (props) => {
     const [data, setData] = useState([]);
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
     const [error, setError] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [nextPage, setNextPage] = useState(null);
@@ -89,19 +90,13 @@ const Playlists = (props) => {
                 onNextPageClick={onNextPageClick}
                 onLastPageClick={onLastPageClick}
             />
-            {token == null || token === ''
-                ? (
-                    <>
-                    </>
-                )
-                : (
-                    <div className="d-flex justify-content-end">
-                        <Link to={"/playlists/create/"}>
-                            <FaPlus size={30} title="Создать плейлист"/>
-                        </Link>
-                    </div>
-                )
-            }
+            {isAuthenticated && (
+                <div className="d-flex justify-content-end">
+                    <Link to={"/playlists/create/"}>
+                        <FaPlus size={30} title="Создать плейлист"/>
+                    </Link>
+                </div>
+            )}
             <div className="mb-3">
                 {data.map(
                     (playlist) => {

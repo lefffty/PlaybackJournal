@@ -18,11 +18,11 @@ import AlbumService from "../../services/AlbumService";
 import SongService from "../../services/SongService";
 
 const Album = (props) => {
-    const params = useParams();
-    const id = params.id;
+    const {id} = useParams();
     const [album, setAlbum] = useState(null);
     const [error, setError] = useState('');
     const token = localStorage.getItem('auth_token');
+    const isAuthenticated = token && token !== '';
     const [reviews, setReviews] = useState([]);
     const [userAlbumData, setUserAlbumData] = useState({
         favourite: false,
@@ -282,10 +282,7 @@ const Album = (props) => {
                                     </Col>
                                     <Col md={3}>
                                         <Row md={3}>
-                                            {token == null || token === '' ? (                                            
-                                                <>
-                                                </>
-                                            ) : (
+                                            {isAuthenticated && (
                                                 <>
                                                     <WishlistIcon initialValue={userAlbumData.wishlist} onClick={onWishlistClick}/>
                                                     <HeartIcon initialValue={userAlbumData.favourite} onClick={onFavouriteClick}/>
@@ -295,10 +292,7 @@ const Album = (props) => {
                                         </Row>
                                     </Col>
                                 </Row>
-                                {token == null || token === '' ? (
-                                    <>
-                                    </>
-                                ) : (
+                                {isAuthenticated && (
                                     <>
                                         <ScaleRating initialValue={userAlbumData.rating} totalStars={10} onRatingChange={onRatingChange}/>
                                     </>
@@ -347,7 +341,7 @@ const Album = (props) => {
                         </ListGroup>
                     </Card.Body>
                 </Card>
-                {isStatistics === true ? (
+                {isStatistics && (
                     <>
                         <Card.Title className="mb-3 fs-3">
                             Рецензии слушателей
@@ -363,23 +357,12 @@ const Album = (props) => {
                             </Col>
                         </Row>
                     </>
-                ) : (
-                    <>
-                    </>
                 )}
-                {token  && token !== ''
-                    ? (
-                        <div
-                            className="mt-3 w-50"
-                        >
-                            <ReviewForm albumId={id} onReviewAdded={handleReviewAdded}/>
-                        </div>
-                    )
-                    : (
-                        <>
-                        </>
-                    )
-                }
+                {isAuthenticated && (
+                    <div className="mt-3 w-50">
+                        <ReviewForm albumId={id} onReviewAdded={handleReviewAdded}/>
+                    </div>
+                )}
             </Container>
         </div>
     )
