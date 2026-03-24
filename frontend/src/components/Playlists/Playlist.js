@@ -190,7 +190,7 @@ const Playlist = (props) => {
                                     </Col>
                                 </Row>
                                 <Row className="mb-3">
-                                {userId === playlist.author.id
+                                {userId === playlist.author.id || !token
                                     ? (
                                         <>
                                         </>

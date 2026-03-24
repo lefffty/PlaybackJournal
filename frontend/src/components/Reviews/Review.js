@@ -6,10 +6,14 @@ import { Link } from "react-router-dom";
 import ReviewReaction from "../Common/Reactions/Review/Reaction";
 
 const Review = ({review, albumId = 0}) => {
+    const token = localStorage.getItem('auth_token');
     const typeToColor = {
         negative: '#ff72722f',
         positive: '#bcffa66c',
         neutral: '#c6d7cf84',
+    }
+    if (albumId === 0){
+        albumId = review.album;
     }
 
     const reviewColor = typeToColor[review.type];
@@ -85,12 +89,15 @@ const Review = ({review, albumId = 0}) => {
                         marginBottom: '30px',
                     }}
                 >
-                    <ReviewReaction
-                        initialState={review.reaction}
-                        reviewId={review.id}
-                        usefulCount={review.useful_count}
-                        notUsefulCount={review.not_useful_count}
-                    />
+                    {token && (
+                            <ReviewReaction
+                                initialState={review.reaction}
+                                reviewId={review.id}
+                                usefulCount={review.useful_count}
+                                notUsefulCount={review.not_useful_count}
+                            />
+                        )
+                    }
                 </div>
             </Card>
         </Col>

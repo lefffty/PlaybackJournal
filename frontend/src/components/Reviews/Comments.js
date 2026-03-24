@@ -7,6 +7,8 @@ import moment from "moment";
 import CommentReaction from "../Common/Reactions/Comment/Reaction";
 
 const Comments = ({ comments }) => {
+  const token = localStorage.getItem('auth_token');
+
   return (
     <div>
       {comments.map((comment) => (
@@ -33,12 +35,14 @@ const Comments = ({ comments }) => {
                       {moment(comment.created_at).format('D MMMM YYYY [г.] HH:mm')}
                     </div>
                   </div>
-                  <CommentReaction
-                    commentId={comment.id}
-                    initialState={comment.reaction}
-                    plusCount={comment.plus_count}
-                    minusCount={comment.minus_count}
-                  />
+                  {token && (
+                    <CommentReaction
+                      commentId={comment.id}
+                      initialState={comment.reaction}
+                      plusCount={comment.plus_count}
+                      minusCount={comment.minus_count}
+                    />
+                  )}
                 </div>
               </div>
 

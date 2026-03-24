@@ -65,7 +65,7 @@ const UserList = ({listType, cardTitle}) => {
                                 (item) => {
                                     if (listType.includes('reviews')){
                                         return (
-                                        <   Review review={item}/>
+                                            <Review review={item}/>
                                         )
                                     } else {
                                         const entity = item[itemKey];

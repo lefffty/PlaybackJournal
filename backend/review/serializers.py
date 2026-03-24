@@ -62,6 +62,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
             'text',
             'type',
             'author',
+            'album',
             'useful_count',
             'not_useful_count',
             'reaction',

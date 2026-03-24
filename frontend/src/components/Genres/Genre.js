@@ -95,7 +95,20 @@ const Genre = (props) => {
                                     {genre.name}
                                 </Card.Title>
                                 <Card.Text className="fs-4">
-                                    {genre.description}
+                                    {genre.description != null && genre.description !== ''
+                                        ? (
+                                            <>
+                                                {genre.description}
+                                            </>
+                                        )
+                                        : (
+                                            <>
+                                                <div className="ms-3">
+                                                    Описания пока нет
+                                                </div>
+                                            </>
+                                        )
+                                    }
                                 </Card.Text>
                             </Col>
                             <Col md={2}>
