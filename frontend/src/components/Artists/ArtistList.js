@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 import ArtistService from "../../services/ArtistService";
-
 import './ArtistList.css';
 
 const ArtistList = (props) => {

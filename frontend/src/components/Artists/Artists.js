@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {Card, Row, Col, ButtonGroup, Button} from 'react-bootstrap';
+import {Card, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
+import Pagination from '../Common/Pagination/Pagination';
 import './Artist.css';
 
 import ArtistService from "../../services/ArtistService";
@@ -81,53 +82,17 @@ const Artists = (props) => {
 
     return (
         <Container>
-            <div className="justify-content-center d-flex mb-3">
-                <ButtonGroup>
-                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
-                        <>
-                            <Button variant="secondary" onClick={onFirstPageClick}>
-                                First
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {previousPage !== null ? (
-                        <>
-                        <Button variant="primary" onClick={onPreviousPageClick}>
-                            {currentPage - 1}
-                        </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    <Button variant="success">
-                        {currentPage}
-                    </Button>
-                    {nextPage !== null ? (
-                        <>
-                        <Button variant="primary" onClick={onNextPageClick}>
-                            {currentPage + 1}
-                        </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
-                        <>
-                            <Button variant="secondary" onClick={onLastPageClick}>
-                                Last
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                </ButtonGroup>
-            </div>
+            <Pagination
+                minPage={minPage}
+                maxPage={maxPage}
+                currentPage={currentPage}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                onFirstPageClick={onFirstPageClick}
+                onPreviousPageClick={onPreviousPageClick}
+                onNextPageClick={onNextPageClick}
+                onLastPageClick={onLastPageClick}
+            />
             <Row>
                 {artists.map(
                     (artist) => (
@@ -154,53 +119,17 @@ const Artists = (props) => {
                         </Col>
                 ))}
             </Row>
-            <div className="justify-content-center d-flex mb-3">
-                <ButtonGroup>
-                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
-                        <>
-                            <Button variant="secondary" onClick={onFirstPageClick}>
-                                First
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {previousPage !== null ? (
-                        <>
-                        <Button variant="primary" onClick={onPreviousPageClick}>
-                            {currentPage - 1}
-                        </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    <Button variant="success">
-                        {currentPage}
-                    </Button>
-                    {nextPage !== null ? (
-                        <>
-                        <Button variant="primary" onClick={onNextPageClick}>
-                            {currentPage + 1}
-                        </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
-                        <>
-                            <Button variant="secondary" onClick={onLastPageClick}>
-                                Last
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                </ButtonGroup>
-            </div>
+            <Pagination
+                minPage={minPage}
+                maxPage={maxPage}
+                currentPage={currentPage}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                onFirstPageClick={onFirstPageClick}
+                onPreviousPageClick={onPreviousPageClick}
+                onNextPageClick={onNextPageClick}
+                onLastPageClick={onLastPageClick}
+            />
         </Container>
     )
 }

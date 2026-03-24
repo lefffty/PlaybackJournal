@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Button, ButtonGroup } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import moment from 'moment';
 
+import Pagination from "../Common/Pagination/Pagination";
 import AlbumService from '../../services/AlbumService';
 
 const Albums = (props) => {
@@ -85,53 +86,17 @@ const Albums = (props) => {
 
     return (
         <Container>
-            <div className="justify-content-center d-flex mb-3">
-                <ButtonGroup>
-                    {minPage !== currentPage - 1 && (minPage !== currentPage) ? (
-                        <>
-                            <Button variant="secondary" onClick={onFirstPageClick}>
-                                First
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {previousPage !== null ? (
-                        <>
-                            <Button variant="primary" onClick={onPreviousPageClick}>
-                                {currentPage - 1}
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    <Button variant="success">
-                        {currentPage}
-                    </Button>
-                    {nextPage !== null ? (
-                        <>
-                            <Button variant="primary" onClick={onNextPageClick}>
-                                {currentPage + 1}
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
-                        <>
-                            <Button variant="secondary" onClick={onLastPageClick}>
-                                Last
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                </ButtonGroup>
-            </div>
+            <Pagination
+                minPage={minPage}
+                maxPage={maxPage}
+                currentPage={currentPage}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                onFirstPageClick={onFirstPageClick}
+                onPreviousPageClick={onPreviousPageClick}
+                onNextPageClick={onNextPageClick}
+                onLastPageClick={onLastPageClick}
+            />
             {albums.map(
                 (album) => {
                     return (
@@ -198,53 +163,17 @@ const Albums = (props) => {
                     );
                 }
             )}
-            <div className="justify-content-center d-flex">
-                <ButtonGroup>
-                    {minPage !== (currentPage - 1) && minPage !== currentPage ? (
-                        <>
-                            <Button variant="secondary" onClick={onFirstPageClick}>
-                                First
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {previousPage !== null ? (
-                        <>
-                            <Button variant="primary" onClick={onPreviousPageClick}>
-                                {currentPage - 1}
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    <Button variant="success">
-                        {currentPage}
-                    </Button>
-                    {nextPage !== null ? (
-                        <>
-                            <Button variant="primary" onClick={onNextPageClick}>
-                                {currentPage + 1}
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                    {currentPage !== maxPage && (currentPage + 1) !== maxPage ? (
-                        <>
-                            <Button variant="secondary" onClick={onLastPageClick}>
-                                Last
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                        </>
-                    )}
-                </ButtonGroup>
-            </div>
+            <Pagination
+                minPage={minPage}
+                maxPage={maxPage}
+                currentPage={currentPage}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                onFirstPageClick={onFirstPageClick}
+                onPreviousPageClick={onPreviousPageClick}
+                onNextPageClick={onNextPageClick}
+                onLastPageClick={onLastPageClick}
+            />
         </Container>
     )
 };
