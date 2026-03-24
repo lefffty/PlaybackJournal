@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Card, Col, Row, Container } from "react-bootstrap";
-import { FaAngleRight } from "react-icons/fa";
 
 import '../Albums/Album.css';
 import './Lists/ArtistList.css';
 
 import HeartIcon from "../Common/HeartIcon/HeartIcon";
 
+import ItemGrid from "../Common/ItemGrids/ItemGrid";
 import ArtistService from '../../services/ArtistService';
 
 const Artist = (props) => {
@@ -134,129 +134,22 @@ const Artist = (props) => {
                         </Col>
                     </Row>
                 </Card>
-                <Card className="mb-3 border-0">
-                    <Card.Body>
-                        <Card.Header className="fs-3 mb-3">
-                            <div className="d-flex align-items-end" style={{height: '50px'}}>
-                                <Link
-                                    to={`/artists/${artist.id}/discography/`}
-                                    className="text-decoration-none"
-                                    style={{
-                                        color: "black"
-                                    }}
-                                >
-                                    <Card.Text className="mb-0 me-2">
-                                        <b>Альбомы</b>
-                                    </Card.Text>
-                                </Link>
-                                <Link
-                                    to={`/artists/${artist.id}/discography/`}
-                                    style={{
-                                        color: "black"
-                                    }}
-                                >
-                                    <FaAngleRight
-                                        className="hover-shift"
-                                    />
-                                </Link>
-                            </div>
-                        </Card.Header>
-                        <Row className="g-0">
-                            {artist.albums.map(
-                                (album) => {
-                                    return (
-                                        <Col style={{textAlign: "center"}}>
-                                            <Link
-                                                to={`/albums/${album.id}`}
-                                            >
-                                                <Card.Img
-                                                    src={album.cover}
-                                                    style={{
-                                                        borderRadius: '5%',
-                                                        width: '240px',
-                                                        height: '240px',
-                                                        objectFit: 'cover'
-                                                    }}
-                                                    className="album-cover"
-                                                />
-                                            </Link>
-                                            <Link
-                                                to={`/albums/${album.id}`}
-                                                className="text-decoration-none fs-5"
-                                                style={{color: "black"}}
-                                            >
-                                                <Col>
-                                                    {album.name}
-                                                </Col>
-                                            </Link>
-                                        </Col>
-                                    )
-                                }
-                            )}
-                        </Row>
-                    </Card.Body>
-                </Card>
-                <Card className="mb-3 border-0">
-                    <Card.Body>
-                        <Card.Header  className="fs-3 mb-3">
-                            <div className="d-flex align-items-end">
-                                <Link
-                                    to={`/artists/${artist.id}/similar/`}
-                                    className="text-decoration-none"
-                                    style={{
-                                        color: "black"
-                                    }}
-                                >
-                                    <Card.Text className="mb-0 me-2">
-                                        <b>Похожие исполнители</b>
-                                    </Card.Text>
-                                </Link>
-                                <Link
-                                    to={`/artists/${artist.id}/similar/`}
-                                    style={{
-                                        color: "black"
-                                    }}
-                                >
-                                    <FaAngleRight
-                                        className="hover-shift"
-                                    />
-                                </Link>
-                            </div>
-                        </Card.Header>
-                        <Row className="g-0">
-                            {artist.similar.map(
-                                (art) => {
-                                    return (
-                                        <Col style={{textAlign: "center"}}>
-                                            <Link
-                                                to={`/artists/${art.id}/`}
-                                            >
-                                                <Card.Img
-                                                    src={art.avatar}
-                                                    style={{
-                                                        borderRadius: '75%',
-                                                        width: '240px',
-                                                        height: '240px',
-                                                        objectFit: 'cover'
-                                                    }}
-                                                />
-                                            </Link>
-                                            <Link
-                                                to={`/artists/${art.id}/`}
-                                                className="text-decoration-none fs-5"
-                                                style={{color: "black"}}
-                                            >
-                                                <Col>
-                                                    {art.username}
-                                                </Col>
-                                            </Link>
-                                        </Col>
-                                    )
-                                }
-                            )}
-                        </Row>
-                    </Card.Body>
-                </Card>
+                <ItemGrid
+                    itemId={artist.id}
+                    items={artist.albums}
+                    itemsName={"Альбомы"}
+                    urlPath={"albums"}
+                    urlPathName={"artists"}
+                    kind={"discography"}
+                />
+                <ItemGrid
+                    itemId={artist.id}
+                    items={artist.similar}
+                    itemsName={"Похожие исполнители"}
+                    urlPathName={"artists"}
+                    urlPath={"artists"}
+                    kind={"similar"}
+                />
             </Container>
         </div>
     )

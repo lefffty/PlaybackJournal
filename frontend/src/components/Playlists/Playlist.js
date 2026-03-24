@@ -172,6 +172,17 @@ const Playlist = (props) => {
                                             <span>{playlist.description}</span>
                                             
                                         </Card.Text>
+                                        <Card.Text className="fs-3">
+                                            <span className="text-muted fs-5">Средняя оценка: </span>
+                                            <span>
+                                                {playlist.average_rating !== "-" ? (
+                                                    Intl.NumberFormat("en", {maximumFractionDigits: 2}).format(playlist.average_rating))
+                                                    : (
+                                                        "-"
+                                                    )
+                                                } / 10.0
+                                            </span>
+                                        </Card.Text>
                                     </Col>
                                     <Col md={3}>
                                         <Row md={3}>
