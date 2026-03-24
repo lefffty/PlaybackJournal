@@ -26,7 +26,7 @@ import GenreList from './components/Genres/GenreLists/GenreList';
 
 import Artists from './components/Artists/Artists';
 import Artist from './components/Artists/Artist';
-import ArtistList from './components/Artists/ArtistList';
+import ArtistList from './components/Artists/Lists/ArtistList';
 
 import Playlists from './components/Playlists/Playlists';
 import Playlist from './components/Playlists/Playlist';

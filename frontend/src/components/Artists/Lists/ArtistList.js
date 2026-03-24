@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-import ArtistService from "../../services/ArtistService";
+import ArtistService from "../../../services/ArtistService";
 import './ArtistList.css';
 
 const ArtistList = (props) => {

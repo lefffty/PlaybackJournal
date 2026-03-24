@@ -1,11 +1,14 @@
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
+
+from statistics import mean
 from collections import Counter
 
 
 from .models import (
     Playlist,
+    RatedPlaylist,
     PlaylistSong
 )
 from song.serializers import (
@@ -54,6 +57,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class PlaylistDetailSerializer(serializers.ModelSerializer):
     songs = SongSerializer(read_only=True, many=True)
     author = serializers.SerializerMethodField()
+    average_rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Playlist
@@ -64,7 +68,15 @@ class PlaylistDetailSerializer(serializers.ModelSerializer):
             'description',
             'cover',
             'songs',
+            'average_rating',
         )
+
+    def get_average_rating(self, obj: Playlist):
+        instances = RatedPlaylist.objects.filter(playlist=obj)
+        if not instances.exists():
+            return '-'
+        ratings = list(map(lambda instance: instance.rating, instances))
+        return mean(ratings)
 
     def get_author(self, obj):
         from users.serializers import UserSimpleSerializer

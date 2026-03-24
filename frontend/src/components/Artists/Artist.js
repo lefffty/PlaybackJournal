@@ -4,7 +4,7 @@ import { Card, Col, Row, Container } from "react-bootstrap";
 import { FaAngleRight } from "react-icons/fa";
 
 import '../Albums/Album.css';
-import './ArtistList.css';
+import './Lists/ArtistList.css';
 
 import HeartIcon from "../Common/HeartIcon/HeartIcon";
 
