@@ -23,7 +23,7 @@ from .serializers import (
     UserRatedAlbumsSerializer,
     UserWishlistAlbumsSerializer,
     UserListenedAlbumsSerializer,
-    UserFavouriteAlbumsSerialzer,
+    UserFavouriteAlbumsSerializer,
     UserRatedPlaylistsSerializer,
     UserFavouriteArtistsSerializer,
     UserFavouritePlaylistsSerializer
@@ -199,7 +199,7 @@ class UserListsViewSet(
         return self._get_user_lists(
             request,
             FavouriteAlbum,
-            UserFavouriteAlbumsSerialzer,
+            UserFavouriteAlbumsSerializer,
         )
 
     @action(detail=False, methods=['GET'], url_path='wishlist/albums')

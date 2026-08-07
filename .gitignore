@@ -190,6 +190,8 @@ frontend/node_modules/
 # production
 /build
 
+backend/media
+
 # misc
 .DS_Store
 .env.local

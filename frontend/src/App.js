@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Routes, Route, Link, useNavigate} from 'react-router-dom'
-import { Image } from 'react-bootstrap';
-import logo from './logo.png';
 
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Navbar';
+import Navigation from "./components/Navigation/Navigation";
 
 import SignUp from './components/Users/SignUp';
 import Login from './components/Users/Login';
@@ -32,7 +28,6 @@ import Playlists from './components/Playlists/Playlists';
 import Playlist from './components/Playlists/Playlist';
 import CreateEditPlaylist from './components/Playlists/CreatePlaylist';
 
-import SearchField from './components/Common/SearchField';
 import SearchResults from './components/Search/SearchResults';
 
 import ReviewDetail from './components/Reviews/ReviewDetail';
@@ -107,37 +102,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar bg='primary' variant='dark'>
-        <div className='container-fluid'>
-          <Navbar.Brand>
-            <Link className='nav-link' to={"/albums/"}>
-              <Image src={logo} height={60}/>
-            </Link>
-          </Navbar.Brand>
-          <Nav className='me-auto fs-4'>
-            <Container>
-              <Link class='nav-link' to={"/albums/"}>Albums</Link>
-              <Link class='nav-link' to={"/artists/"}>Artists</Link>
-              <Link class='nav-link' to={"/genres/"}>Genres</Link>
-              <Link class='nav-link' to={"/playlists/"}>Playlists</Link>
-              {user ? (
-                <>
-                  <Link class='nav-link' to={'/profile'}>Profile</Link>
-                  <button className="nav-link btn btn-link" onClick={logout}>
-                      Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link class='nav-link' to={'/login'}>Login</Link>
-                  <Link class='nav-link' to={'/signup/'}>Sign Up</Link>
-                </>
-              )}
-              <SearchField/>
-            </Container>
-          </Nav>
-        </div>
-      </Navbar>
+      <Navigation user={user} logout={logout} />
       <div className='container mt-4'>
         <Routes>
           <Route
