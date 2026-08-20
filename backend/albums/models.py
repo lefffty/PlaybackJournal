@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from .constants import ALBUM_NAME_MAX_LENGTH
+from .constants import AlbumConsts
 from genre.models import Genre
 from song.models import Song
 from artist.models import Artist
@@ -14,7 +14,7 @@ class Album(models.Model):
         verbose_name='Название альбома',
         blank=False,
         null=False,
-        max_length=ALBUM_NAME_MAX_LENGTH,
+        max_length=AlbumConsts.NAME_MAX_LENGTH,
     )
     publication_date = models.DateField(
         verbose_name='Дата публикации альбома',

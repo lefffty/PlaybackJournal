@@ -1,10 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from .constants import (
-    GENRE_DESCRIPTION_MAX_LENGTH,
-    GENRE_NAME_MAX_LENGTH,
-)
+from .constants import GenreConsts
 
 User = get_user_model()
 
@@ -14,14 +11,14 @@ class Genre(models.Model):
         verbose_name='Название жанра',
         blank=False,
         null=False,
-        max_length=GENRE_NAME_MAX_LENGTH,
+        max_length=GenreConsts.NAME_MAX_LENGTH,
         unique=True,
     )
     description = models.CharField(
         verbose_name='Краткое описание жанра',
         blank=True,
         null=False,
-        max_length=GENRE_DESCRIPTION_MAX_LENGTH,
+        max_length=GenreConsts.DESCRIPTION_MAX_LENGTH,
     )
     albums = models.ManyToManyField(
         'albums.Album',

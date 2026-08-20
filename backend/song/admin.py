@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Song, RatedSong
-from .constants import SONG_LIST_PER_PAGE
+from .constants import SongConsts
 from .inlines import SongArtistInline
 
 
@@ -15,7 +15,7 @@ class SongAdmin(admin.ModelAdmin):
     search_fields = (
         'name',
     )
-    list_per_page = SONG_LIST_PER_PAGE
+    list_per_page = SongConsts.LIST_PER_PAGE
     ordering = (
         'id',
     )

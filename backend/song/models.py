@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from .constants import SONG_NAME_MAX_LENGTH
+from .constants import SongConsts
 
 User = get_user_model()
 
@@ -12,7 +12,7 @@ class Song(models.Model):
         verbose_name='Название песни',
         null=False,
         blank=False,
-        max_length=SONG_NAME_MAX_LENGTH,
+        max_length=SongConsts.NAME_MAX_LENGTH,
     )
     duration = models.TimeField(
         verbose_name='Длительность песни'

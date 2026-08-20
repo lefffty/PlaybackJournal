@@ -1,2 +1,6 @@
-GENRE_NAME_MAX_LENGTH = 32
-GENRE_DESCRIPTION_MAX_LENGTH = 512
+from enum import IntEnum
+
+
+class GenreConsts(IntEnum):
+    NAME_MAX_LENGTH = 32
+    DESCRIPTION_MAX_LENGTH = 512

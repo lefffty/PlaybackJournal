@@ -1,10 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from .constants import (
-    ARTIST_USERNAME_MAX_LENGTH,
-    ARTIST_DESCRIPTION_MAX_LENGTH,
-)
+from .constants import ArtistConsts
 from song.models import Song
 from genre.models import Genre
 
@@ -16,11 +13,11 @@ class Artist(models.Model):
         verbose_name='Имя артиста',
         blank=False,
         null=False,
-        max_length=ARTIST_USERNAME_MAX_LENGTH,
+        max_length=ArtistConsts.USERNAME_MAX_LENGTH,
         unique=True,
     )
     description = models.TextField(
-        max_length=ARTIST_DESCRIPTION_MAX_LENGTH,
+        max_length=ArtistConsts.DESCRIPTION_MAX_LENGTH,
         verbose_name='Краткие сведения об артисте',
         null=True,
         blank=True,

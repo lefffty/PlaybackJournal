@@ -1,4 +1,7 @@
-SONG_NAME_MAX_LENGTH = 128
-SONG_LIST_PER_PAGE = 150
+from enum import IntEnum
 
-ARTIST_SONG_INLINE_EXTRA = 1
+
+class SongConsts(IntEnum):
+    NAME_MAX_LENGTH = 128
+    LIST_PER_PAGE = 150
+    ARTIST_SONG_INLINE_EXTRA = 1
