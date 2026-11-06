@@ -9,24 +9,24 @@ router = DefaultRouter()
 router.register(
     r'users',
     views.UserCreateViewSet,
-    basename='user_create',
+    basename='user-create', 
 )
 router.register(
     r'users',
     views.UserProfileViewSet,
-    basename='user_profile',
+    basename='user-profile',
 )
 router.register(
     r'users',
     views.AvatarViewSet,
-    basename='user_avatar',
+    basename='user-avatar',
 )
 
 useralbums_router = DefaultRouter()
 useralbums_router.register(
     r'users',
     views.UserListsViewSet,
-    basename='user_albums_list',
+    basename='user-albums-list',
 )
 
 urlpatterns = [
@@ -44,6 +44,7 @@ urlpatterns = [
                 'post': 'set_password',
             }
         ),
+        name="user-set-password",
     ),
     path('', include(useralbums_router.urls)),
     path('', include(router.urls)),

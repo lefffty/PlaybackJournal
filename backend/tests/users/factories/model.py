@@ -1,0 +1,26 @@
+from django.contrib.auth import get_user_model
+
+import factory
+from faker import Factory
+from datetime import datetime
+
+from users.constants import UsersConsts
+
+
+faker = Factory.create()
+User = get_user_model()
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = User
+
+    username = factory.LazyFunction(lambda: faker.user_name()[:UsersConsts.USERNAME_MAX_LENGTH])
+    last_name = factory.LazyFunction(lambda: faker.last_name()[:UsersConsts.SURNAME_MAX_LENGTH])
+    first_name = factory.LazyFunction(lambda: faker.first_name()[:UsersConsts.NAME_MAX_LENGTH])
+    email = factory.LazyFunction(lambda: faker.email())
+    registration_date = factory.LazyFunction(lambda: datetime.now())
+    avatar = factory.django.ImageField(
+        filename="test_image.jpg", width=200, height=200, color="blue", format="JPEG",
+    )
+    password = factory.PostGenerationMethodCall("set_password", "testpass_1234")
