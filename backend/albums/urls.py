@@ -12,7 +12,7 @@ router = DefaultRouter()
 router.register(
     r'albums',
     AlbumListDetailViewSet,
-    basename='albums_list',
+    basename='albums',
 )
 router.register(
     r'albums',
