@@ -13,7 +13,7 @@ router = DefaultRouter()
 router.register(
     r'artists',
     ArtistViewSet,
-    basename='artists_detail',
+    basename='artists',
 )
 router.register(
     r'artists',
