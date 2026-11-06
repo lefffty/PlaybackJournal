@@ -8,7 +8,7 @@ router = DefaultRouter()
 router.register(
     r'genres',
     views.GenreListDetailViewSet,
-    basename='genre_list_detail',
+    basename='genre',
 )
 router.register(
     r'genres',
