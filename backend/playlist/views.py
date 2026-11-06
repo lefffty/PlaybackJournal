@@ -45,7 +45,7 @@ class PlaylistViewSet(
         serializer.save(author=self.request.user)
 
 
-class PlaylistCreateUserViewSet(
+class PlaylistUserCreateViewSet(
     viewsets.GenericViewSet
 ):
     permission_classes = [IsAuthenticated]
@@ -66,18 +66,19 @@ class PlaylistCreateUserViewSet(
 
         instance = model.objects.filter(user=user, playlist=playlist)
         if model == RatedPlaylist:
-            rating = request.data.get('rating')
+            try:
+                rating = int(request.data.get('rating'))
+            except (ValueError, TypeError):
+                return Response(
+                    {'detail': ''},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            if not (0 <= rating <= 10):
+                return Response(
+                    {'detail': ''},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             if instance.exists():
-                if rating is None:
-                    return Response(
-                        {'detail': ''},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-                if not (0 <= rating <= 10):
-                    return Response(
-                        {'detail': ''},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
                 instance.update(rating=rating)
                 return Response(
                     status=status.HTTP_204_NO_CONTENT,
@@ -97,7 +98,7 @@ class PlaylistCreateUserViewSet(
         methods=['POST'],
         url_path='favourite'
     )
-    def favourite_playlists(self, request: HttpRequest, pk: int):
+    def favourite(self, request: HttpRequest, pk: int):
         return self._create_delete_playlist_user(
             request,
             pk,
@@ -109,7 +110,7 @@ class PlaylistCreateUserViewSet(
         methods=['POST'],
         url_path='rated'
     )
-    def rated_playlists(self, request: HttpRequest, pk: int):
+    def rated(self, request: HttpRequest, pk: int):
         return self._create_delete_playlist_user(
             request,
             pk,

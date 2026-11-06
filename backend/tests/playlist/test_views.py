@@ -1,10 +1,15 @@
 from rest_framework import status
 
 from django.urls import reverse
+from django.db.models import Model
 
-from playlist.models import Playlist
+from playlist.models import (
+    Playlist,
+    RatedPlaylist,
+    FavouritePlaylist,
+)
 
-from .factories.form import PlaylistCreateDataFactory
+from .factories.form import PlaylistCreateDataFactory, RatedPlaylistCreateDataFactory
 from ..users.factories.model import UserFactory
 from ..song.factories.model import SongFactory
 from ..playlist.factories.model import PlaylistFactory
@@ -109,3 +114,78 @@ class PlaylistViewSetAnonymousTestCase(AnonymousAPITestCase):
     def test_returns_401_for_delete_action(self):
         response = self.client.delete(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class PlaylistUserCreateViewSetAnonymousTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.playlist = PlaylistFactory()
+        cls.data = RatedPlaylistCreateDataFactory()
+        cls.rate_playlist_url = reverse('playlist-user-rated', kwargs={"pk": cls.playlist.pk})
+        cls.favourite_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": cls.playlist.pk})
+
+    def test_returns_401_for_rate_playlist_endpoint(self):
+        response = self.client.post(self.rate_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_favourite_playlist_endpoint(self):
+        response = self.client.post(self.favourite_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class PlaylistUserCreateViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.playlist = PlaylistFactory()
+        cls.data = RatedPlaylistCreateDataFactory()
+        cls.invalid_data = RatedPlaylistCreateDataFactory(rating=-1)
+        cls.update_data = RatedPlaylistCreateDataFactory()
+        cls.rate_nonexistent_playlist_url = reverse('playlist-user-rated', kwargs={"pk": 100_000}),
+        cls.favourite_nonexistent_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": 100_000}),
+        cls.rate_playlist_url = reverse('playlist-user-rated', kwargs={"pk": cls.playlist.pk})
+        cls.favourite_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": cls.playlist.pk})
+
+    def _check_model_count(self, _Model: Model, expected_cnt: int):
+        self.assertEqual(_Model.objects.count(), expected_cnt)
+
+    def test_returns_201_for_rate_new_playlist_endpoint(self):
+        response = self.client.post(self.rate_playlist_url, data=self.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self._check_model_count(RatedPlaylist, 1)
+
+    def test_returns_204_for_existing_playlist_endpoint(self):
+        self.client.post(self.rate_playlist_url, data=self.data)
+        self._check_model_count(RatedPlaylist, 1)
+        response = self.client.post(self.rate_playlist_url, data=self.data)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self._check_model_count(RatedPlaylist, 1)
+
+    def test_returns_404_for_rate_playlist_endpoint_if_playlist_does_not_exist(self):
+        response = self.client.post(self.rate_nonexistent_playlist_url, data=self.data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_returns_400_for_rate_playlist_endpoint_if_rating_data_is_empty(self):
+        response = self.client.post(self.rate_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_returns_400_for_rate_playlist_endpoint_if_rating_data_is_invalid(self):
+        response = self.client.post(self.rate_playlist_url, data=self.invalid_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_returns_201_for_favourite_playlist_endpoint(self):
+        response = self.client.post(self.favourite_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self._check_model_count(FavouritePlaylist, 1)
+
+    def test_returns_204_for_favourite_playlist_endpoint(self):
+        self.client.post(self.favourite_playlist_url, data=self.data)
+        self._check_model_count(FavouritePlaylist, 1)
+        response = self.client.post(self.favourite_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self._check_model_count(FavouritePlaylist, 0)
+
+    def test_returns_404_for_favourite_playlist_endpoint_if_playlist_does_not_exist(self):
+        response = self.client.post(self.favourite_nonexistent_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self._check_model_count(FavouritePlaylist, 0)

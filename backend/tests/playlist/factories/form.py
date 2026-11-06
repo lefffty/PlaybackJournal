@@ -20,3 +20,7 @@ class PlaylistCreateDataFactory(factory.DictFactory):
     name = factory.LazyFunction(lambda: faker.name()[:PlaylistsConsts.NAME_MAX_LENGTH])
     description = factory.LazyFunction(lambda: faker.sentence()[:PlaylistsConsts.DESCRIPTION_MAX_LENGTH])
     cover = factory.LazyFunction(_make_b64_cover)
+
+
+class RatedPlaylistCreateDataFactory(factory.DictFactory):
+    rating = 3
