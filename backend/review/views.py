@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions, mixins, status
 from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
 from django.shortcuts import get_object_or_404
 from django.http import HttpRequest
 from django.db.models import Model
@@ -52,7 +53,7 @@ class ReviewModelViewSet(
         methods=['GET'],
         url_path='comments'
     )
-    def get_review_comments(self, request, pk: int):
+    def comments(self, request, pk: int):
         review = get_object_or_404(Review, pk=pk)
         comments = review.comments.all()
         serializer = ReviewCommentSerializer(
@@ -67,7 +68,7 @@ class ReviewCommentViewSet(
     permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.action in ('create', ):
+        if self.action in ('create',):
             return ReviewCommentCreateSerializer
 
     def perform_create(self, serializer: Serializer):

@@ -1,9 +1,17 @@
 from __future__ import annotations
+
 from django.db import models
 from django.contrib.auth import get_user_model
+
 import reprlib
 
 from albums.models import Album
+
+from review.constants import (
+    ReviewConsts,
+    ReviewUserVoteConsts,
+    CommentUserVoteConsts,
+)
 
 User = get_user_model()
 
@@ -16,7 +24,7 @@ class Review(models.Model):
 
     title = models.CharField(
         verbose_name='Заголовок рецензии',
-        max_length=128,
+        max_length=ReviewConsts.TITLE_MAX_LENGTH,
         null=False,
         blank=False,
     )
@@ -133,7 +141,7 @@ class ReviewUserVote(models.Model):
         verbose_name='Пользователь',
     )
     reaction = models.CharField(
-        max_length=20,
+        max_length=ReviewUserVoteConsts.REACTION_MAX_LENGTH,
         verbose_name='Реакция на рецензию',
         choices=ReviewReaction.choices
     )
@@ -166,7 +174,7 @@ class CommentUserVote(models.Model):
         verbose_name='Пользователь'
     )
     reaction = models.CharField(
-        max_length=20,
+        max_length=CommentUserVoteConsts.REACTION_MAX_LENGTH,
         choices=ReviewReaction.choices,
         verbose_name='Реакция на комментарий'
     )
