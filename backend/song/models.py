@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from .constants import SongConsts
+from .constants import SongConsts, RatedSongConsts
 
 User = get_user_model()
 
@@ -44,10 +44,10 @@ class RatedSong(models.Model):
     )
     rating = models.IntegerField(
         verbose_name='Оценка',
-        default=0,
+        default=RatedSongConsts.DEFAULT_RATING,
         validators=[
-            MaxValueValidator(10),
-            MinValueValidator(0),
+            MinValueValidator(RatedSongConsts.MIN_RATING),
+            MaxValueValidator(RatedSongConsts.MAX_RATING),
         ]
     )
 
