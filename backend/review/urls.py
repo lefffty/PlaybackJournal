@@ -22,7 +22,7 @@ router.register(
 router.register(
     r'comments',
     ReviewCommentViewSet,
-    basename='review_comments',
+    basename='review-comments',
 )
 
 urlpatterns = [

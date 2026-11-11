@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 
-from review.models import Review
+from review.models import Review, ReviewComment
 
 from tests.base import (
     AnonymousAPITestCase,
@@ -9,7 +9,7 @@ from tests.base import (
 )
 from tests.review.factories.model import ReviewFactory
 from tests.users.factories.model import UserFactory
-from tests.review.factories.form import ReviewDataFactory
+from tests.review.factories.form import ReviewDataFactory, ReviewCommentDataFactory
 from tests.albums.factories.model import AlbumFactory
 
 
@@ -123,3 +123,53 @@ class ReviewModelViewSetAuthenticatedTest(AuthenticatedAPITestCase):
     def test_returns_404_for_retrieve_comments_action_for_nonexistent_review_for_authenticated_user(self):
         response = self.client.get(self.retrieve_url_404)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ReviewCommentViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.review = ReviewFactory()
+        cls.data = ReviewCommentDataFactory(
+            author=cls.user.pk,
+            review=cls.review.pk,
+        )
+        cls.create_url = reverse("review-comments-list")
+
+    def _check_review_comments_count(self, review_id: int, expected_cnt: int):
+        self.assertEqual(
+            ReviewComment.objects.filter(review_id=review_id).count(),
+            expected_cnt
+        )
+
+    def test_returns_201_for_create_comment_action(self):
+        response = self.client.post(
+            self.create_url, data=self.data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self._check_review_comments_count(self.review.pk, 1)
+
+
+class ReviewCommentViewSetAnonymousUserTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.user = UserFactory()
+        cls.review = ReviewFactory(
+            author=cls.user
+        )
+        cls.data = ReviewCommentDataFactory(
+            author=cls.user.pk,
+            review=cls.review.pk,
+        )
+        cls.create_url = reverse("review-comments-list")
+
+    def _check_review_comments_count(self, review_id: int, expected_cnt: int):
+        self.assertEqual(
+            ReviewComment.objects.filter(review_id=review_id).count(),
+            expected_cnt
+        )
+
+    def test_returns_401_for_create_comment_action(self):
+        response = self.client.post(self.create_url, data=self.data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self._check_review_comments_count(self.review.pk, 0)

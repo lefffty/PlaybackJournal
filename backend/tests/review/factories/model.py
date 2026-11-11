@@ -3,7 +3,7 @@ from faker import Factory
 
 import django.utils.timezone as tz
 
-from review.models import Review
+from review.models import Review, ReviewComment
 from review.constants import ReviewConsts
 
 from tests.albums.factories.model import AlbumFactory
