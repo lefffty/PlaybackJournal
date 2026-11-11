@@ -115,7 +115,7 @@ class ReactionViewSet(
         return Response(status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['POST'], url_path='review')
-    def review_reaction(self, request: HttpRequest, pk: int):
+    def review(self, request: HttpRequest, pk: int):
         return self._create_user_reaction(
             request,
             pk,
@@ -124,7 +124,7 @@ class ReactionViewSet(
         )
 
     @action(detail=True, methods=['POST'], url_path='comment')
-    def comment_reaction(self, request: HttpRequest, pk: int):
+    def comment(self, request: HttpRequest, pk: int):
         return self._create_user_reaction(
             request,
             pk,

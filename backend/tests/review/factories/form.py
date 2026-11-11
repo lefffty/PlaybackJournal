@@ -19,3 +19,11 @@ class ReviewCommentDataFactory(factory.DictFactory):
     author = None
     review = None
     created_at = factory.LazyFunction(tz.now)
+
+
+class ReviewUserVoteDataFactory(factory.DictFactory):
+    reaction = 'useful'
+
+
+class CommentUserVoteDataFactory(factory.DictFactory):
+    reaction = 'plus'
