@@ -1,7 +1,8 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth import get_user_model
 
-from .constants import AlbumConsts
+from albums.constants import AlbumConsts, RatedAlbumConsts
 from genre.models import Genre
 from song.models import Song
 from artist.models import Artist
@@ -76,10 +77,15 @@ class AbstractUserAlbumModel(models.Model):
 
 
 class RatedAlbum(AbstractUserAlbumModel):
-    rating = models.FloatField(
+    rating = models.PositiveSmallIntegerField(
         verbose_name='Оценка альбома',
         blank=False,
         null=False,
+        default=RatedAlbumConsts.DEFAULT_RATING,
+        validators=[
+            MinValueValidator(RatedAlbumConsts.MIN_RATING),
+            MaxValueValidator(RatedAlbumConsts.MAX_RATING),
+        ]
     )
 
     class Meta(AbstractUserAlbumModel.Meta):

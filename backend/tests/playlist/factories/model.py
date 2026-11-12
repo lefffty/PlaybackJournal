@@ -1,8 +1,8 @@
 import factory
 from faker import Factory
 
-from playlist.models import Playlist, PlaylistSong
-from playlist.constants import PlaylistsConsts
+from playlist.models import Playlist, PlaylistSong, RatedPlaylist, FavouritePlaylist
+from playlist.constants import PlaylistsConsts, RatedPlaylistsConsts
 
 from ...song.factories.model import SongFactory
 from ...users.factories.model import UserFactory
@@ -40,3 +40,25 @@ class PlaylistSongFactory(factory.django.DjangoModelFactory):
 
     playlist = factory.SubFactory(PlaylistFactory)
     song = factory.SubFactory(SongFactory)
+
+
+class FavouritePlaylistFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = FavouritePlaylist
+
+    user = factory.SubFactory(UserFactory)
+    playlist = factory.SubFactory(PlaylistFactory)
+
+
+class RatedPlaylistFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = RatedPlaylist
+
+    user = factory.SubFactory(UserFactory)
+    playlist = factory.SubFactory(PlaylistFactory)
+    rating = factory.LazyFunction(
+        lambda: faker.pyint(
+            min_value=RatedPlaylistsConsts.MIN_RATING,
+            max_value=RatedPlaylistsConsts.MAX_RATING,
+        )
+    )

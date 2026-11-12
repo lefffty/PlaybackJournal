@@ -16,11 +16,11 @@ def _make_b64_cover(width=200, height=200, color="blue", fmt="JPEG"):
     return base64.b64encode(buf.getvalue()).decode("ascii")
 
 
-class PlaylistCreateDataFactory(factory.DictFactory):
+class PlaylistDataFactory(factory.DictFactory):
     name = factory.LazyFunction(lambda: faker.name()[:PlaylistsConsts.NAME_MAX_LENGTH])
     description = factory.LazyFunction(lambda: faker.sentence()[:PlaylistsConsts.DESCRIPTION_MAX_LENGTH])
     cover = factory.LazyFunction(_make_b64_cover)
 
 
-class RatedPlaylistCreateDataFactory(factory.DictFactory):
+class RatedPlaylistDataFactory(factory.DictFactory):
     rating = 3

@@ -2,7 +2,7 @@ from enum import IntEnum
 
 
 class ArtistConsts(IntEnum):
-    USERNAME_MAX_LENGTH = 64
-    DESCRIPTION_MAX_LENGTH = 1024
-    RELATED_ARTISTS_INLINE_EXTRA = 1
-    GENRE_INLINE_EXTRA = 1
+    USERNAME_MAX_LENGTH =           64
+    DESCRIPTION_MAX_LENGTH =        1024
+    RELATED_ARTISTS_INLINE_EXTRA =  1
+    GENRE_INLINE_EXTRA =            1

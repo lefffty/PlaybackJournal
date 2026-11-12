@@ -9,10 +9,10 @@ from playlist.models import (
     FavouritePlaylist,
 )
 
-from .factories.form import PlaylistCreateDataFactory, RatedPlaylistCreateDataFactory
+from .factories.form import PlaylistDataFactory, RatedPlaylistDataFactory
 from ..users.factories.model import UserFactory
 from ..song.factories.model import SongFactory
-from ..playlist.factories.model import PlaylistFactory
+from ..playlist.factories.model import PlaylistFactory, RatedPlaylistFactory
 from ..base import (
     AuthenticatedAPITestCase,
     AnonymousAPITestCase
@@ -28,10 +28,10 @@ class PlaylistViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
         cls.playlist = PlaylistFactory(
             author=cls.user,
         )
-        cls.data = PlaylistCreateDataFactory(
+        cls.data = PlaylistDataFactory(
             songs=[{"id": song.id} for song in [cls.song]],
         )
-        cls.update_data = PlaylistCreateDataFactory(
+        cls.update_data = PlaylistDataFactory(
             songs=[{"id": song.id} for song in [cls.song]],
         )
         cls.list_url = reverse('playlist-list')
@@ -83,10 +83,10 @@ class PlaylistViewSetAnonymousTestCase(AnonymousAPITestCase):
     def setUpTestData(cls):
         cls.song = SongFactory()
         cls.playlist = PlaylistFactory()
-        cls.data = PlaylistCreateDataFactory(
+        cls.data = PlaylistDataFactory(
             songs=[{"id": song.id} for song in [cls.song]],
         )
-        cls.update_data = PlaylistCreateDataFactory(
+        cls.update_data = PlaylistDataFactory(
             songs=[{"id": song.id} for song in [cls.song]],
         )
         cls.list_url = reverse('playlist-list')
@@ -120,7 +120,7 @@ class PlaylistUserCreateViewSetAnonymousTestCase(AnonymousAPITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.playlist = PlaylistFactory()
-        cls.data = RatedPlaylistCreateDataFactory()
+        cls.data = RatedPlaylistDataFactory()
         cls.rate_playlist_url = reverse('playlist-user-rated', kwargs={"pk": cls.playlist.pk})
         cls.favourite_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": cls.playlist.pk})
 
@@ -138,9 +138,9 @@ class PlaylistUserCreateViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
     def setUpTestData(cls):
         super().setUpTestData()
         cls.playlist = PlaylistFactory()
-        cls.data = RatedPlaylistCreateDataFactory()
-        cls.invalid_data = RatedPlaylistCreateDataFactory(rating=-1)
-        cls.update_data = RatedPlaylistCreateDataFactory()
+        cls.data = RatedPlaylistDataFactory()
+        cls.invalid_data = RatedPlaylistDataFactory(rating=-1)
+        cls.update_data = RatedPlaylistDataFactory()
         cls.rate_nonexistent_playlist_url = reverse('playlist-user-rated', kwargs={"pk": 100_000}),
         cls.favourite_nonexistent_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": 100_000}),
         cls.rate_playlist_url = reverse('playlist-user-rated', kwargs={"pk": cls.playlist.pk})
@@ -159,7 +159,7 @@ class PlaylistUserCreateViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
         self._check_model_count(RatedPlaylist, 1)
         response = self.client.post(self.rate_playlist_url, data=self.data)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self._check_model_count(RatedPlaylist, 1)
+        self._check_model_count(RatedPlaylist, 0)
 
     def test_returns_404_for_rate_playlist_endpoint_if_playlist_does_not_exist(self):
         response = self.client.post(self.rate_nonexistent_playlist_url, data=self.data)
@@ -189,3 +189,31 @@ class PlaylistUserCreateViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
         response = self.client.post(self.favourite_nonexistent_playlist_url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self._check_model_count(FavouritePlaylist, 0)
+
+
+class UserPlaylistViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.playlist = PlaylistFactory()
+        cls.user_playlist_url = reverse("user-playlist-data", kwargs={"pk": cls.playlist.pk})
+        cls.user_nonexistent_playlist_url = reverse("user-playlist-data", kwargs={"pk": 999_999})
+
+    def test_returns_200_for_existing_playlist(self):
+        response = self.client.get(self.user_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_404_for_nonexistent_playlist(self):
+        response = self.client.get(self.user_nonexistent_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class UserPlaylistViewSetAnonymousUserTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.playlist = PlaylistFactory()
+        cls.user_playlist_url = reverse("user-playlist-data", kwargs={"pk": cls.playlist.pk})
+
+    def test_returns_401(self):
+        response = self.client.get(self.user_playlist_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

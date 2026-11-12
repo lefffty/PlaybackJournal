@@ -42,7 +42,7 @@ class RatedSong(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
     )
-    rating = models.IntegerField(
+    rating = models.PositiveSmallIntegerField(
         verbose_name='Оценка',
         default=RatedSongConsts.DEFAULT_RATING,
         validators=[

@@ -21,7 +21,7 @@ router.register(
 router.register(
     r'playlists',
     UserPlaylistViewSet,
-    basename='user-playlist'
+    basename='user-playlist',
 )
 
 urlpatterns = [

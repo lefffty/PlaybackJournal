@@ -15,6 +15,7 @@ from .serializers import (
     PlaylistDetailSerializer,
     PlaylistCreateUpdateSerializer
 )
+from .constants import RatedPlaylistsConsts
 from .permissions import OwnerOrReadOnly
 from .models import (
     Playlist,
@@ -73,15 +74,19 @@ class PlaylistUserCreateViewSet(
                     {'detail': ''},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            if not (0 <= rating <= 10):
+            if not (RatedPlaylistsConsts.MIN_RATING <= rating <= RatedPlaylistsConsts.MAX_RATING):
                 return Response(
                     {'detail': ''},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             if instance.exists():
+                old_rating = instance[0].rating
+                if old_rating == rating:
+                    instance.delete()
+                    return Response(status=status.HTTP_204_NO_CONTENT)
                 instance.update(rating=rating)
                 return Response(
-                    status=status.HTTP_204_NO_CONTENT,
+                    status=status.HTTP_200_OK,
                 )
             params['rating'] = rating
             model.objects.create(**params)
@@ -127,13 +132,13 @@ class UserPlaylistViewSet(
         detail=True,
         url_path='user_playlist',
     )
-    def user_playlist(self, request: HttpRequest, pk: int):
+    def data(self, request: HttpRequest, pk: int):
         playlist = get_object_or_404(Playlist, pk=pk)
         user = request.user
 
         response = {
             'favourite': False,
-            'rating': 0,
+            'rating': RatedPlaylistsConsts.DEFAULT_RATING,
         }
 
         if FavouritePlaylist.objects.filter(user=user, playlist=playlist).exists():

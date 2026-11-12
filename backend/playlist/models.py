@@ -1,7 +1,8 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from .constants import PlaylistsConsts
+from .constants import PlaylistsConsts, RatedPlaylistsConsts
 from song.models import Song
 
 User = get_user_model()
@@ -101,10 +102,15 @@ class FavouritePlaylist(AbstractUserPlaylistModel):
 
 
 class RatedPlaylist(AbstractUserPlaylistModel):
-    rating = models.FloatField(
+    rating = models.PositiveSmallIntegerField(
         verbose_name='Оценка плейлиста',
         blank=False,
         null=False,
+        default=RatedPlaylistsConsts.DEFAULT_RATING,
+        validators=[
+            MinValueValidator(RatedPlaylistsConsts.MIN_RATING),
+            MaxValueValidator(RatedPlaylistsConsts.MAX_RATING),
+        ]
     )
 
     class Meta(AbstractUserPlaylistModel.Meta):
