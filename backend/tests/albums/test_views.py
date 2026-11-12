@@ -121,3 +121,31 @@ class AlbumListDetailViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
     def test_returns_200_for_existent_album_statictics(self):
         response = self.client.get(self.statistics_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UserAlbumViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.album = AlbumFactory()
+        cls.existent_user_album_data_url = reverse("user-album-data", kwargs={"pk": cls.album.pk})
+        cls.nonexistent_user_album_data_url = reverse("user-album-data", kwargs={"pk": 999_999})
+
+    def test_returns_404_for_nonexistent_album(self):
+        response = self.client.get(self.nonexistent_user_album_data_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_returns_200_for_existent_album(self):
+        response = self.client.get(self.existent_user_album_data_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UserAlbumViewSetAnonymousUserTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.album = AlbumFactory()
+        cls.existent_user_album_data_url = reverse("user-album-data", kwargs={"pk": cls.album.pk})
+
+    def test_returns_401_for_anonymous_user(self):
+        response = self.client.get(self.existent_user_album_data_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -95,7 +95,7 @@ class UserAlbumViewSet(
         detail=True,
         url_path='user_album',
     )
-    def user_album(self, request: HttpRequest, pk):
+    def data(self, request: HttpRequest, pk):
         user = request.user
         album = get_object_or_404(Album, pk=pk)
         data = {

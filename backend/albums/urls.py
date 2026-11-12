@@ -22,7 +22,7 @@ router.register(
 router.register(
     r'albums',
     UserAlbumViewSet,
-    basename='user_album',
+    basename='user-album',
 )
 
 urlpatterns = [
