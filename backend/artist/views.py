@@ -4,12 +4,10 @@ from rest_framework import (
 )
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Model
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404
 
 from .serializers import (
     ArtistSerializer,
@@ -29,24 +27,19 @@ class ArtistViewSet(
     mixins.ListModelMixin,
 ):
     queryset = Artist.objects.all()
-    permission_classes = [AllowAny]
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
-        if self.action in ('retrieve'):
+        if self.action in ('retrieve',):
             return ArtistSerializer
         return ArtistSimpleSerializer
 
-
-class ArtistDiscographyViewSet(
-    viewsets.GenericViewSet,
-):
     @action(
         detail=True,
         url_path='discography'
     )
     def discography(self, request, pk: int):
-        artist = get_object_or_404(Artist, pk=pk)
+        artist = self.get_object()
         albums = artist.albums.all().order_by('publication_date')
         serializer = AlbumArtistSerializer(
             albums,
@@ -60,70 +53,33 @@ class ArtistDiscographyViewSet(
         url_path='similar'
     )
     def similar(self, request, pk: int):
-        artist = get_object_or_404(Artist, pk=pk)
+        artist = self.get_object()
         similar = artist.similar_artists.all()
         serializer = RelatedArtistSerializer(
             similar,
             many=True,
-            read_only=True
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-class UserArtistViewSet(
-    viewsets.GenericViewSet
-):
-    permission_classes = [IsAuthenticated]
-
     @action(
         detail=True,
-        url_path='user_artist'
-    )
-    def user_artist(self, request: HttpRequest, pk: int):
-        user = request.user
-        artist = get_object_or_404(Artist, pk=pk)
-        filter_kwargs = {
-            'user': user,
-            'artist': artist
-        }
-        data = {
-            'favourite': False
-        }
-        if FavouriteArtist.objects.filter(**filter_kwargs).exists():
-            data['favourite'] = True
-        return Response(data, status=status.HTTP_200_OK)
-
-
-class UserArtistsPreferencesViewSet(
-    viewsets.GenericViewSet
-):
-    permission_classes = [IsAuthenticated]
-
-    def _create_user_genre_item(self, request: HttpRequest, pk: int, model: Model):
-        user = request.user
-        artist = get_object_or_404(Artist, pk=pk)
-
-        filter_kwargs = {
-            'user': user,
-            'artist': artist
-        }
-        instance = model.objects.filter(**filter_kwargs)
-
-        if instance.exists():
-            instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            model.objects.create(**filter_kwargs)
-            return Response(status=status.HTTP_201_CREATED)
-
-    @action(
-        detail=True,
-        methods=['POST'],
+        methods=['GET', 'POST', 'DELETE'],
         url_path='favourite',
+        permission_classes=[IsAuthenticated]
     )
-    def favourite_genre(self, request: HttpRequest, pk: int):
-        return self._create_user_genre_item(
-            request,
-            pk,
-            FavouriteArtist
-        )
+    def favourite(self, request: HttpRequest, pk: int):
+        user = request.user
+        artist = self.get_object()
+
+        fav_qs = FavouriteArtist.objects.filter(user=user, artist=artist)
+
+        if request.method == 'GET':
+            return Response({"favourite": fav_qs.exists()}, status=status.HTTP_200_OK)
+
+        if request.method == 'POST':
+            FavouriteArtist.objects.get_or_create(user=user, artist=artist)
+            return Response({"favourite": True}, status=status.HTTP_201_CREATED)
+
+        if request.method == 'DELETE':
+            fav_qs.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)

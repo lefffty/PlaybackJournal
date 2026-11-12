@@ -3,9 +3,9 @@ from tests.song.factories.model import SongFactory
 import factory
 from faker import Factory
 
-from artist.models import Artist, ArtistSong
+from artist.models import Artist, ArtistSong, FavouriteArtist
 from artist.constants import ArtistConsts
-
+from tests.users.factories.model import UserFactory
 
 faker = Factory.create()
 
@@ -29,3 +29,11 @@ class ArtistSongFactory(factory.django.DjangoModelFactory):
 
     artist = factory.SubFactory(ArtistFactory)
     song = factory.SubFactory(SongFactory)
+
+
+class FavouriteArtistFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = FavouriteArtist
+
+    user = factory.SubFactory(UserFactory)
+    artist = factory.SubFactory(ArtistFactory)
