@@ -93,3 +93,33 @@ class GenreListsViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
     def test_returns_404_for_genre_albums_list_for_nonexistent_genre(self):
         response = self.client.get(self.nonexistent_genre_albums_url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class UserGenreViewSetAuthenticatedUserTestCase(
+    AuthenticatedAPITestCase
+):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.genre = GenreFactory()
+        cls.user_genre_url = reverse("user-genre-data", kwargs={"pk": cls.genre.pk})
+        cls.user_nonexistent_genre_url = reverse("user-genre-data", kwargs={"pk": 999_999})
+
+    def test_returns_200_for_existent_genre(self):
+        response = self.client.get(self.user_genre_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_404_for_nonexistent_genre(self):
+        response = self.client.get(self.user_nonexistent_genre_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class UserGenreViewSetAnonymousTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.genre = GenreFactory()
+        cls.user_genre_url = reverse("user-genre-data", kwargs={"pk": cls.genre.pk})
+
+    def test_returns_404_for_existent_url(self):
+        response = self.client.get(self.user_genre_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

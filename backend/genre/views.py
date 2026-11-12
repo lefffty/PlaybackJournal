@@ -70,7 +70,7 @@ class UserGenreViewSet(
         methods=['GET'],
         url_path='user_genre'
     )
-    def user_genre(self, request: HttpRequest, pk: int):
+    def data(self, request: HttpRequest, pk: int):
         user = request.user
         genre = get_object_or_404(Genre, pk=pk)
 

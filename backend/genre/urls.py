@@ -23,7 +23,7 @@ router.register(
 router.register(
     r'genres',
     views.UserGenreViewSet,
-    basename='user_genre',
+    basename='user-genre',
 )
 
 urlpatterns = [
