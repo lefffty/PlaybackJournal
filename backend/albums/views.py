@@ -40,12 +40,12 @@ class AlbumListDetailViewSet(
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
-        if self.action in ('create'):
+        if self.action in ('create',):
             return AlbumCreateSerializer
         return AlbumSerializer
 
     def get_permissions(self):
-        if self.action in ('create'):
+        if self.action in ('create',):
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -54,7 +54,7 @@ class AlbumListDetailViewSet(
         methods=['GET'],
         url_path='album_reviews'
     )
-    def get_album_reviews(self, request: HttpRequest, pk: int):
+    def reviews(self, request: HttpRequest, pk: int):
         album = get_object_or_404(Album, pk=pk)
         reviews = album.reviews.all()
         serializer = ReviewListSerializer(
@@ -72,7 +72,7 @@ class AlbumListDetailViewSet(
         methods=['GET'],
         url_path='album_reviews_statistics'
     )
-    def get_album_statistics(self, request: HttpRequest, pk: int):
+    def statistics(self, request: HttpRequest, pk: int):
         album = get_object_or_404(Album, pk=pk)
         entries = album.reviews.values('type').annotate(total=Count('id'))
         stats = {

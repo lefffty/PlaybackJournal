@@ -13,7 +13,7 @@ from ..base import (
 )
 
 
-class AlbumListDetailViewSetAnonymousTestCase(AnonymousAPITestCase):
+class AlbumListDetailViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         super().setUpTestData()
@@ -22,6 +22,8 @@ class AlbumListDetailViewSetAnonymousTestCase(AnonymousAPITestCase):
         cls.list_url = reverse("albums-list")
         cls.detail_url = reverse("albums-detail", kwargs={"pk": cls.album.pk})
         cls.create_url = reverse("albums-list")
+        cls.review_list_url = reverse("albums-reviews", kwargs={"pk": cls.album.pk})
+        cls.statistics_url = reverse("albums-statistics", kwargs={"pk": cls.album.pk})
 
     def test_returns_200_for_retrieve_action(self):
         response = self.client.get(self.detail_url)
@@ -35,8 +37,16 @@ class AlbumListDetailViewSetAnonymousTestCase(AnonymousAPITestCase):
         response = self.client.post(self.create_url, data=self.data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_returns_200_for_album_reviews(self):
+        response = self.client.get(self.review_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class AlbumListDetailViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
+    def test_returns_200_for_album_statistics(self):
+        response = self.client.get(self.statistics_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class AlbumListDetailViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -47,6 +57,10 @@ class AlbumListDetailViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
         cls.list_url = reverse("albums-list")
         cls.detail_url = reverse("albums-detail", kwargs={"pk": cls.album.pk})
         cls.create_url = reverse("albums-list")
+        cls.review_list_url = reverse("albums-reviews", kwargs={"pk": cls.album.pk})
+        cls.statistics_url = reverse("albums-statistics", kwargs={"pk": cls.album.pk})
+        cls.nonexistent_album_review_list_url = reverse("albums-reviews", kwargs={"pk": 999_999})
+        cls.nonexistent_album_statistics_url = reverse("albums-statistics", kwargs={"pk": 999_999})
 
     def setUp(self):
         super().setUp()
@@ -91,3 +105,19 @@ class AlbumListDetailViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
     def test_returns_400_for_create_action_if_genres_is_empty(self):
         response = self.client.post(self.create_url, data=self.empty_genres_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_returns_404_for_album_reviews_list_for_nonexistent_album(self):
+        response = self.client.get(self.nonexistent_album_review_list_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_returns_200_for_existent_album_reviews(self):
+        response = self.client.get(self.review_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_404_for_album_statistics_for_nonexistent_album(self):
+        response = self.client.get(self.nonexistent_album_statistics_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_returns_200_for_existent_album_statictics(self):
+        response = self.client.get(self.statistics_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
