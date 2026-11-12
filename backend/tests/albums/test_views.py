@@ -78,16 +78,16 @@ class AlbumListDetailViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
 
     def test_returns_201_for_create_action(self):
         response = self.client.post(self.create_url, data=self.data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.content.decode())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_returns_400_for_create_action_if_songs_field_is_empty(self):
         response = self.client.post(self.create_url, data=self.empty_song_data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.content.decode())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_returns_400_for_create_action_if_artists_is_empty(self):
         response = self.client.post(self.create_url, data=self.empty_artists_data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.content.decode())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_returns_400_for_create_action_if_genres_is_empty(self):
         response = self.client.post(self.create_url, data=self.empty_genres_data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.content.decode())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

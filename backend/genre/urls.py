@@ -18,7 +18,7 @@ router.register(
 router.register(
     r'genres',
     views.UserGenrePreferencesViewSet,
-    basename='user_genre_preferences',
+    basename='user-genre-preferences',
 )
 router.register(
     r'genres',

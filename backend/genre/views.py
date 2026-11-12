@@ -117,7 +117,7 @@ class UserGenrePreferencesViewSet(
         methods=['POST'],
         url_path='favourite'
     )
-    def favourite_genre(self, request: HttpRequest, pk: int):
+    def favourite(self, request: HttpRequest, pk: int):
         return self._create_user_genre_item(
             request,
             pk,

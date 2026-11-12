@@ -2,8 +2,10 @@ from rest_framework import status
 
 from django.urls import reverse
 
-from .factories.model import GenreFactory
-from ..base import (
+from genre.models import FavouriteGenre
+
+from tests.genre.factories.model import GenreFactory, FavouriteGenreFactory
+from tests.base import (
     AuthenticatedAPITestCase,
     AnonymousAPITestCase,
 )
@@ -122,4 +124,52 @@ class UserGenreViewSetAnonymousTestCase(AnonymousAPITestCase):
 
     def test_returns_404_for_existent_url(self):
         response = self.client.get(self.user_genre_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class UserGenrePreferencesViewSetAuthenticatedUserTestCase(
+    AuthenticatedAPITestCase
+):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.genre1 = GenreFactory()
+        cls.genre2 = GenreFactory()
+        cls.favourite_genre = FavouriteGenreFactory(
+            user=cls.user,
+            genre=cls.genre2,
+        )
+        cls.new_favour_genre_url = reverse("user-genre-preferences-favourite", kwargs={"pk": cls.genre1.pk})
+        cls.favour_existent_genre_url = reverse("user-genre-preferences-favourite", kwargs={"pk": cls.genre2.pk})
+        cls.favour_nonexistent_genre_url = reverse("user-genre-preferences-favourite", kwargs={"pk": 999_999})
+
+    def _check_model_count(self, expected_cnt: int, **filter_kwargs):
+        self.assertEqual(
+            FavouriteGenre.objects.filter(**filter_kwargs).count(),
+            expected_cnt
+        )
+
+    def test_returns_404_for_nonexistent_genre(self):
+        response = self.client.post(self.favour_nonexistent_genre_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_returns_201_for_new_favourite_genre_record(self):
+        response = self.client.post(self.new_favour_genre_url)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self._check_model_count(2, user=self.user)
+
+    def test_returns_204_for_existent_favourite_genre_record(self):
+        response = self.client.post(self.favour_existent_genre_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self._check_model_count(0, user=self.user)
+
+
+class UserGenrePreferencesViewSetAnonymousTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.genre1 = GenreFactory()
+        cls.new_favour_genre_url = reverse("user-genre-preferences-favourite", kwargs={"pk": cls.genre1.pk})
+
+    def test_returns_401(self):
+        response = self.client.post(self.new_favour_genre_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
