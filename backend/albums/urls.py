@@ -17,7 +17,7 @@ router.register(
 router.register(
     r'albums',
     UserAlbumsPreferencesViewSet,
-    basename='album_user',
+    basename='album-user',
 )
 router.register(
     r'albums',

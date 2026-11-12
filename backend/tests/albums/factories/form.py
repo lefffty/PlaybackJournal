@@ -27,3 +27,7 @@ class AlbumCreateDataFactory(factory.DictFactory):
     )
     publication_date = factory.LazyFunction(lambda: timezone.now().date())
     cover = factory.LazyFunction(_make_b64_cover)
+
+
+class RatedAlbumDataFactory(factory.DictFactory):
+    rating = 5

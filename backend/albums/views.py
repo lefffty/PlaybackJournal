@@ -17,6 +17,7 @@ from django.http import HttpRequest
 
 
 from review.serializers import ReviewListSerializer
+from albums.constants import RatedAlbumConsts
 from .serializers import (
     AlbumCreateSerializer,
     AlbumSerializer,
@@ -134,28 +135,38 @@ class UserAlbumsPreferencesViewSet(
             'album': album,
         }
 
-        instance = model.objects.filter(user=user, album=album)
+        instance = model.objects.filter(**params)
+
         if model == RatedAlbum:
             rating = request.data.get('rating')
+
+            if rating is None:
+                return Response(
+                    {'detail': 'Необходимо указать оценку.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if not (RatedAlbumConsts.MIN_RATING <= rating <= RatedAlbumConsts.MAX_RATING):
+                return Response(
+                    {
+                        'detail': 'Оценка должна быть в диапазоне от {} до {}'.format(
+                            RatedAlbumConsts.MIN_RATING,
+                            RatedAlbumConsts.MAX_RATING,
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
             if instance.exists():
-                if rating is None:
-                    return Response(
-                        {'detail': 'Необходимо указать оценку.'},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-                if rating == 0:
+                old_rating = instance[0].rating
+                if old_rating == rating:
                     instance.delete()
-                    return Response(status=status.HTTP_204_NO_CONTENT)
-                if not (0 < rating <= 10):
                     return Response(
-                        {
-                            'detail': 'Оценка должна быть в диапазоне от 0 до 10'
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
+                        status=status.HTTP_204_NO_CONTENT
                     )
                 instance.update(rating=rating)
                 return Response(
-                    status=status.HTTP_204_NO_CONTENT
+                    status=status.HTTP_200_OK
                 )
             params['rating'] = rating
             model.objects.create(**params)
@@ -172,7 +183,7 @@ class UserAlbumsPreferencesViewSet(
         methods=['POST'],
         url_path='favourite'
     )
-    def favourite_album(self, request, pk):
+    def favourite(self, request, pk):
         return self._create_user_album_item(
             request,
             pk,
@@ -184,7 +195,7 @@ class UserAlbumsPreferencesViewSet(
         methods=['POST'],
         url_path='listened'
     )
-    def listened_album(self, request, pk):
+    def listened(self, request, pk):
         return self._create_user_album_item(
             request,
             pk,
@@ -196,7 +207,7 @@ class UserAlbumsPreferencesViewSet(
         methods=['POST'],
         url_path='wishlist'
     )
-    def wishlist_album(self, request, pk):
+    def wishlist(self, request, pk):
         return self._create_user_album_item(
             request,
             pk,
@@ -208,7 +219,7 @@ class UserAlbumsPreferencesViewSet(
         methods=['POST'],
         url_path='rated'
     )
-    def rated_album(self, request: HttpRequest, pk):
+    def rated(self, request: HttpRequest, pk):
         return self._create_user_album_item(
             request,
             pk,

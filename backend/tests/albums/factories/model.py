@@ -2,13 +2,22 @@ import factory
 from faker import Factory
 from datetime import datetime
 
-from albums.models import Album, AlbumGenre, AlbumArtist, AlbumSong
-from albums.constants import AlbumConsts
+from albums.models import (
+    Album,
+    AlbumGenre,
+    AlbumArtist,
+    AlbumSong,
+    RatedAlbum,
+    FavouriteAlbum,
+    ListenedAlbum,
+    WishlistAlbum
+)
+from albums.constants import AlbumConsts, RatedAlbumConsts
 
-from ...artist.factories.model import ArtistFactory
-from ...song.factories.model import SongFactory
-from ...genre.factories.model import GenreFactory
-
+from tests.artist.factories.model import ArtistFactory
+from tests.song.factories.model import SongFactory
+from tests.genre.factories.model import GenreFactory
+from tests.users.factories.model import UserFactory
 
 faker = Factory.create()
 
@@ -82,3 +91,45 @@ class AlbumSongFactory(factory.django.DjangoModelFactory):
 
     album = factory.SubFactory(AlbumFactory)
     song = factory.SubFactory(SongFactory)
+
+
+class RatedAlbumFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = RatedAlbum
+        django_get_or_create = ("album", "user")
+
+    user = factory.SubFactory(UserFactory)
+    album = factory.SubFactory(AlbumFactory)
+    rating = factory.LazyFunction(
+        lambda: faker.pyint(
+            min_value=RatedAlbumConsts.MIN_RATING,
+            max_value=RatedAlbumConsts.MAX_RATING,
+        )
+    )
+
+
+class FavouriteAlbumFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = FavouriteAlbum
+        django_get_or_create = ("album", "user")
+
+    user = factory.SubFactory(UserFactory)
+    album = factory.SubFactory(AlbumFactory)
+
+
+class ListenedAlbumFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ListenedAlbum
+        django_get_or_create = ("album", "user")
+
+    user = factory.SubFactory(UserFactory)
+    album = factory.SubFactory(AlbumFactory)
+
+
+class WishlistAlbumFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = WishlistAlbum
+        django_get_or_create = ("album", "user")
+
+    user = factory.SubFactory(UserFactory)
+    album = factory.SubFactory(AlbumFactory)
