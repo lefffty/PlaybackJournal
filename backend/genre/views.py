@@ -42,7 +42,7 @@ class GenreListsViewSet(
         methods=['GET'],
         url_path='artists'
     )
-    def get_genre_artists(self, request, pk):
+    def artists(self, request, pk):
         genre = get_object_or_404(Genre, pk=pk)
         artists = genre.artists.all()
         serializer = ArtistSimpleSerializer(artists, many=True, read_only=True)
@@ -53,7 +53,7 @@ class GenreListsViewSet(
         methods=['GET'],
         url_path='albums'
     )
-    def get_genre_albums(self, request, pk: int):
+    def albums(self, request, pk: int):
         genre = get_object_or_404(Genre, pk=pk)
         albums = genre.albums.all()
         serializer = AlbumGenreSerializer(albums, many=True, read_only=True)

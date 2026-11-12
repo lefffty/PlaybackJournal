@@ -13,7 +13,7 @@ router.register(
 router.register(
     r'genres',
     views.GenreListsViewSet,
-    basename='genre_lists',
+    basename='genre-lists',
 )
 router.register(
     r'genres',
