@@ -74,7 +74,7 @@ class AlbumListDetailViewSet(
         url_path='album_reviews_statistics'
     )
     def statistics(self, request: HttpRequest, pk: int):
-        album = get_object_or_404(Album, pk=pk)
+        album = self.get_object()
         entries = album.reviews.values('type').annotate(total=Count('id'))
         stats = {
             'positive': 0,
@@ -91,6 +91,7 @@ class UserAlbumViewSet(
     viewsets.GenericViewSet
 ):
     permission_classes = [IsAuthenticated]
+    queryset = Album.objects.all()
 
     @action(
         detail=True,
@@ -98,26 +99,25 @@ class UserAlbumViewSet(
     )
     def data(self, request: HttpRequest, pk):
         user = request.user
-        album = get_object_or_404(Album, pk=pk)
-        data = {
-            'listened': False,
-            'favourite': False,
-            'rating': 0,
-            'wishlist': False,
-        }
+        album = self.get_object()
+
         filter_kwargs = {
             'user': user,
             'album': album,
         }
-        if WishlistAlbum.objects.filter(**filter_kwargs).exists():
-            data['wishlist'] = True
-        if ListenedAlbum.objects.filter(**filter_kwargs).exists():
-            data['listened'] = True
-        if FavouriteAlbum.objects.filter(**filter_kwargs).exists():
-            data['favourite'] = True
-        if RatedAlbum.objects.filter(**filter_kwargs).exists():
-            instance = RatedAlbum.objects.get(**filter_kwargs)
-            data['rating'] = instance.rating
+
+        data = {
+            'listened': ListenedAlbum.objects.filter(**filter_kwargs).exists(),
+            'favourite': FavouriteAlbum.objects.filter(**filter_kwargs).exists(),
+            'rating': 0,
+            'wishlist': WishlistAlbum.objects.filter(**filter_kwargs).exists(),
+        }
+
+        rated_album = RatedAlbum.objects.filter(**filter_kwargs)
+
+        if rated_album:
+            data['rating'] = rated_album[0].rating
+
         return Response(data, status=status.HTTP_200_OK)
 
 
@@ -125,9 +125,10 @@ class UserAlbumsPreferencesViewSet(
     viewsets.GenericViewSet,
 ):
     permission_classes = [IsAuthenticated]
+    queryset = Album.objects.all()
 
     def _create_user_album_item(self, request: HttpRequest, pk, model: Model):
-        album = get_object_or_404(Album, pk=pk)
+        album = self.get_object()
         user = request.user
 
         params = {

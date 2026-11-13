@@ -7,23 +7,8 @@ from . import views
 router = DefaultRouter()
 router.register(
     r'genres',
-    views.GenreListDetailViewSet,
+    views.GenreViewSet,
     basename='genre',
-)
-router.register(
-    r'genres',
-    views.GenreListsViewSet,
-    basename='genre-lists',
-)
-router.register(
-    r'genres',
-    views.UserGenrePreferencesViewSet,
-    basename='user-genre-preferences',
-)
-router.register(
-    r'genres',
-    views.UserGenreViewSet,
-    basename='user-genre',
 )
 
 urlpatterns = [
