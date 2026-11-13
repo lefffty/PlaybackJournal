@@ -194,7 +194,7 @@ class UserListsViewSet(
             status=status.HTTP_200_OK
         )
 
-    @action(detail=False, methods=['GET'], url_path='favourite/albums')
+    @action(detail=False, methods=['GET'], url_path='favourite/albums', url_name='favourite-albums')
     def favourite_albums(self, request):
         return self._get_user_lists(
             request,
@@ -202,7 +202,7 @@ class UserListsViewSet(
             UserFavouriteAlbumsSerializer,
         )
 
-    @action(detail=False, methods=['GET'], url_path='wishlist/albums')
+    @action(detail=False, methods=['GET'], url_path='wishlist/albums', url_name='wishlist-albums')
     def wishlist_albums(self, request):
         return self._get_user_lists(
             request,
@@ -210,7 +210,7 @@ class UserListsViewSet(
             UserWishlistAlbumsSerializer,
         )
 
-    @action(detail=False, methods=['GET'], url_path='listened/albums')
+    @action(detail=False, methods=['GET'], url_path='listened/albums', url_name='listened-albums')
     def listened_albums(self, request):
         return self._get_user_lists(
             request,
@@ -218,7 +218,7 @@ class UserListsViewSet(
             UserListenedAlbumsSerializer,
         )
 
-    @action(detail=False, methods=['GET'], url_path='rated/albums')
+    @action(detail=False, methods=['GET'], url_path='rated/albums', url_name='rated-albums')
     def rated_albums(self, request):
         return self._get_user_lists(
             request,
@@ -226,7 +226,7 @@ class UserListsViewSet(
             UserRatedAlbumsSerializer,
         )
 
-    @action(detail=False, methods=['GET'], url_path='favourite/playlists')
+    @action(detail=False, methods=['GET'], url_path='favourite/playlists', url_name='favourite-playlists')
     def favourite_playlists(self, request):
         return self._get_user_lists(
             request,
@@ -234,7 +234,7 @@ class UserListsViewSet(
             UserFavouritePlaylistsSerializer,
         )
 
-    @action(detail=False, methods=['GET'], url_path='rated/playlists')
+    @action(detail=False, methods=['GET'], url_path='rated/playlists', url_name='rated-playlists')
     def rated_playlists(self, request):
         return self._get_user_lists(
             request,
@@ -242,7 +242,7 @@ class UserListsViewSet(
             UserRatedPlaylistsSerializer,
         )
 
-    @action(detail=False, methods=['GET'], url_path='favourite/artists')
+    @action(detail=False, methods=['GET'], url_path='favourite/artists', url_name='favourite-artists')
     def favourite_artists(self, request):
         return self._get_user_lists(
             request,

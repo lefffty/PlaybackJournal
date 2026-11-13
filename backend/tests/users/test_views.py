@@ -133,3 +133,94 @@ class NewPasswordViewSetTestCase(AuthenticatedAPITestCase):
         response = self.client.post(self.url, data=self.data)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self._check_password_was_changed(self.plain_password, self.new)
+
+
+class UserListsViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.reviews_list_url = reverse("user-list-reviews")
+        cls.favourite_albums_list_url = reverse("user-list-favourite-albums")
+        cls.wishlist_albums_list_url = reverse("user-list-wishlist-albums")
+        cls.listened_albums_list_url = reverse("user-list-listened-albums")
+        cls.rated_albums_list_url = reverse("user-list-rated-albums")
+        cls.favourite_playlists_list_url = reverse("user-list-favourite-playlists")
+        cls.rated_playlists_list_url = reverse("user-list-rated-playlists")
+        cls.favourite_artists_list_url = reverse("user-list-favourite-artists")
+
+    def test_returns_200_for_user_reviews_list(self):
+        response = self.client.get(self.reviews_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_200_for_user_favourite_albums_list(self):
+        response = self.client.get(self.favourite_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_200_for_user_wishlist_albums_list(self):
+        response = self.client.get(self.wishlist_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_200_for_user_listened_albums_list(self):
+        response = self.client.get(self.listened_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_200_for_user_rated_albums_list(self):
+        response = self.client.get(self.rated_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_200_for_user_favourite_playlists_list(self):
+        response = self.client.get(self.favourite_playlists_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_200_for_user_rated_playlists_list(self):
+        response = self.client.get(self.rated_playlists_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_200_for_user_favourite_artists_list(self):
+        response = self.client.get(self.favourite_artists_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UserListsViewSetAnonymousUserTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.reviews_list_url = reverse("user-list-reviews")
+        cls.favourite_albums_list_url = reverse("user-list-favourite-albums")
+        cls.wishlist_albums_list_url = reverse("user-list-wishlist-albums")
+        cls.listened_albums_list_url = reverse("user-list-listened-albums")
+        cls.rated_albums_list_url = reverse("user-list-rated-albums")
+        cls.favourite_playlists_list_url = reverse("user-list-favourite-playlists")
+        cls.rated_playlists_list_url = reverse("user-list-rated-playlists")
+        cls.favourite_artists_list_url = reverse("user-list-favourite-artists")
+
+    def test_returns_401_for_user_reviews_list(self):
+        response = self.client.get(self.reviews_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_user_favourite_albums_list(self):
+        response = self.client.get(self.favourite_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_user_wishlist_albums_list(self):
+        response = self.client.get(self.wishlist_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_user_listened_albums_list(self):
+        response = self.client.get(self.listened_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_user_rated_albums_list(self):
+        response = self.client.get(self.rated_albums_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_user_favourite_playlists_list(self):
+        response = self.client.get(self.favourite_playlists_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_user_rated_playlists_list(self):
+        response = self.client.get(self.rated_playlists_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_returns_401_for_user_favourite_artists_list(self):
+        response = self.client.get(self.favourite_artists_list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -26,7 +26,7 @@ useralbums_router = DefaultRouter()
 useralbums_router.register(
     r'users',
     views.UserListsViewSet,
-    basename='user-albums-list',
+    basename='user-list',
 )
 
 urlpatterns = [
