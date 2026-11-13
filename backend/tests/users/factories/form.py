@@ -27,3 +27,7 @@ class AvatarDataFactory(factory.DictFactory):
 class NewPasswordDataFactory(factory.DictFactory):
     current_password = None
     new_password = "administrator_01"
+
+
+class SearchDataFactory(factory.DictFactory):
+    query = factory.LazyFunction(lambda: faker.text())

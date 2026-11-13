@@ -35,7 +35,8 @@ urlpatterns = [
         'search/',
         views.SearchViewSet.as_view({
             'get': 'search',
-        })
+        }),
+        name='search',
     ),
     path(
         'users/set_password/',

@@ -28,6 +28,8 @@ from .serializers import (
     UserFavouriteArtistsSerializer,
     UserFavouritePlaylistsSerializer
 )
+from .constants import SearchConsts
+
 from playlist.serializers import PlaylistSimpleSerializer
 from albums.serializers import AlbumGenreSerializer
 from artist.serializers import ArtistSimpleSerializer
@@ -133,30 +135,30 @@ class SearchViewSet(
         methods=['GET'],
     )
     def search(self, request: HttpRequest):
-        query = request.GET.get('query')
+        query = request.GET.get('query').strip()
+
         if not query:
             return Response(
-                data='Empty query',
+                data={
+                    "albums": [],
+                    "playlists": [],
+                    "artists": [],
+                    "songs": []
+                },
                 status=status.HTTP_204_NO_CONTENT
             )
-        albums = Album.objects.filter(Q(name__icontains=query))
-        playlists = Playlist.objects.filter(Q(name__icontains=query))
-        songs = Song.objects.filter(Q(name__icontains=query))
-        artists = Artist.objects.filter(Q(username__icontains=query))
-        albums_serialized = AlbumGenreSerializer(
-            albums, many=True, read_only=True).data
-        playlists_serialized = PlaylistSimpleSerializer(
-            playlists, many=True, read_only=True).data
-        songs_serialized = SongSerializer(
-            songs, many=True, read_only=True).data
-        artists_serialized = ArtistSimpleSerializer(
-            artists, many=True, read_only=True).data
+
+        albums = Album.objects.filter(name__icontains=query)[:SearchConsts.LIMIT]
+        songs = Song.objects.filter(name__icontains=query)[:SearchConsts.LIMIT]
+        artists = Artist.objects.filter(username__icontains=query)[:SearchConsts.LIMIT]
+        playlists = Playlist.objects.filter(name__icontains=query)[:SearchConsts.LIMIT]
+
         return Response(
             data={
-                'albums': albums_serialized,
-                'playlists': playlists_serialized,
-                'songs': songs_serialized,
-                'artists': artists_serialized,
+                'albums': AlbumGenreSerializer(albums, many=True).data,
+                'playlists': PlaylistSimpleSerializer(playlists, many=True).data,
+                'songs': SongSerializer(songs, many=True).data,
+                'artists': ArtistSimpleSerializer(artists, many=True).data,
             },
             status=status.HTTP_200_OK
         )

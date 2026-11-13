@@ -9,3 +9,7 @@ class UsersConsts(IntEnum):
     LISTENED_ALBUM_INLINE_EXTRA =   1
     RATED_ALBUM_INLINE_EXTRA =      1
     FAVOURITE_ALBUM_INLINE_EXTRA =  1
+
+
+class SearchConsts(IntEnum):
+    LIMIT = 10

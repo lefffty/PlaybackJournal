@@ -9,6 +9,7 @@ from .factories.form import (
     NewPasswordDataFactory,
     UserCreateDataFactory,
     AvatarDataFactory,
+    SearchDataFactory,
 )
 from ..base import (
     AuthenticatedAPITestCase,
@@ -224,3 +225,36 @@ class UserListsViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     def test_returns_401_for_user_favourite_artists_list(self):
         response = self.client.get(self.favourite_artists_list_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class SearchViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.data = SearchDataFactory()
+        cls.empty_data = SearchDataFactory(query="")
+        cls.search_url = reverse("search")
+
+    def test_returns_200_for_non_empty_query(self):
+        response = self.client.get(self.search_url, data=self.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_204_for_empty_query(self):
+        response = self.client.get(self.search_url, data=self.empty_data)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class SearchViewSetAnonymousUserTestCase(AnonymousAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.search_url = reverse("search")
+        cls.data = SearchDataFactory()
+        cls.empty_data = SearchDataFactory(query="")
+
+    def test_returns_200_for_non_empty_query(self):
+        response = self.client.get(self.search_url, data=self.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_returns_204_for_empty_query(self):
+        response = self.client.get(self.search_url, data=self.empty_data)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
