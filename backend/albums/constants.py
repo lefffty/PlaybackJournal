@@ -7,7 +7,7 @@ class AlbumConsts(IntEnum):
     GENRE_INLINE_EXTRA =    1
     ARTIST_INLINE_EXTRA =   1
     PAGINATION_PAGE_SIZE =  15
-
+    REVIEWS_LIMIT =          10
 
 class RatedAlbumConsts(IntEnum):
     MIN_RATING =        1

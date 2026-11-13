@@ -11,10 +11,8 @@ from rest_framework.permissions import (
     AllowAny,
 )
 
-from django.db.models import Model, Count
-from django.shortcuts import get_object_or_404
+from django.db.models import Model
 from django.http import HttpRequest
-
 
 from review.serializers import ReviewListSerializer
 from albums.constants import RatedAlbumConsts
@@ -40,64 +38,48 @@ class AlbumListDetailViewSet(
     queryset = Album.objects.all()
     pagination_class = PageNumberPagination
 
+    def get_queryset(self):
+        qs = Album.objects.all()
+        if self.action in ("list", "retrieve"):
+            qs = qs.prefetch_related("artists", "genres", "songs")
+        return qs
+
     def get_serializer_class(self):
         if self.action in ('create',):
             return AlbumCreateSerializer
         return AlbumSerializer
 
     def get_permissions(self):
-        if self.action in ('create',):
+        protected_actions = ('create', 'status', 'favourite', 'rated', 'listened', 'wishlist')
+        if self.action in protected_actions:
             return [IsAuthenticated()]
         return [AllowAny()]
 
     @action(
         detail=True,
         methods=['GET'],
-        url_path='album_reviews'
+        url_path='reviews',
     )
     def reviews(self, request: HttpRequest, pk: int):
-        album = get_object_or_404(Album, pk=pk)
-        reviews = album.reviews.all()
-        serializer = ReviewListSerializer(
-            reviews,
-            many=True,
-            read_only=True,
-            context={
-                'request': request
-            }
-        )
+        album = self.get_object()
+        reviews = album.reviews.all().select_related("author")
+        serializer = ReviewListSerializer(reviews,many=True,context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(
         detail=True,
         methods=['GET'],
-        url_path='album_reviews_statistics'
+        url_path='statistics',
     )
     def statistics(self, request: HttpRequest, pk: int):
         album = self.get_object()
-        entries = album.reviews.values('type').annotate(total=Count('id'))
-        stats = {
-            'positive': 0,
-            'negative': 0,
-            'neutral': 0,
-        }
-        for entry in entries:
-            stats[entry['type']] = entry['total']
-        stats['total'] = album.reviews.count()
-        return Response(stats, status=status.HTTP_200_OK)
-
-
-class UserAlbumViewSet(
-    viewsets.GenericViewSet
-):
-    permission_classes = [IsAuthenticated]
-    queryset = Album.objects.all()
+        return Response(album.reviews_statistics, status=status.HTTP_200_OK)
 
     @action(
         detail=True,
-        url_path='user_album',
+        url_path='status',
     )
-    def data(self, request: HttpRequest, pk):
+    def status(self, request: HttpRequest, pk):
         user = request.user
         album = self.get_object()
 
@@ -106,28 +88,18 @@ class UserAlbumViewSet(
             'album': album,
         }
 
+        rating = RatedAlbum.objects.filter(**filter_kwargs).values_list('rating', flat=True).first()
+
         data = {
             'listened': ListenedAlbum.objects.filter(**filter_kwargs).exists(),
             'favourite': FavouriteAlbum.objects.filter(**filter_kwargs).exists(),
-            'rating': 0,
+            'rating': rating or 0,
             'wishlist': WishlistAlbum.objects.filter(**filter_kwargs).exists(),
         }
 
-        rated_album = RatedAlbum.objects.filter(**filter_kwargs)
-
-        if rated_album:
-            data['rating'] = rated_album[0].rating
-
         return Response(data, status=status.HTTP_200_OK)
 
-
-class UserAlbumsPreferencesViewSet(
-    viewsets.GenericViewSet,
-):
-    permission_classes = [IsAuthenticated]
-    queryset = Album.objects.all()
-
-    def _create_user_album_item(self, request: HttpRequest, pk, model: Model):
+    def _set_rating(self, request: HttpRequest, pk: int):
         album = self.get_object()
         user = request.user
 
@@ -136,48 +108,54 @@ class UserAlbumsPreferencesViewSet(
             'album': album,
         }
 
-        instance = model.objects.filter(**params)
+        try:
+            rating = int(request.data.get('rating'))
+        except (ValueError, TypeError):
+            return Response(
+                {'detail': 'Некорректный формат оценки'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        if model == RatedAlbum:
-            rating = request.data.get('rating')
-
-            if rating is None:
-                return Response(
-                    {'detail': 'Необходимо указать оценку.'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            if not (RatedAlbumConsts.MIN_RATING <= rating <= RatedAlbumConsts.MAX_RATING):
-                return Response(
-                    {
-                        'detail': 'Оценка должна быть в диапазоне от {} до {}'.format(
-                            RatedAlbumConsts.MIN_RATING,
-                            RatedAlbumConsts.MAX_RATING,
-                        )
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-            if instance.exists():
-                old_rating = instance[0].rating
-                if old_rating == rating:
-                    instance.delete()
-                    return Response(
-                        status=status.HTTP_204_NO_CONTENT
+        if not (RatedAlbumConsts.MIN_RATING <= rating <= RatedAlbumConsts.MAX_RATING):
+            return Response(
+                {
+                    'detail': 'Оценка должна быть в диапазоне от {} до {}'.format(
+                        RatedAlbumConsts.MIN_RATING,
+                        RatedAlbumConsts.MAX_RATING,
                     )
-                instance.update(rating=rating)
-                return Response(
-                    status=status.HTTP_200_OK
-                )
-            params['rating'] = rating
-            model.objects.create(**params)
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            if instance.exists():
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        instance = RatedAlbum.objects.filter(**params)
+
+        if instance.exists():
+            old_rating = instance[0].rating
+            if old_rating == rating:
                 instance.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            model.objects.create(**params)
-            return Response(status=status.HTTP_201_CREATED)
+                return Response(
+                    status=status.HTTP_204_NO_CONTENT
+                )
+            instance[0].rating = rating
+            instance[0].save(update_fields=['rating'])
+            return Response(
+                {"rating": rating},
+                status=status.HTTP_200_OK
+            )
+        params['rating'] = rating
+        RatedAlbum.objects.create(**params)
+        return Response(status=status.HTTP_201_CREATED)
+
+    def _toggle_album_item(self, request: HttpRequest, _Model: Model):
+        album = self.get_object()
+        user = request.user
+        params = {"album": album, "user": user}
+        instance = _Model.objects.filter(**params)
+        if instance.exists():
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        _Model.objects.create(**params)
+        return Response(status=status.HTTP_201_CREATED)
 
     @action(
         detail=True,
@@ -185,11 +163,7 @@ class UserAlbumsPreferencesViewSet(
         url_path='favourite'
     )
     def favourite(self, request, pk):
-        return self._create_user_album_item(
-            request,
-            pk,
-            FavouriteAlbum,
-        )
+        return self._toggle_album_item(request, FavouriteAlbum)
 
     @action(
         detail=True,
@@ -197,11 +171,7 @@ class UserAlbumsPreferencesViewSet(
         url_path='listened'
     )
     def listened(self, request, pk):
-        return self._create_user_album_item(
-            request,
-            pk,
-            ListenedAlbum,
-        )
+        return self._toggle_album_item(request, ListenedAlbum)
 
     @action(
         detail=True,
@@ -209,11 +179,7 @@ class UserAlbumsPreferencesViewSet(
         url_path='wishlist'
     )
     def wishlist(self, request, pk):
-        return self._create_user_album_item(
-            request,
-            pk,
-            WishlistAlbum,
-        )
+        return self._toggle_album_item(request, WishlistAlbum)
 
     @action(
         detail=True,
@@ -221,8 +187,4 @@ class UserAlbumsPreferencesViewSet(
         url_path='rated'
     )
     def rated(self, request: HttpRequest, pk):
-        return self._create_user_album_item(
-            request,
-            pk,
-            RatedAlbum,
-        )
+        return self._set_rating(request, pk)

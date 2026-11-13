@@ -12,6 +12,7 @@ from .models import (
     Album,
     Song,
 )
+from .constants import AlbumConsts
 from artist.serializers import (
     ArtistAlbumCreateSerializer,
     ArtistSimpleSerializer,
@@ -23,6 +24,9 @@ from genre.serializers import (
 from song.serializers import (
     SongAlbumCreateSerializer,
     SongSerializer,
+)
+from review.serializers import (
+    ReviewListSerializer
 )
 
 
@@ -36,7 +40,8 @@ class AlbumSerializer(serializers.ModelSerializer):
         many=True,
     )
     songs = SongSerializer(read_only=True, many=True)
-    average_rating = serializers.SerializerMethodField()
+    latest_reviews = serializers.SerializerMethodField()
+    average_rating = serializers.ReadOnlyField()
 
     class Meta:
         model = Album
@@ -48,15 +53,13 @@ class AlbumSerializer(serializers.ModelSerializer):
             'cover',
             'songs',
             'artists',
+            'latest_reviews',
             'genres',
         )
 
-    def get_average_rating(self, obj: Album):
-        instances = RatedAlbum.objects.filter(album=obj)
-        if not instances.exists():
-            return '-'
-        ratings = list(map(lambda instance: instance.rating, instances))
-        return mean(ratings)
+    def get_latest_reviews(self, obj: Album):
+        reviews = obj.reviews.select_related("author").order_by("-created_at")[:AlbumConsts.REVIEWS_LIMIT]
+        return ReviewListSerializer(reviews, many=True, context=self.context).data
 
 
 class AlbumSimpleSerializer(serializers.ModelSerializer):

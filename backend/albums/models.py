@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth import get_user_model
+from django.db.models import Count, Avg, FloatField
+from django.db.models.functions import Coalesce
 
 from albums.constants import AlbumConsts, RatedAlbumConsts
 from genre.models import Genre
@@ -48,6 +50,34 @@ class Album(models.Model):
         verbose_name = 'Альбом'
         verbose_name_plural = 'Альбомы'
         ordering = ('id',)
+
+    @property
+    def reviews_statistics(self):
+        entries = self.reviews.values('type').annotate(total=Count('id'))
+        stats = {
+            'positive': 0,
+            'negative': 0,
+            'neutral': 0,
+        }
+        for entry in entries:
+            stats[entry['type']] = entry['total']
+        stats['total'] = self.reviews.count()
+        return stats
+
+    @property
+    def average_rating(self):
+        average = (
+            self.ratedalbums.
+            aggregate(
+                avg=Coalesce(
+                    Avg("rating"),
+                    0.0,
+                    output_field=FloatField(),
+                )
+            )["avg"]
+        )
+        return average
+
 
     def __str__(self) -> str:
         return self.name

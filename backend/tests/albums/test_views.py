@@ -130,8 +130,8 @@ class UserAlbumViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
     def setUpTestData(cls):
         super().setUpTestData()
         cls.album = AlbumFactory()
-        cls.existent_user_album_data_url = reverse("user-album-data", kwargs={"pk": cls.album.pk})
-        cls.nonexistent_user_album_data_url = reverse("user-album-data", kwargs={"pk": 999_999})
+        cls.existent_user_album_data_url = reverse("albums-status", kwargs={"pk": cls.album.pk})
+        cls.nonexistent_user_album_data_url = reverse("albums-status", kwargs={"pk": 999_999})
 
     def test_returns_404_for_nonexistent_album(self):
         response = self.client.get(self.nonexistent_user_album_data_url)
@@ -146,7 +146,7 @@ class UserAlbumViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.album = AlbumFactory()
-        cls.existent_user_album_data_url = reverse("user-album-data", kwargs={"pk": cls.album.pk})
+        cls.existent_user_album_data_url = reverse("albums-status", kwargs={"pk": cls.album.pk})
 
     def test_returns_401_for_anonymous_user(self):
         response = self.client.get(self.existent_user_album_data_url)
@@ -180,18 +180,18 @@ class UserAlbumsPreferencesViewSetAuthenticatedUserTestCase(AuthenticatedAPITest
         cls.empty_data = RatedAlbumDataFactory(rating=None)
         cls.invalid_data = RatedAlbumDataFactory(rating=-1)
         cls.same_data = RatedAlbumDataFactory()
-        cls.new_favour_album_url = reverse("album-user-favourite", kwargs={"pk": cls.album1.pk})
-        cls.new_rate_album_url = reverse("album-user-rated", kwargs={"pk": cls.album1.pk})
-        cls.new_listened_album_url = reverse("album-user-listened", kwargs={"pk": cls.album1.pk})
-        cls.new_wishlist_album_url = reverse("album-user-wishlist", kwargs={"pk": cls.album1.pk})
-        cls.nonexistent_favour_album_url = reverse("album-user-favourite", kwargs={"pk": 999_999})
-        cls.nonexistent_rate_album_url = reverse("album-user-rated", kwargs={"pk": 999_999})
-        cls.nonexistent_listened_album_url = reverse("album-user-listened", kwargs={"pk": 999_999})
-        cls.nonexistent_wishlist_album_url = reverse("album-user-wishlist", kwargs={"pk": 999_999})
-        cls.existent_favour_album_url = reverse("album-user-favourite", kwargs={"pk": cls.album2.pk})
-        cls.existent_rate_album_url = reverse("album-user-rated", kwargs={"pk": cls.album2.pk})
-        cls.existent_listened_album_url = reverse("album-user-listened", kwargs={"pk": cls.album2.pk})
-        cls.existent_wishlist_album_url = reverse("album-user-wishlist", kwargs={"pk": cls.album2.pk})
+        cls.new_favour_album_url = reverse("albums-favourite", kwargs={"pk": cls.album1.pk})
+        cls.new_rate_album_url = reverse("albums-rated", kwargs={"pk": cls.album1.pk})
+        cls.new_listened_album_url = reverse("albums-listened", kwargs={"pk": cls.album1.pk})
+        cls.new_wishlist_album_url = reverse("albums-wishlist", kwargs={"pk": cls.album1.pk})
+        cls.nonexistent_favour_album_url = reverse("albums-favourite", kwargs={"pk": 999_999})
+        cls.nonexistent_rate_album_url = reverse("albums-rated", kwargs={"pk": 999_999})
+        cls.nonexistent_listened_album_url = reverse("albums-listened", kwargs={"pk": 999_999})
+        cls.nonexistent_wishlist_album_url = reverse("albums-wishlist", kwargs={"pk": 999_999})
+        cls.existent_favour_album_url = reverse("albums-favourite", kwargs={"pk": cls.album2.pk})
+        cls.existent_rate_album_url = reverse("albums-rated", kwargs={"pk": cls.album2.pk})
+        cls.existent_listened_album_url = reverse("albums-listened", kwargs={"pk": cls.album2.pk})
+        cls.existent_wishlist_album_url = reverse("albums-wishlist", kwargs={"pk": cls.album2.pk})
 
     def _check_model_count(self, _Model: Model, expected_cnt: int, **filter_kwargs):
         self.assertEqual(
@@ -264,10 +264,10 @@ class UserAlbumsPreferencesViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     def setUpTestData(cls):
         cls.album = AlbumFactory()
         cls.data = RatedAlbumDataFactory()
-        cls.favour_album_url = reverse("album-user-favourite", kwargs={"pk": cls.album.pk})
-        cls.rate_album_url = reverse("album-user-rated", kwargs={"pk": cls.album.pk})
-        cls.listened_album_url = reverse("album-user-listened", kwargs={"pk": cls.album.pk})
-        cls.wishlist_album_url = reverse("album-user-wishlist", kwargs={"pk": cls.album.pk})
+        cls.favour_album_url = reverse("albums-favourite", kwargs={"pk": cls.album.pk})
+        cls.rate_album_url = reverse("albums-rated", kwargs={"pk": cls.album.pk})
+        cls.listened_album_url = reverse("albums-listened", kwargs={"pk": cls.album.pk})
+        cls.wishlist_album_url = reverse("albums-wishlist", kwargs={"pk": cls.album.pk})
 
     def test_returns_401_for_rate_album_route(self):
         response = self.client.post(self.favour_album_url, data=self.data)
