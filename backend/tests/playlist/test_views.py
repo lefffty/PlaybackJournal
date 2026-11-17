@@ -217,3 +217,46 @@ class UserPlaylistViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     def test_returns_401(self):
         response = self.client.get(self.user_playlist_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class PlaylistViewSetPerformanceTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        super().setUpTestData()
+        cls.playlist = PlaylistFactory()
+        cls.rating_data = RatedPlaylistDataFactory()
+        cls.invalid_data = RatedPlaylistDataFactory(rating="aba")
+        cls.incorrect_data = RatedPlaylistDataFactory(rating=0)
+        cls.list_url = reverse('playlist-list')
+        cls.detail_url = reverse('playlist-detail', kwargs={"pk": cls.playlist.pk})
+        cls.user_playlist_url = reverse("playlist-status", kwargs={"pk": cls.playlist.pk})
+        cls.rate_playlist_url = reverse('playlist-rated', kwargs={"pk": cls.playlist.pk})
+        cls.favourite_playlist_url = reverse('playlist-favourite', kwargs={"pk": cls.playlist.pk})
+
+    def test_playlists_list_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.get(self.list_url)
+
+    def test_playlist_detail_number_of_made_queries(self):
+        with self.assertNumQueries(4):
+            _ = self.client.get(self.detail_url)
+
+    def test_playlist_status_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.get(self.user_playlist_url)
+
+    def test_playlist_rate_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.post(self.rate_playlist_url, data=self.rating_data)
+
+    def test_playlist_rate_with_invalid_data_number_of_made_queries(self):
+        with self.assertNumQueries(0):
+            _ = self.client.post(self.rate_playlist_url, data=self.invalid_data)
+
+    def test_playlist_rate_with_incorrect_data_number_of_made_queries(self):
+        with self.assertNumQueries(0):
+            _ = self.client.post(self.rate_playlist_url, data=self.incorrect_data)
+
+    def test_playlist_favourite_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.post(self.favourite_playlist_url)

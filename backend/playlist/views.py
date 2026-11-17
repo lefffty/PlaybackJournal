@@ -96,14 +96,6 @@ class PlaylistViewSet(
         return Response(status=status.HTTP_201_CREATED)
 
     def _set_rating(self, request: HttpRequest, pk: int):
-        playlist = self.get_object()
-        user = request.user
-
-        params = {
-            'playlist': playlist,
-            'user': user
-        }
-
         try:
             rating = int(request.data.get('rating'))
         except (ValueError, TypeError):
@@ -121,6 +113,14 @@ class PlaylistViewSet(
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        playlist = self.get_object()
+        user = request.user
+
+        params = {
+            'playlist': playlist,
+            'user': user
+        }
 
         instance = RatedPlaylist.objects.filter(**params)
 
