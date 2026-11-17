@@ -116,3 +116,48 @@ class GenreViewSetAnonymousTestCase(AnonymousAPITestCase):
     def test_returns_401(self):
         response = self.client.post(self.new_favour_genre_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class GenreViewSetPerformanceTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.genre = GenreFactory()
+        cls.genre2 = GenreFactory()
+        cls.genre3 = GenreFactory()
+        cls.genre4 = GenreFactory()
+        cls.favour_genre = FavouriteGenreFactory(user=cls.user, genre=cls.genre)
+        cls.list_url = reverse("genre-list")
+        cls.detail_url = reverse("genre-detail", kwargs={"pk": cls.genre.pk})
+        cls.genre_artists_url = reverse("genre-artists", kwargs={"pk": cls.genre.pk})
+        cls.genre_albums_url = reverse("genre-albums", kwargs={"pk": cls.genre.pk})
+        cls.genre_favour_url = reverse("genre-favourite", kwargs={"pk": cls.genre.pk})
+        cls.genre_favour_delete_url = reverse("genre-favourite", kwargs={"pk": cls.genre2.pk})
+
+    def test_genre_list_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.list_url)
+
+    def test_genre_detail_number_of_made_queries(self):
+        with self.assertNumQueries(4):
+            _ = self.client.get(self.detail_url)
+
+    def test_genre_artists_list_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.genre_artists_url)
+
+    def test_genre_albums_list_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.genre_albums_url)
+
+    def test_favour_genre_GET_method_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.genre_favour_url)
+
+    def test_favour_genre_POST_method_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.post(self.genre_favour_url)
+
+    def test_favour_genre_DELETE_method_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.delete(self.genre_favour_delete_url)
