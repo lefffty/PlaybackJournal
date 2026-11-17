@@ -42,22 +42,13 @@ class SongsViewSet(
         url_path='rated'
     )
     def rated(self, request: HttpRequest, pk: int):
-        return self._create_user_song_item(
+        return self._set_rating(
             request,
             pk,
             RatedSong,
         )
 
-    def _create_user_song_item(self, request: HttpRequest, pk: int, model: Model):
-        song = self.get_object()
-
-        filter_kwargs = {
-            'user': request.user,
-            'song': song,
-        }
-
-        instance = model.objects.filter(**filter_kwargs)
-
+    def _set_rating(self, request: HttpRequest, pk: int, model: Model):
         try:
             rating = int(request.data.get('rating'))
         except (ValueError, TypeError):
@@ -77,15 +68,24 @@ class SongsViewSet(
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if instance.exists():
-            old_rating = instance[0].rating
+        song = self.get_object()
+
+        filter_kwargs = {
+            'user': request.user,
+            'song': song,
+        }
+
+        instance = model.objects.filter(**filter_kwargs).first()
+
+        if instance:
+            old_rating = instance.rating
 
             if old_rating == rating:
-                instance[0].delete()
+                instance.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
-            instance[0].rating = rating
-            instance[0].save(update_fields=['rating'])
+            instance.rating = rating
+            instance.save(update_fields=['rating'])
             return Response(
                 {"rating": rating},
                 status=status.HTTP_200_OK

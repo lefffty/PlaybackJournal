@@ -105,3 +105,33 @@ class UserSongPreferencesViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     def test_returns_401_for_rate_song_action(self):
         response = self.client.post(self.new_rated_song_url, data=self.new_rating_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class SongsViewSetPerformanceTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.songs = SongFactory.create_batch(20)
+        cls.ratedsong_data = RatedSongDataFactory()
+        cls.ratedsong = RatedSongFactory(song=cls.songs[1], user=cls.user)
+        cls.existing_ratedsong_data=  RatedSongDataFactory(rating=cls.ratedsong.rating)
+        cls.list_url = reverse("songs-list")
+        cls.detail_url = reverse("songs-detail", kwargs={"pk": cls.songs[0].pk})
+        cls.new_rate_song_url = reverse("songs-rated", kwargs={"pk": cls.songs[0].pk})
+        cls.rate_song_url = reverse("songs-rated", kwargs={"pk": cls.songs[1].pk})
+
+    def test_songs_list_url_number_of_made_queries(self):
+        with self.assertNumQueries(1):
+            _ = self.client.get(self.list_url)
+
+    def test_songs_detail_url_number_of_made_queries(self):
+        with self.assertNumQueries(4):
+            _ = self.client.get(self.detail_url)
+
+    def test_songs_rate_url_POST_method_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.post(self.new_rate_song_url, data=self.ratedsong_data)
+
+    def test_songs_existing_rate_url_POST_method_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.post(self.rate_song_url, data=self.existing_ratedsong_data)
