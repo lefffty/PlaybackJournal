@@ -1,6 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models.functions import Coalesce
+from django.db.models import Avg
 
 from .constants import PlaylistsConsts, RatedPlaylistsConsts
 from song.models import Song
@@ -42,6 +44,20 @@ class Playlist(models.Model):
         verbose_name = 'Плейлист'
         verbose_name_plural = 'Плейлисты'
         ordering = ('id',)
+
+    @property
+    def average_rating(self):
+        average = (
+            self.ratedplaylists.
+            aggregate(
+                avg=Coalesce(
+                    Avg("rating"),
+                    0.0,
+                    output_field=models.FloatField(),
+                )
+            )["avg"]
+        )
+        return average
 
     def __str__(self) -> str:
         return self.name
