@@ -40,7 +40,7 @@ class AlbumSerializer(serializers.ModelSerializer):
         many=True,
     )
     songs = SongSerializer(read_only=True, many=True)
-    latest_reviews = serializers.SerializerMethodField()
+    latest_reviews = serializers.ReadOnlyField()
     average_rating = serializers.ReadOnlyField()
 
     class Meta:
@@ -56,10 +56,6 @@ class AlbumSerializer(serializers.ModelSerializer):
             'latest_reviews',
             'genres',
         )
-
-    def get_latest_reviews(self, obj: Album):
-        reviews = obj.reviews.select_related("author").order_by("-created_at")[:AlbumConsts.REVIEWS_LIMIT]
-        return ReviewListSerializer(reviews, many=True, context=self.context).data
 
 
 class AlbumSimpleSerializer(serializers.ModelSerializer):
