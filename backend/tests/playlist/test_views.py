@@ -12,7 +12,7 @@ from playlist.models import (
 from .factories.form import PlaylistDataFactory, RatedPlaylistDataFactory
 from ..users.factories.model import UserFactory
 from ..song.factories.model import SongFactory
-from ..playlist.factories.model import PlaylistFactory, RatedPlaylistFactory
+from ..playlist.factories.model import PlaylistFactory
 from ..base import (
     AuthenticatedAPITestCase,
     AnonymousAPITestCase
@@ -121,8 +121,8 @@ class PlaylistUserCreateViewSetAnonymousTestCase(AnonymousAPITestCase):
     def setUpTestData(cls):
         cls.playlist = PlaylistFactory()
         cls.data = RatedPlaylistDataFactory()
-        cls.rate_playlist_url = reverse('playlist-user-rated', kwargs={"pk": cls.playlist.pk})
-        cls.favourite_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": cls.playlist.pk})
+        cls.rate_playlist_url = reverse('playlist-rated', kwargs={"pk": cls.playlist.pk})
+        cls.favourite_playlist_url = reverse('playlist-favourite', kwargs={"pk": cls.playlist.pk})
 
     def test_returns_401_for_rate_playlist_endpoint(self):
         response = self.client.post(self.rate_playlist_url)
@@ -141,10 +141,10 @@ class PlaylistUserCreateViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
         cls.data = RatedPlaylistDataFactory()
         cls.invalid_data = RatedPlaylistDataFactory(rating=-1)
         cls.update_data = RatedPlaylistDataFactory()
-        cls.rate_nonexistent_playlist_url = reverse('playlist-user-rated', kwargs={"pk": 100_000}),
-        cls.favourite_nonexistent_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": 100_000}),
-        cls.rate_playlist_url = reverse('playlist-user-rated', kwargs={"pk": cls.playlist.pk})
-        cls.favourite_playlist_url = reverse('playlist-user-favourite', kwargs={"pk": cls.playlist.pk})
+        cls.rate_nonexistent_playlist_url = reverse('playlist-rated', kwargs={"pk": 100_000}),
+        cls.favourite_nonexistent_playlist_url = reverse('playlist-favourite', kwargs={"pk": 100_000}),
+        cls.rate_playlist_url = reverse('playlist-rated', kwargs={"pk": cls.playlist.pk})
+        cls.favourite_playlist_url = reverse('playlist-favourite', kwargs={"pk": cls.playlist.pk})
 
     def _check_model_count(self, _Model: Model, expected_cnt: int):
         self.assertEqual(_Model.objects.count(), expected_cnt)
@@ -179,7 +179,7 @@ class PlaylistUserCreateViewSetAuthenticatedTestCase(AuthenticatedAPITestCase):
         self._check_model_count(FavouritePlaylist, 1)
 
     def test_returns_204_for_favourite_playlist_endpoint(self):
-        self.client.post(self.favourite_playlist_url, data=self.data)
+        self.client.post(self.favourite_playlist_url)
         self._check_model_count(FavouritePlaylist, 1)
         response = self.client.post(self.favourite_playlist_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -196,8 +196,8 @@ class UserPlaylistViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCase):
     def setUpTestData(cls):
         super().setUpTestData()
         cls.playlist = PlaylistFactory()
-        cls.user_playlist_url = reverse("user-playlist-data", kwargs={"pk": cls.playlist.pk})
-        cls.user_nonexistent_playlist_url = reverse("user-playlist-data", kwargs={"pk": 999_999})
+        cls.user_playlist_url = reverse("playlist-status", kwargs={"pk": cls.playlist.pk})
+        cls.user_nonexistent_playlist_url = reverse("playlist-status", kwargs={"pk": 999_999})
 
     def test_returns_200_for_existing_playlist(self):
         response = self.client.get(self.user_playlist_url)
@@ -212,7 +212,7 @@ class UserPlaylistViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.playlist = PlaylistFactory()
-        cls.user_playlist_url = reverse("user-playlist-data", kwargs={"pk": cls.playlist.pk})
+        cls.user_playlist_url = reverse("playlist-status", kwargs={"pk": cls.playlist.pk})
 
     def test_returns_401(self):
         response = self.client.get(self.user_playlist_url)

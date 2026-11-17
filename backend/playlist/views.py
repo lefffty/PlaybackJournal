@@ -1,14 +1,12 @@
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
-    IsAuthenticated
+    IsAuthenticated,
 )
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Model
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404
 
 from .serializers import (
     PlaylistSerializer,
@@ -31,7 +29,9 @@ class PlaylistViewSet(
     pagination_class = PageNumberPagination
 
     def get_permissions(self):
-        if self.action in ('list', 'retrieve', 'create'):
+        if self.action in ("status", "rated", "favourite"):
+            return [IsAuthenticated()]
+        if self.action in ("list", "retrieve", "create"):
             return [IsAuthenticatedOrReadOnly()]
         return [OwnerOrReadOnly()]
 
@@ -45,58 +45,22 @@ class PlaylistViewSet(
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-
-class PlaylistUserCreateViewSet(
-    viewsets.GenericViewSet
-):
-    permission_classes = [IsAuthenticated]
-
-    def _create_delete_playlist_user(
-        self,
-        request: HttpRequest,
-        pk: int,
-        model: Model
-    ):
-        playlist = get_object_or_404(Playlist, pk=pk)
+    @action(
+        detail=True,
+        url_path='status',
+    )
+    def status(self, request: HttpRequest, pk: int):
+        playlist = self.get_object()
         user = request.user
 
-        params = {
-            'playlist': playlist,
-            'user': user
+        rating = RatedPlaylist.objects.filter(user=user, playlist=playlist).values_list("rating", flat=True).first()
+
+        response = {
+            'favourite': FavouritePlaylist.objects.filter(user=user, playlist=playlist).exists(),
+            'rating': rating or 0,
         }
 
-        instance = model.objects.filter(user=user, playlist=playlist)
-        if model == RatedPlaylist:
-            try:
-                rating = int(request.data.get('rating'))
-            except (ValueError, TypeError):
-                return Response(
-                    {'detail': ''},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if not (RatedPlaylistsConsts.MIN_RATING <= rating <= RatedPlaylistsConsts.MAX_RATING):
-                return Response(
-                    {'detail': ''},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if instance.exists():
-                old_rating = instance[0].rating
-                if old_rating == rating:
-                    instance.delete()
-                    return Response(status=status.HTTP_204_NO_CONTENT)
-                instance.update(rating=rating)
-                return Response(
-                    status=status.HTTP_200_OK,
-                )
-            params['rating'] = rating
-            model.objects.create(**params)
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            if instance.exists():
-                instance[0].delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            model.objects.create(**params)
-            return Response(status=status.HTTP_201_CREATED)
+        return Response(response, status=status.HTTP_200_OK)
 
     @action(
         detail=True,
@@ -104,11 +68,7 @@ class PlaylistUserCreateViewSet(
         url_path='favourite'
     )
     def favourite(self, request: HttpRequest, pk: int):
-        return self._create_delete_playlist_user(
-            request,
-            pk,
-            FavouritePlaylist
-        )
+        return self._toggle_item(request, pk)
 
     @action(
         detail=True,
@@ -116,36 +76,67 @@ class PlaylistUserCreateViewSet(
         url_path='rated'
     )
     def rated(self, request: HttpRequest, pk: int):
-        return self._create_delete_playlist_user(
-            request,
-            pk,
-            RatedPlaylist,
-        )
+        return self._set_rating(request, pk)
 
-
-class UserPlaylistViewSet(
-    viewsets.GenericViewSet
-):
-    permission_classes = [IsAuthenticated]
-
-    @action(
-        detail=True,
-        url_path='user_playlist',
-    )
-    def data(self, request: HttpRequest, pk: int):
-        playlist = get_object_or_404(Playlist, pk=pk)
+    def _toggle_item(self, request: HttpRequest, pk: int):
+        playlist = self.get_object()
         user = request.user
 
-        response = {
-            'favourite': False,
-            'rating': RatedPlaylistsConsts.DEFAULT_RATING,
+        params = {
+            'playlist': playlist,
+            'user': user
         }
 
-        if FavouritePlaylist.objects.filter(user=user, playlist=playlist).exists():
-            response['favourite'] = True
+        instance = FavouritePlaylist.objects.filter(**params)
 
-        if RatedPlaylist.objects.filter(user=user, playlist=playlist).exists():
-            instance = RatedPlaylist.objects.get(user=user, playlist=playlist)
-            response['rating'] = instance.rating
+        if instance.exists():
+            instance[0].delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        FavouritePlaylist.objects.create(**params)
+        return Response(status=status.HTTP_201_CREATED)
 
-        return Response(response, status=status.HTTP_200_OK)
+    def _set_rating(self, request: HttpRequest, pk: int):
+        playlist = self.get_object()
+        user = request.user
+
+        params = {
+            'playlist': playlist,
+            'user': user
+        }
+
+        try:
+            rating = int(request.data.get('rating'))
+        except (ValueError, TypeError):
+            return Response(
+                {'detail': 'Некорректный формат оценки'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not (RatedPlaylistsConsts.MIN_RATING <= rating <= RatedPlaylistsConsts.MAX_RATING):
+            return Response(
+                {'detail': 'Оценка должна быть в диапазоне от {} до {}'.format(
+                        RatedPlaylistsConsts.MIN_RATING,
+                        RatedPlaylistsConsts.MAX_RATING,
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        instance = RatedPlaylist.objects.filter(**params)
+
+        if instance.exists():
+            old_rating = instance[0].rating
+            if old_rating == rating:
+                instance.delete()
+                return Response(
+                    status=status.HTTP_204_NO_CONTENT
+                )
+            instance[0].rating = rating
+            instance[0].save(update_fields=['rating'])
+            return Response(
+                {"rating": rating},
+                status=status.HTTP_200_OK,
+            )
+        params['rating'] = rating
+        RatedPlaylist.objects.create(**params)
+        return Response(status=status.HTTP_201_CREATED)
