@@ -57,9 +57,9 @@ class UserSongPreferencesViewSetAuthenticatedUserTestCase(AuthenticatedAPITestCa
         cls.invalid_rating_data = RatedSongDataFactory(rating=-1)
         cls.new_rating_data = RatedSongDataFactory()
         cls.same_rating_data = RatedSongDataFactory(rating=5)
-        cls.new_rated_song_url = reverse("song_user-rated", kwargs={"pk": cls.song1.pk})
-        cls.existent_rated_song_url = reverse("song_user-rated", kwargs={"pk": cls.song2.pk})
-        cls.nonexistent_rated_song_url = reverse("song_user-rated", kwargs={"pk": 999_999})
+        cls.new_rated_song_url = reverse("songs-rated", kwargs={"pk": cls.song1.pk})
+        cls.existent_rated_song_url = reverse("songs-rated", kwargs={"pk": cls.song2.pk})
+        cls.nonexistent_rated_song_url = reverse("songs-rated", kwargs={"pk": 999_999})
 
     def _check_objects_count(self, expected_cnt: int, **kwargs):
         self.assertEqual(
@@ -100,7 +100,7 @@ class UserSongPreferencesViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     def setUpTestData(cls):
         cls.song1 = SongFactory()
         cls.new_rating_data = RatedSongDataFactory()
-        cls.new_rated_song_url = reverse("song_user-rated", kwargs={"pk": cls.song1.pk})
+        cls.new_rated_song_url = reverse("songs-rated", kwargs={"pk": cls.song1.pk})
 
     def test_returns_401_for_rate_song_action(self):
         response = self.client.post(self.new_rated_song_url, data=self.new_rating_data, format="json")

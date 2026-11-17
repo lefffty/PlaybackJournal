@@ -84,13 +84,13 @@ class ReactionViewSet(
         self,
         request: HttpRequest,
         pk: int,
-        source: Model,
+        _Model: Model,
         related: Model,
     ):
         user = request.user
-        obj = get_object_or_404(source, pk=pk)
+        obj = get_object_or_404(_Model, pk=pk)
 
-        objKey = 'review' if source == Review else 'comment'
+        objKey = 'review' if _Model == Review else 'comment'
 
         filter_kwargs = {
             'user': user,
@@ -101,14 +101,18 @@ class ReactionViewSet(
         new_reaction = request.data.get('reaction')
 
         if not new_reaction:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Некорректная реакция",
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         if instance.exists():
             old_reaction = instance[0].reaction
             if new_reaction == old_reaction:
                 instance.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            instance.update(reaction=new_reaction)
+            instance[0].reaction = new_reaction
+            instance[0].save(update_fields=['reaction'])
             return Response(status=status.HTTP_200_OK)
         filter_kwargs['reaction'] = new_reaction
         related.objects.create(**filter_kwargs)

@@ -2,20 +2,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import (
-    SongsListRetrieveViewSet,
-    UserSongPreferencesViewSet,
+    SongsViewSet,
 )
 
 router = DefaultRouter()
 router.register(
     r'songs',
-    SongsListRetrieveViewSet,
+    SongsViewSet,
     basename='songs',
-)
-router.register(
-    r'songs',
-    UserSongPreferencesViewSet,
-    basename='song_user',
 )
 
 

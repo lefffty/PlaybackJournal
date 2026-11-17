@@ -173,7 +173,7 @@ class UserListsViewSet(
         self,
         request: HttpRequest,
         model: Model,
-        serializer: serializers.ModelSerializer
+        _Serializer: serializers.ModelSerializer
     ):
         user = request.user
         objects = model.objects.filter(
@@ -181,7 +181,7 @@ class UserListsViewSet(
         )
         if model == RatedAlbum:
             objects = objects.order_by('-rating')
-        _serializer = serializer(objects, read_only=True, many=True)
+        _serializer = _Serializer(objects, read_only=True, many=True)
         return Response(
             _serializer.data,
             status=status.HTTP_200_OK
