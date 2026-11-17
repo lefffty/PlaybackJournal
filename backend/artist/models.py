@@ -41,6 +41,14 @@ class Artist(models.Model):
         verbose_name_plural = 'Исполнители'
         ordering = ('id',)
 
+    @property
+    def earliest_albums(self):
+        return self.albums.all().order_by("publication_date")[:ArtistConsts.ALBUMS_LIMIT]
+
+    @property
+    def similar(self):
+        return self.similar_artists.all().order_by("id")[:ArtistConsts.ALBUMS_LIMIT]
+
     def __str__(self) -> str:
         return self.username
 

@@ -56,8 +56,8 @@ class AlbumArtistSerializer(serializers.ModelSerializer):
 
 
 class ArtistSerializer(serializers.ModelSerializer):
-    albums = serializers.SerializerMethodField()
-    similar = serializers.SerializerMethodField()
+    albums = serializers.ReadOnlyField(source='earliest_albums')
+    similar = serializers.ReadOnlyField()
     genres = GenreSimpleSerializer(
         many=True,
         read_only=True,
@@ -74,14 +74,6 @@ class ArtistSerializer(serializers.ModelSerializer):
             'genres',
             'similar'
         )
-
-    def get_albums(self, obj: Artist):
-        albums = obj.albums.all()[:5]
-        return AlbumArtistSerializer(albums, many=True, read_only=True).data
-
-    def get_similar(self, obj: Artist):
-        similar = obj.similar_artists.all()[:5]
-        return RelatedArtistSerializer(similar, many=True, read_only=True).data
 
 
 class ArtistAlbumCreateSerializer(serializers.Serializer):

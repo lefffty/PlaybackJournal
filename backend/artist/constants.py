@@ -6,3 +6,5 @@ class ArtistConsts(IntEnum):
     DESCRIPTION_MAX_LENGTH =        1024
     RELATED_ARTISTS_INLINE_EXTRA =  1
     GENRE_INLINE_EXTRA =            1
+    ALBUMS_LIMIT =                  5
+    ARTISTS_LIMIT =                 5
