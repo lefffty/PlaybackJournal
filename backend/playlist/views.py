@@ -87,10 +87,10 @@ class PlaylistViewSet(
             'user': user
         }
 
-        instance = FavouritePlaylist.objects.filter(**params)
+        instance = FavouritePlaylist.objects.filter(**params).first()
 
-        if instance.exists():
-            instance[0].delete()
+        if instance:
+            instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         FavouritePlaylist.objects.create(**params)
         return Response(status=status.HTTP_201_CREATED)
@@ -122,17 +122,17 @@ class PlaylistViewSet(
             'user': user
         }
 
-        instance = RatedPlaylist.objects.filter(**params)
+        instance = RatedPlaylist.objects.filter(**params).first()
 
-        if instance.exists():
-            old_rating = instance[0].rating
+        if instance:
+            old_rating = instance.rating
             if old_rating == rating:
                 instance.delete()
                 return Response(
                     status=status.HTTP_204_NO_CONTENT
                 )
-            instance[0].rating = rating
-            instance[0].save(update_fields=['rating'])
+            instance.rating = rating
+            instance.save(update_fields=['rating'])
             return Response(
                 {"rating": rating},
                 status=status.HTTP_200_OK,

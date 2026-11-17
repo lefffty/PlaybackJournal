@@ -126,17 +126,17 @@ class AlbumViewSet(
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        instance = RatedAlbum.objects.filter(**params)
+        instance = RatedAlbum.objects.filter(**params).first()
 
-        if instance.exists():
-            old_rating = instance[0].rating
+        if instance:
+            old_rating = instance.rating
             if old_rating == rating:
                 instance.delete()
                 return Response(
                     status=status.HTTP_204_NO_CONTENT
                 )
-            instance[0].rating = rating
-            instance[0].save(update_fields=['rating'])
+            instance.rating = rating
+            instance.save(update_fields=['rating'])
             return Response(
                 {"rating": rating},
                 status=status.HTTP_200_OK
@@ -149,8 +149,8 @@ class AlbumViewSet(
         album = self.get_object()
         user = request.user
         params = {"album": album, "user": user}
-        instance = _Model.objects.filter(**params)
-        if instance.exists():
+        instance = _Model.objects.filter(**params).first()
+        if instance:
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         _Model.objects.create(**params)
