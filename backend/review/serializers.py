@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Review, ReviewComment, ReviewUserVote, CommentUserVote
+from .utils import get_user_reaction
 
 
 class ReviewCommentCreateSerializer(serializers.ModelSerializer):
@@ -29,20 +30,12 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
         )
 
     def get_reaction(self, obj: ReviewComment):
-        request = self.context.get('request')
-        if not request:
-            return ''
-        user = request.user
-        if not user.is_authenticated:
-            return ''
-        filter_kwargs = {
-            'user': user,
-            'comment': obj
-        }
-        instance = CommentUserVote.objects.filter(**filter_kwargs)
-        if instance.exists():
-            return instance[0].reaction
-        return ''
+        return get_user_reaction(
+            self.context.get('request'),
+            obj,
+            CommentUserVote,
+            "comment"
+        )
 
     def get_author(self, obj: ReviewComment):
         from users.serializers import UserSimpleSerializer
@@ -70,20 +63,12 @@ class ReviewListSerializer(serializers.ModelSerializer):
         )
 
     def get_reaction(self, obj: Review):
-        request = self.context.get('request')
-        if not request:
-            return ''
-        user = request.user
-        if not user.is_authenticated:
-            return ''
-        filter_kwargs = {
-            'user': user,
-            'review': obj
-        }
-        instance = ReviewUserVote.objects.filter(**filter_kwargs)
-        if instance.exists():
-            return instance[0].reaction
-        return ''
+        return get_user_reaction(
+            self.context.get('request'),
+            obj,
+            ReviewUserVote,
+            "comment"
+        )
 
     def get_author(self, obj: Review):
         from users.serializers import UserSimpleSerializer
@@ -112,20 +97,12 @@ class ReviewDetailSerializer(serializers.ModelSerializer):
         )
 
     def get_reaction(self, obj: Review):
-        request = self.context.get('request')
-        if not request:
-            return ''
-        user = request.user
-        if not user.is_authenticated:
-            return ''
-        filter_kwargs = {
-            'user': user,
-            'review': obj
-        }
-        instance = ReviewUserVote.objects.filter(**filter_kwargs)
-        if instance.exists():
-            return instance[0].reaction
-        return ''
+        return get_user_reaction(
+            self.context.get('request'),
+            obj,
+            ReviewUserVote,
+            "review"
+        )
 
     def get_author(self, obj: Review):
         from users.serializers import UserSimpleSerializer

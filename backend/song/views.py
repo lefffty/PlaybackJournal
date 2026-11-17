@@ -11,6 +11,7 @@ from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.db.models import Model
 
+from .constants import RatedSongConsts
 from .models import Song, RatedSong
 from .serializers import (
     SongListSerializer,
@@ -27,7 +28,7 @@ class SongsListRetrieveViewSet(
     pagination_class = None
 
     def get_serializer_class(self):
-        if self.action in ('list'):
+        if self.action in ('list',):
             return SongListSerializer
         return SongSerializer
 
@@ -46,14 +47,15 @@ class UserSongPreferencesViewSet(
         }
 
         instance = model.objects.filter(**filter_kwargs)
-        rating = request.data.get('rating')
 
-        if rating is None:
+        try:
+            rating = int(request.data.get('rating'))
+        except (ValueError, TypeError):
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if not (0 <= rating <= 10):
+        if not (RatedSongConsts.MIN_RATING <= rating <= RatedSongConsts.MAX_RATING):
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,
             )
