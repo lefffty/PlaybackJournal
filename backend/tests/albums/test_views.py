@@ -4,7 +4,7 @@ from rest_framework import status
 from django.urls import reverse
 
 from .factories.model import AlbumFactory, FavouriteAlbumFactory, RatedAlbumFactory, ListenedAlbumFactory, \
-    WishlistAlbumFactory
+    WishlistAlbumFactory, AlbumArtistFactory
 from .factories.form import AlbumCreateDataFactory, RatedAlbumDataFactory
 from ..genre.factories.model import GenreFactory
 from ..artist.factories.model import ArtistFactory
@@ -284,3 +284,45 @@ class UserAlbumsPreferencesViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     def test_returns_401_for_favourite_album_route(self):
         response = self.client.post(self.favour_album_url, data=self.data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class AlbumViewSetPerformanceTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.album1 = AlbumFactory()
+        cls.album2 = AlbumFactory()
+        cls.list_url = reverse("albums-list")
+        cls.detail_url = reverse("albums-detail", kwargs={"pk": cls.album1.pk})
+        cls.review_list_url = reverse("albums-reviews", kwargs={"pk": cls.album1.pk})
+        cls.statistics_url = reverse("albums-statistics", kwargs={"pk": cls.album1.pk})
+        cls.status_url = reverse("albums-status", kwargs={"pk": cls.album1.pk})
+        cls.favour_album_url = reverse("albums-favourite", kwargs={"pk": cls.album1.pk})
+        cls.rate_album_url = reverse("albums-rated", kwargs={"pk": cls.album1.pk})
+        cls.listened_album_url = reverse("albums-listened", kwargs={"pk": cls.album1.pk})
+        cls.wishlist_album_url = reverse("albums-wishlist", kwargs={"pk": cls.album1.pk})
+
+    def test_album_detail_number_of_made_queries(self):
+        with self.assertNumQueries(6):
+            _ = self.client.get(self.detail_url)
+
+    def test_albums_list_number_of_made_queries(self):
+        with self.assertNumQueries(9):
+            _ = self.client.get(self.list_url)
+
+    def test_reviews_list_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.review_list_url)
+
+    def test_album_statistics_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.statistics_url)
+
+    def test_album_status_number_of_made_queries(self):
+        with self.assertNumQueries(5):
+            _ = self.client.get(self.status_url)
+
+    def test_toggle_new_albums_number_of_made_queries(self):
+        for url in (self.favour_album_url, self.wishlist_album_url, self.listened_album_url):
+            with self.assertNumQueries(3):
+                _ = self.client.post(url)

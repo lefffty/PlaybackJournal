@@ -1,13 +1,13 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 
-from .views import AlbumListDetailViewSet
+from .views import AlbumViewSet
 
 
 router = DefaultRouter()
 router.register(
     r'albums',
-    AlbumListDetailViewSet,
+    AlbumViewSet,
     basename='albums',
 )
 

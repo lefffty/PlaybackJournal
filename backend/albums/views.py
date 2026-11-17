@@ -29,13 +29,12 @@ from .models import (
 )
 
 
-class AlbumListDetailViewSet(
+class AlbumViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
 ):
-    queryset = Album.objects.all()
     pagination_class = PageNumberPagination
 
     def get_queryset(self):

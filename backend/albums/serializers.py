@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from statistics import mean
 from typing import MutableMapping
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
@@ -7,12 +6,10 @@ from django.db.transaction import atomic
 from .models import (
     AlbumArtist,
     AlbumGenre,
-    RatedAlbum,
     AlbumSong,
     Album,
     Song,
 )
-from .constants import AlbumConsts
 from artist.serializers import (
     ArtistAlbumCreateSerializer,
     ArtistSimpleSerializer,
@@ -25,9 +22,6 @@ from song.serializers import (
     SongAlbumCreateSerializer,
     SongSerializer,
 )
-from review.serializers import (
-    ReviewListSerializer
-)
 
 
 class AlbumSerializer(serializers.ModelSerializer):
@@ -39,7 +33,10 @@ class AlbumSerializer(serializers.ModelSerializer):
         read_only=True,
         many=True,
     )
-    songs = SongSerializer(read_only=True, many=True)
+    songs = SongSerializer(
+        read_only=True,
+        many=True,
+    )
     latest_reviews = serializers.ReadOnlyField()
     average_rating = serializers.ReadOnlyField()
 
