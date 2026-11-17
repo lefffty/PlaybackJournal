@@ -92,3 +92,49 @@ class ArtistViewSetAnonymousTestCase(AnonymousAPITestCase):
     def test_returns_401_for_delete_method_for_favourite_action(self):
         response = self.client.delete(self.favourite_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class ArtistViewSetPerfomanceTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.artist = ArtistFactory()
+        cls.artist2 = ArtistFactory()
+        cls.fav_artist = FavouriteArtistFactory(
+            artist=cls.artist2,
+            user=cls.user
+        )
+        cls.list_url = reverse("artist-list")
+        cls.detail_url = reverse("artist-detail", kwargs={"pk": cls.artist.pk})
+        cls.discography_url = reverse("artist-discography", kwargs={"pk": cls.artist.pk})
+        cls.similar_url = reverse("artist-similar", kwargs={"pk": cls.artist.pk})
+        cls.favourite_url = reverse("artist-favourite", kwargs={"pk": cls.artist.pk})
+        cls.favourite_delete_url = reverse("artist-favourite", kwargs={"pk": cls.artist2.pk})
+
+    def test_artist_detail_number_of_made_queries(self):
+        with self.assertNumQueries(5):
+            _ = self.client.get(self.detail_url)
+
+    def test_artists_list_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.list_url)
+
+    def test_artist_discography_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.discography_url)
+
+    def test_artist_similar_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.similar_url)
+
+    def test_toggle_favourite_artist_GET_method_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.favourite_url)
+
+    def test_toggle_favourite_artist_POST_method_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.post(self.favourite_url)
+
+    def test_toggle_favourite_artist_DELETE_method_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.delete(self.favourite_delete_url)

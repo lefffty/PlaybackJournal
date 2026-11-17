@@ -26,8 +26,13 @@ class ArtistViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
 ):
-    queryset = Artist.objects.all()
     pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        base_qs = Artist.objects.all()
+        if self.action in ('retrieve', ):
+            return base_qs.prefetch_related("albums", "genres")
+        return base_qs
 
     def get_serializer_class(self):
         if self.action in ('retrieve',):
@@ -40,7 +45,7 @@ class ArtistViewSet(
     )
     def discography(self, request, pk: int):
         artist = self.get_object()
-        albums = artist.albums.all().order_by('publication_date')
+        albums = artist.albums.order_by('publication_date')
         serializer = AlbumArtistSerializer(
             albums,
             many=True,
@@ -77,7 +82,7 @@ class ArtistViewSet(
             return Response({"favourite": fav_qs.exists()}, status=status.HTTP_200_OK)
 
         if request.method == 'POST':
-            FavouriteArtist.objects.get_or_create(user=user, artist=artist)
+            FavouriteArtist.objects.create(user=user, artist=artist)
             return Response({"favourite": True}, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
