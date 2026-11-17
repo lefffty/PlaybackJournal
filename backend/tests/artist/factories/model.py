@@ -1,9 +1,10 @@
 import factory
 from faker import Factory
 
-from artist.models import Artist, ArtistSong, FavouriteArtist, RelatedArtists
+from artist.models import Artist, ArtistSong, FavouriteArtist, RelatedArtists, ArtistGenre
 from artist.constants import ArtistConsts
 
+from tests.genre.factories.model import GenreFactory
 from tests.song.factories.model import SongFactory
 from tests.users.factories.model import UserFactory
 
@@ -19,7 +20,6 @@ class ArtistFactory(factory.django.DjangoModelFactory):
     avatar = factory.django.ImageField(
         filename="test_image.jpg", width=200, height=200, color="blue", format="JPEG",
     )
-
 
 
 class ArtistSongFactory(factory.django.DjangoModelFactory):
@@ -45,3 +45,11 @@ class RelatedArtistsFactory(factory.django.DjangoModelFactory):
 
     artist = factory.SubFactory(ArtistFactory)
     related_artist = factory.SubFactory(ArtistFactory)
+
+
+class ArtistGenreFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ArtistGenre
+
+    artist = factory.SubFactory(ArtistFactory)
+    genre = factory.SubFactory(GenreFactory)

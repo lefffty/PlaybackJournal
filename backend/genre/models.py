@@ -34,6 +34,21 @@ class Genre(models.Model):
         verbose_name_plural = 'Жанры'
         ordering = ('id',)
 
+    @property
+    def limited_albums(self):
+        from albums.models import Album
+        albums_ids = self.albums.values_list("id", flat=True)[:GenreConsts.ALBUMS_LIMIT]
+        return (
+            Album.objects
+            .filter(id__in=albums_ids)
+            .prefetch_related("artists")
+        )
+
+    @property
+    def limited_artists(self):
+        artists = self.artists.all()[:GenreConsts.ARTISTS_LIMIT]
+        return artists
+
     def __str__(self):
         return self.name
 

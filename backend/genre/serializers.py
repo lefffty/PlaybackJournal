@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.db.models import Model
 
 from .models import Genre
 
@@ -15,9 +14,6 @@ class GenreSimpleSerializer(serializers.ModelSerializer):
 
 
 class GenreSerializer(serializers.ModelSerializer):
-    albums = serializers.SerializerMethodField()
-    artists = serializers.SerializerMethodField()
-
     class Meta:
         model = Genre
         fields = (
@@ -28,24 +24,20 @@ class GenreSerializer(serializers.ModelSerializer):
             'artists',
         )
 
-    def get_albums(self, obj: Model):
-        from albums.serializers import AlbumGenreSerializer
-        albums = obj.albums.all()[:5]
-        serializer = AlbumGenreSerializer(
-            albums,
-            many=True,
-            read_only=True)
-        return serializer.data
+    def get_fields(self):
+        fields = super().get_fields()
 
-    def get_artists(self, obj: Model):
+        from albums.serializers import AlbumGenreSerializer
         from artist.serializers import ArtistSimpleSerializer
-        artists = obj.artists.all()[:5]
-        serializer = ArtistSimpleSerializer(
-            artists,
-            many=True,
-            read_only=True
+
+        fields['albums'] = AlbumGenreSerializer(
+            many=True, read_only=True, source='limited_albums'
         )
-        return serializer.data
+        fields["artists"] = ArtistSimpleSerializer(
+            many=True, read_only=True, source='limited_artists'
+        )
+
+        return fields
 
 
 class GenreAlbumCreateSerializer(serializers.Serializer):
