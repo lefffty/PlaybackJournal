@@ -314,3 +314,23 @@ class ReviewModelViewSetPerformanceTestCase(AuthenticatedAPITestCase):
     def test_review_comments_number_of_made_queries(self):
         with self.assertNumQueries(2):
             _ = self.client.get(self.comments_url)
+
+
+class ReactionViewSetPerformanceTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        super().setUpTestData()
+        cls.review = ReviewFactory()
+        cls.comment = ReviewCommentFactory()
+        cls.reviewreaction_data = ReviewUserVoteDataFactory()
+        cls.commentreaction_data = CommentUserVoteDataFactory()
+        cls.review_reaction_url = reverse("reactions-review", kwargs={"pk": cls.review.pk})
+        cls.comment_reaction_url = reverse("reactions-comment", kwargs={"pk": cls.comment.pk})
+
+    def test_review_toggle_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.post(self.review_reaction_url, data=self.reviewreaction_data)
+
+    def test_comment_toggle_number_of_made_queries(self):
+        with self.assertNumQueries(3):
+            _ = self.client.post(self.comment_reaction_url, data=self.commentreaction_data)

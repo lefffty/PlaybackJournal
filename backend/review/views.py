@@ -80,12 +80,12 @@ class ReactionViewSet(
 ):
     permission_classes = [permissions.IsAuthenticated]
 
-    def _create_user_reaction(
+    def _toggle_reaction(
         self,
         request: HttpRequest,
         pk: int,
         _Model: Model,
-        related: Model,
+        _RelatedModel: Model,
         field_name: str
     ):
         user = request.user
@@ -96,7 +96,7 @@ class ReactionViewSet(
             field_name: obj
         }
 
-        instance = related.objects.filter(**filter_kwargs).first()
+        instance = _RelatedModel.objects.filter(**filter_kwargs).first()
         new_reaction = request.data.get('reaction')
 
         if not new_reaction:
@@ -112,14 +112,17 @@ class ReactionViewSet(
                 return Response(status=status.HTTP_204_NO_CONTENT)
             instance.reaction = new_reaction
             instance.save(update_fields=['reaction'])
-            return Response(status=status.HTTP_200_OK)
+            return Response(
+                {"reaction": new_reaction},
+                status=status.HTTP_200_OK
+            )
         filter_kwargs['reaction'] = new_reaction
-        related.objects.create(**filter_kwargs)
+        _RelatedModel.objects.create(**filter_kwargs)
         return Response(status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['POST'], url_path='review')
     def review(self, request: HttpRequest, pk: int):
-        return self._create_user_reaction(
+        return self._toggle_reaction(
             request,
             pk,
             Review,
@@ -129,7 +132,7 @@ class ReactionViewSet(
 
     @action(detail=True, methods=['POST'], url_path='comment')
     def comment(self, request: HttpRequest, pk: int):
-        return self._create_user_reaction(
+        return self._toggle_reaction(
             request,
             pk,
             ReviewComment,
