@@ -15,7 +15,7 @@ def get_user_reaction(request: HttpRequest, obj, _Model: Model, field_name: str)
         'user': user,
         field_name: obj
     }
-    instance = _Model.objects.filter(**filter_kwargs)
-    if instance.exists():
-        return instance[0].reaction
+    instance = _Model.objects.filter(**filter_kwargs).first()
+    if instance:
+        return instance.reaction
     return ''

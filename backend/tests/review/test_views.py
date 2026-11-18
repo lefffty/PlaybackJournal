@@ -297,3 +297,20 @@ class ReactionViewSetAnonymousUserTestCase(AnonymousAPITestCase):
     def test_returns_401_for_comment_reaction(self):
         response = self.client.post(self.comment_url, self.c_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class ReviewModelViewSetPerformanceTestCase(AuthenticatedAPITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        super().setUpTestData()
+        cls.review = ReviewFactory()
+        cls.detail_url = reverse("review-detail", kwargs={"pk": cls.review.pk})
+        cls.comments_url = reverse("review-comments", kwargs={"pk": cls.review.pk})
+
+    def test_review_detail_number_of_made_queries(self):
+        with self.assertNumQueries(4):
+            _ = self.client.get(self.detail_url)
+
+    def test_review_comments_number_of_made_queries(self):
+        with self.assertNumQueries(2):
+            _ = self.client.get(self.comments_url)

@@ -26,11 +26,11 @@ from .models import (
 class ReviewModelViewSet(
     viewsets.GenericViewSet,
     mixins.CreateModelMixin,
-    mixins.DestroyModelMixin,
+    mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    mixins.RetrieveModelMixin
+    mixins.DestroyModelMixin,
 ):
-    queryset = Review.objects.all()
+    queryset = Review.objects.select_related("album", "author")
 
     def get_serializer_class(self):
         if self.action in ('create',):
@@ -54,8 +54,8 @@ class ReviewModelViewSet(
         url_path='comments'
     )
     def comments(self, request, pk: int):
-        review = get_object_or_404(Review, pk=pk)
-        comments = review.comments.all()
+        review = self.get_object()
+        comments = review.comments.prefetch_related("author")
         serializer = ReviewCommentSerializer(
             comments, many=True, read_only=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -86,18 +86,17 @@ class ReactionViewSet(
         pk: int,
         _Model: Model,
         related: Model,
+        field_name: str
     ):
         user = request.user
         obj = get_object_or_404(_Model, pk=pk)
 
-        objKey = 'review' if _Model == Review else 'comment'
-
         filter_kwargs = {
             'user': user,
-            objKey: obj
+            field_name: obj
         }
 
-        instance = related.objects.filter(**filter_kwargs)
+        instance = related.objects.filter(**filter_kwargs).first()
         new_reaction = request.data.get('reaction')
 
         if not new_reaction:
@@ -106,13 +105,13 @@ class ReactionViewSet(
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        if instance.exists():
-            old_reaction = instance[0].reaction
+        if instance:
+            old_reaction = instance.reaction
             if new_reaction == old_reaction:
                 instance.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            instance[0].reaction = new_reaction
-            instance[0].save(update_fields=['reaction'])
+            instance.reaction = new_reaction
+            instance.save(update_fields=['reaction'])
             return Response(status=status.HTTP_200_OK)
         filter_kwargs['reaction'] = new_reaction
         related.objects.create(**filter_kwargs)
@@ -125,6 +124,7 @@ class ReactionViewSet(
             pk,
             Review,
             ReviewUserVote,
+            "review",
         )
 
     @action(detail=True, methods=['POST'], url_path='comment')
@@ -134,4 +134,5 @@ class ReactionViewSet(
             pk,
             ReviewComment,
             CommentUserVote,
+            "comment"
         )
