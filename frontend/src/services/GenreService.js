@@ -19,7 +19,7 @@ class GenreService {
     }
 
     userGenre(id){
-        return AxiosInstance.get(`/api/genres/${id}/user_genre/`);
+        return AxiosInstance.get(`/api/genres/${id}/favourite/`);
     }
 
     favouriteGenre(id){

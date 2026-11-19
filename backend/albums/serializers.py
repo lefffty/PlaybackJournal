@@ -3,6 +3,7 @@ from typing import MutableMapping
 from drf_extra_fields.fields import Base64ImageField
 from django.db.transaction import atomic
 
+from review.serializers import ReviewListSerializer
 from .models import (
     AlbumArtist,
     AlbumGenre,
@@ -37,7 +38,10 @@ class AlbumSerializer(serializers.ModelSerializer):
         read_only=True,
         many=True,
     )
-    latest_reviews = serializers.ReadOnlyField()
+    latest_reviews = ReviewListSerializer(
+        read_only=True,
+        many=True,
+    )
     average_rating = serializers.ReadOnlyField()
 
     class Meta:

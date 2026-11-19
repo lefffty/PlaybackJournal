@@ -18,7 +18,7 @@ class ArtistService{
     }
 
     userArtist(id){
-        return AxiosInstance.get(`/api/artists/${id}/user_artist/`);
+        return AxiosInstance.get(`/api/artists/${id}/favourite/`);
     }
 
     favouriteArtist(id){

@@ -67,7 +67,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
             self.context.get('request'),
             obj,
             ReviewUserVote,
-            "comment"
+            "review"
         )
 
     def get_author(self, obj: Review):

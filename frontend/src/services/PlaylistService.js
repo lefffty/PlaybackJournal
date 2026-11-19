@@ -18,7 +18,7 @@ class PlaylistService{
     }
 
     userPlaylist(id){
-        return AxiosInstance.get(`/api/playlists/${id}/user_playlist/`);
+        return AxiosInstance.get(`/api/playlists/${id}/status/`);
     }
 
     favouritePlaylist(id){

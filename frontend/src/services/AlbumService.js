@@ -27,15 +27,15 @@ class AlbumService{
     }
 
     userAlbum(id){
-        return AxiosInstance.get(`/api/albums/${id}/user_album/`)
+        return AxiosInstance.get(`/api/albums/${id}/status/`)
     }
 
     fetchStatistics(id){
-        return AxiosInstance.get(`/api/albums/${id}/album_reviews_statistics/`);
+        return AxiosInstance.get(`/api/albums/${id}/statistics/`);
     }
 
     fetchReviews(id){
-        return AxiosInstance.get(`/api/albums/${id}/album_reviews/`);
+        return AxiosInstance.get(`/api/albums/${id}/reviews/`);
     }
 }
 
