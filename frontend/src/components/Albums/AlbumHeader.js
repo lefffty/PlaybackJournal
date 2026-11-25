@@ -6,13 +6,22 @@ import ScaleRating from "../Common/ScaleRating/ScaleRating";
 import AlbumActions from "./AlbumActions";
 
 
-const AlbumHeader = ({isAuthenticated, album, userAlbumData, onWishlistClick, onFavouriteClick, onListenedClick, onRatingChange}) => {
+const AlbumHeader = ({
+                         isAuthenticated,
+                         album,
+                         userAlbumData,
+                         onWishlistClick,
+                         onFavouriteClick,
+                         onListenedClick,
+                         onRatingChange
+                     }) => {
     return (
         <Card className="mb-3 border-0">
             <Row className="g-0">
                 <Col md={4} className="d-flex">
                     <Card.Img
                         src={album.cover}
+                        data-testid="album-cover"
                     >
                     </Card.Img>
                 </Col>
@@ -20,12 +29,12 @@ const AlbumHeader = ({isAuthenticated, album, userAlbumData, onWishlistClick, on
                     <Card.Body>
                         <Row>
                             <Col md={8} className="mb-3">
-                                <Card.Title className="fs-1">
+                                <Card.Title data-testid="album-title" className="fs-1">
                                     {album.name}
                                 </Card.Title>
                                 <Card.Text className="fs-3">
                                     <span className="text-muted fs-5">Исполнители: </span>
-                                    <span>{album.artists.map(
+                                    <span data-testid="album-artists">{album.artists.map(
                                         (artist, index) => (
                                             <React.Fragment key={artist.id}>
                                                 <Link
@@ -42,7 +51,7 @@ const AlbumHeader = ({isAuthenticated, album, userAlbumData, onWishlistClick, on
                                 </Card.Text>
                                 <Card.Text className="fs-3">
                                     <span className="text-muted fs-5">Жанры: </span>
-                                    <span>
+                                    <span data-testid="album-genres">
                                                 {album.genres.map(
                                                     (genre, index) => (
                                                         <React.Fragment key={genre.id}>
@@ -58,11 +67,12 @@ const AlbumHeader = ({isAuthenticated, album, userAlbumData, onWishlistClick, on
                                 </Card.Text>
                                 <Card.Text className="fs-3">
                                     <span className="text-muted fs-5">Выпущен: </span>
-                                    <span>{moment(album.publication_date).format('Do MMMM YYYY')}</span>
+                                    <span
+                                        data-testid="album-publication-date">{moment(album.publication_date).format('Do MMMM YYYY')}</span>
                                 </Card.Text>
                                 <Card.Text className="fs-3">
                                     <span className="text-muted fs-5">Средняя оценка: </span>
-                                    <span>
+                                    <span data-testid="album-rating">
                                                 {album.average_rating !== "-" ? (
                                                         Intl.NumberFormat("en", {maximumFractionDigits: 2}).format(album.average_rating))
                                                     : (

@@ -21,7 +21,7 @@ const ScaleRating = ({initialValue, onRatingChange, totalStars = 10, frozen = fa
     }
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div data-testid="scale-rating" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ display: 'flex', gap: '4px' }}>
                 {
                     [...Array(totalStars)].map(

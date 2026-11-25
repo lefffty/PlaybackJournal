@@ -7,7 +7,7 @@ import Headphones from "../Common/Headphones/Headphones";
 const AlbumActions = ({isAuthenticated, userAlbumData, onWishlistClick, onFavouriteClick, onListenedClick}) => {
     return (
         <Col md={3}>
-            <Row md={3}>
+            <Row md={3} data-testid="album-actions">
                 {isAuthenticated && (
                     <>
                         <WishlistIcon initialValue={userAlbumData.wishlist}
