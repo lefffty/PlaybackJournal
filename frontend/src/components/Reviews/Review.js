@@ -1,21 +1,20 @@
 import React from "react";
 import {Card, Row, Col} from "react-bootstrap";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 import ReviewReaction from "../Common/Reactions/Review/Reaction";
 
-const Review = ({review, albumId = 0}) => {
+const typeToColor = {
+    negative: '#ff72722f',
+    positive: '#bcffa66c',
+    neutral: '#c6d7cf84',
+}
+
+const Review = ({review, albumId}) => {
     const token = localStorage.getItem('auth_token');
     const isAuthenticated = token && token !== '';
-    const typeToColor = {
-        negative: '#ff72722f',
-        positive: '#bcffa66c',
-        neutral: '#c6d7cf84',
-    }
-    if (albumId === 0){
-        albumId = review.album;
-    }
+    const currentAlbumId = albumId !== undefined ? albumId : review.album;
 
     const reviewColor = typeToColor[review.type];
     return (
@@ -29,17 +28,18 @@ const Review = ({review, albumId = 0}) => {
                 <Row className="align-items-center mt-3 ms-1">
                     <Col md={2} className="d-flex justify-content-center">
                         <Card.Img
+                            data-testid="author-avatar"
                             style={{
                                 width: '75px',
                                 height: '75px',
                                 borderRadius: '90px'
                             }}
                             src={`http://localhost:8000/${review.author.avatar}`}
-                            >
+                        >
                         </Card.Img>
                     </Col>
                     <Col md={6}>
-                        <span className="fs-3">
+                        <span className="fs-3" data-testid="author-username">
                             <b>{review.author.username}</b>
                         </span>
                     </Col>
@@ -50,14 +50,15 @@ const Review = ({review, albumId = 0}) => {
                                 marginRight: '20px'
                             }}
                         >
-                            <div>
+                            <div data-testid={"review-updated-at"}>
                                 {moment(review.updated_at).format('D MMMM YYYY [г.] HH:mm')}
                             </div>
-                            {albumId !== 0 ? (
+                            {currentAlbumId !== 0 ? (
                                 <>
                                     <Link
                                         to={`/albums/${albumId}/reviews/${review.id}`}
                                         className="text-muted text-decoration-none"
+                                        data-testid={`review-direct-link-${review.id}`}
                                     >
                                         прямая ссылка
                                     </Link>
@@ -76,10 +77,10 @@ const Review = ({review, albumId = 0}) => {
                     }}
                     className="pt-0 ms-4 mt-2"
                 >
-                    <Card.Title className="fs-3">
+                    <Card.Title className="fs-3" data-testid={"review-title"}>
                         {review.title}
                     </Card.Title>
-                    <Card.Text>
+                    <Card.Text data-testid={"review-text"}>
                         {review.text}
                     </Card.Text>
                 </Card.Body>
@@ -91,13 +92,13 @@ const Review = ({review, albumId = 0}) => {
                     }}
                 >
                     {isAuthenticated && (
-                            <ReviewReaction
-                                initialState={review.reaction}
-                                reviewId={review.id}
-                                usefulCount={review.useful_count}
-                                notUsefulCount={review.not_useful_count}
-                            />
-                        )
+                        <ReviewReaction
+                            initialState={review.reaction}
+                            reviewId={review.id}
+                            usefulCount={review.useful_count}
+                            notUsefulCount={review.not_useful_count}
+                        />
+                    )
                     }
                 </div>
             </Card>
