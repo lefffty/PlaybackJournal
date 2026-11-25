@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
-import { Link, useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import {ListGroup, Card, Row, Col} from "react-bootstrap";
-import moment from "moment";
+import {Spinner, Alert} from "react-bootstrap";
 
-import WishlistIcon from "../Common/WishlistIcon/WishlistIcon";
-import ScaleRating from "../Common/ScaleRating/ScaleRating";
-import HeartIcon from "../Common/HeartIcon/HeartIcon";
-import Headphones from "../Common/Headphones/Headphones";
-
-import Review from "../Reviews/Review";
 import ReviewForm from "../Reviews/Forms/ReviewForm";
-import Reviews from "../Statistics/Reviews/Reviews";
+
+import AlbumHeader from "./AlbumHeader";
+import AlbumSongsList from "./AlbumSongsList";
+import AlbumReviews from "./AlbumReviews";
 
 import AlbumService from "../../services/AlbumService";
 import SongService from "../../services/SongService";
 
-const Album = (props) => {
+const Album = () => {
     const {id} = useParams();
     const [album, setAlbum] = useState(null);
     const [error, setError] = useState('');
@@ -34,110 +30,102 @@ const Album = (props) => {
         total: 0,
         negative: 0,
         neutral: 0,
-        positive: 0,  
+        positive: 0,
     })
     const [isStatistics, setIsStatistics] = useState(false);
-    const [userSongsData, setUserSongsData] = useState({});
+    const [songsRatings, setSongsRatings] = useState({});
 
     const fetchAlbum = () => {
         AlbumService.readAlbum(id)
-        .then(
-            (response) => {
-                setAlbum(response.data);
-                const songs = response.data.songs;
-                const initialRatings = {};
-                songs.forEach(song => {
-                    initialRatings[song.id] = song.rating;
-                })
-                setUserSongsData(initialRatings);
-            }
-        )
-        .catch(
-            (e) => {
+            .then(
+                (response) => {
+                    setAlbum(response.data);
+                    const songs = response.data.songs;
+                    const initialRatings = {};
+                    songs.forEach(song => {
+                        initialRatings[song.id] = song.rating;
+                    })
+                    setSongsRatings(initialRatings);
+                }
+            )
+            .catch((e) => {
+                setAlbum(s => s);
+                setSongsRatings(s => s);
                 setError(e.toString());
-            }
-        )
+            })
+    }
+
+    const fetchUserAlbum = () => {
+        AlbumService.userAlbum(id)
+            .then(
+                (response) => {
+                    setUserAlbumData(response.data);
+                }
+            )
     }
 
     const fetchReviews = () => {
         AlbumService.fetchReviews(id)
-        .then(
-            (response) => {
-                const data = response.data;
-                setReviews(data);
-            }
-        )
-        .catch(
-            (e) => setError(e.toString())
-        )
+            .then(
+                (response) => {
+                    const data = response.data;
+                    setReviews(data);
+                }
+            )
+            .catch(
+                (e) => setError(e.toString())
+            )
     }
 
     const fetchAlbumReviews = () => {
         AlbumService.fetchStatistics(id)
-        .then(
-            (response) => {
-                const data = response.data;
-                setReviewsStatistics(data);
-                if (data.total){
-                    setIsStatistics(true);
-                    fetchReviews();
+            .then(
+                (response) => {
+                    const data = response.data;
+                    setReviewsStatistics(data);
+                    if (data.total) {
+                        setIsStatistics(Boolean(data.total));
+                        fetchReviews();
+                    }
                 }
-            }
-        )
-        .catch(
-            (e) => setError(e.toString())
-        )
+            )
+            .catch(
+                (e) => setError(e.toString())
+            )
     }
 
     useEffect(
         () => {
+            fetchAlbum();
             fetchAlbumReviews();
+            if (isAuthenticated) fetchUserAlbum();
         },
         [id]
-    )
-
-    useEffect(
-        () => {
-            fetchAlbum();
-        }, [id]
     )
 
     const handleReviewAdded = () => {
         fetchAlbumReviews();
     }
 
-    useEffect(
-        () => {
-            if (token){
-                AlbumService.userAlbum(id)
-                .then(
-                    (response) => {
-                        setUserAlbumData(response.data);
-                    }
-                )
-            }
-        }, [id]
-    )
-
     const onSongRatingChange = (songId, value) => {
-        const data = {
-            rating: value
-        }
-
-        setUserSongsData(
+        const prevValue = songsRatings[songId];
+        setSongsRatings(
             prev => ({
                 ...prev,
                 [songId]: value
             })
         )
-
+        const data = {
+            rating: value
+        }
         SongService.rateSong(songId, data)
-        .catch(
-            e => setError(e.toString())
-        )
+            .catch((e) => {
+                setSongsRatings(prevState => ({...prevState, [songId]: prevValue}))
+            })
     }
 
     const onRatingChange = (value) => {
+        const prev = userAlbumData.rating;
         setUserAlbumData(
             prevstate => ({
                 ...prevstate,
@@ -148,14 +136,14 @@ const Album = (props) => {
             rating: value,
         }
         AlbumService.rateAlbum(id, data)
-        .catch(
-            (e) => {
-                console.log(e.toString());
-            }
-        )
+            .catch((e) => {
+                setUserAlbumData(s => ({...s, rating: prev}));
+                setError(e.toString());
+            })
     }
 
-    const onListenedClick = (_) => {
+    const onListenedClick = () => {
+        const prev = userAlbumData.listened;
         setUserAlbumData(
             prevstate => ({
                 ...prevstate,
@@ -163,14 +151,14 @@ const Album = (props) => {
             })
         )
         AlbumService.listenAlbum(id)
-        .catch(
-            (e) => {
-                console.log(e.toString());
-            }
-        )
+            .catch((e) => {
+                setUserAlbumData(s => ({...s, listened: prev}))
+                setError(e.toString());
+            })
     }
 
-    const onWishlistClick = (_) => {
+    const onWishlistClick = () => {
+        const prev = userAlbumData.wishlist;
         setUserAlbumData(
             prevstate => ({
                 ...prevstate,
@@ -178,12 +166,14 @@ const Album = (props) => {
             })
         )
         AlbumService.wishlistAlbum(id)
-        .catch(
-            e => setError(e.toString())
-        )
+            .catch((e) => {
+                setUserAlbumData(s => ({...s, wishlist: prev}));
+                setError(e.toString());
+            })
     }
 
-    const onFavouriteClick = (_) => {
+    const onFavouriteClick = () => {
+        const prev = userAlbumData.favourite;
         setUserAlbumData(
             prevstate => ({
                 ...prevstate,
@@ -191,173 +181,52 @@ const Album = (props) => {
             })
         )
         AlbumService.favouriteAlbum(id)
-        .catch(
-            (e) => {
-                console.log(e.toString());
-            }
+            .catch((e) => {
+                setUserAlbumData(state => ({...state, favourite: prev}));
+                setError(e.toString());
+            })
+    }
+
+    if (!album) {
+        return (
+            <Spinner animation={"grow"} variant={"primary"}/>
         )
     }
 
-    if (!album){
+    if (error) {
         return (
-            <div>
-                Loading
-            </div>
-        )
-    }
-
-    if (error){
-        return (
-            <div>
-                Error: {error}
-            </div>
+            <Alert>
+                <Alert.Heading>
+                    Error: {error}
+                </Alert.Heading>
+            </Alert>
         )
     }
 
     return (
         <div>
             <Container>
-                <Card className="mb-3 border-0">
-                    <Row className="g-0">
-                        <Col md={4} className="d-flex">
-                            <Card.Img
-                                src={album.cover}
-                            >
-                            </Card.Img>
-                        </Col>
-                        <Col md={8}>
-                            <Card.Body>
-                                <Row>
-                                    <Col md={8} className="mb-3">
-                                        <Card.Title className="fs-1">
-                                            {album.name}
-                                        </Card.Title>
-                                        <Card.Text className="fs-3">
-                                            <span className="text-muted fs-5">Исполнители: </span>
-                                            <span>{album.artists.map(
-                                                (artist, index) => (
-                                                    <React.Fragment>
-                                                        <Link
-                                                            className="text-decoration-none"
-                                                            to={`/artists/${artist.id}/`}
-                                                            >
-                                                            {artist.username}
-                                                        </Link>
-                                                        {index < album.artists.length - 1 && ', '}
-                                                        </React.Fragment>
-                                                )
-                                            )}
-                                            </span>
-                                        </Card.Text>
-                                        <Card.Text className="fs-3">
-                                            <span className="text-muted fs-5">Жанры: </span>
-                                            <span>
-                                                {album.genres.map(
-                                                    (genre, index) => (
-                                                        <React.Fragment>
-                                                            <Link to={`/genres/${genre.id}/`} className="text-decoration-none">
-                                                                {genre.name}
-                                                            </Link>
-                                                            {index < album.genres.length - 1 && ', '}
-                                                        </React.Fragment>
-                                                    )
-                                                )}
-                                            </span>
-                                        </Card.Text>
-                                        <Card.Text className="fs-3">
-                                            <span className="text-muted fs-5">Выпущен: </span>
-                                            <span>{moment(album.publication_date).format('Do MMMM YYYY')}</span>
-                                        </Card.Text>
-                                        <Card.Text className="fs-3">
-                                            <span className="text-muted fs-5">Средняя оценка: </span>
-                                            <span>
-                                                {album.average_rating !== "-" ? (
-                                                    Intl.NumberFormat("en", {maximumFractionDigits: 2}).format(album.average_rating))
-                                                    : (
-                                                        "-"
-                                                    )
-                                                } / 10.0
-                                            </span>
-                                        </Card.Text>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Row md={3}>
-                                            {isAuthenticated && (
-                                                <>
-                                                    <WishlistIcon initialValue={userAlbumData.wishlist} onClick={onWishlistClick}/>
-                                                    <HeartIcon initialValue={userAlbumData.favourite} onClick={onFavouriteClick}/>
-                                                    <Headphones initialValue={userAlbumData.listened} onClick={onListenedClick}/>
-                                                </>
-                                            )}
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                {isAuthenticated && (
-                                    <>
-                                        <ScaleRating initialValue={userAlbumData.rating} totalStars={10} onRatingChange={onRatingChange}/>
-                                    </>
-                                )}
-                            </Card.Body>
-                        </Col>
-                    </Row>
-                </Card>
-                <Card className="mb-3 border-0">
-                    <Card.Body>
-                        <ListGroup variant="flush">
-                            <Card.Title>
-                                Список песен:
-                            </Card.Title>
-                            {album.songs.map(
-                                (song, index) => (
-                                    <ListGroup.Item key={song.id} className="px-0">
-                                        <Row>
-                                            <Col xs={1} className="text-muted fs-5">
-                                                {index + 1}
-                                            </Col>
-                                            <Col xs={5} className="fs-5">
-                                                <Link to={`/songs/${song.id}/`} className="text-decoration-none">
-                                                    {song.name}
-                                                </Link>
-                                            </Col>
-                                            <Col xs={5}>
-                                            {token ? (
-                                                <ScaleRating
-                                                    initialValue={userSongsData[song.id]}
-                                                    onRatingChange={(value) => onSongRatingChange(song.id, value)}
-                                                />
-                                            ):
-                                                (
-                                                <>
-                                                </>
-                                            )}
-                                            </Col>  
-                                            <Col xs={1} className="text-end fs-5">
-                                                {song.duration}
-                                            </Col>
-                                        </Row>
-                                    </ListGroup.Item>
-                                )
-                            )}
-                        </ListGroup>
-                    </Card.Body>
-                </Card>
-                {isStatistics && (
-                    <>
-                        <Card.Title className="mb-3 fs-3">
-                            Рецензии слушателей
-                        </Card.Title>
-                        <Row className="g-0">
-                            <Col md={8} className="pe-3">
-                                {reviews.map(
-                                    (review) => <Review review={review} albumId={id}/>
-                                )}
-                            </Col>
-                            <Col md={4} className="statistics-block" style={{top: '20px'}}>
-                                <Reviews stats={reviewsStatistics} />
-                            </Col>
-                        </Row>
-                    </>
-                )}
+                <AlbumHeader
+                    isAuthenticated={isAuthenticated}
+                    album={album}
+                    userAlbumData={userAlbumData}
+                    onRatingChange={onRatingChange}
+                    onFavouriteClick={onFavouriteClick}
+                    onListenedClick={onListenedClick}
+                    onWishlistClick={onWishlistClick}
+                />
+                <AlbumSongsList
+                    token={token}
+                    album={album}
+                    onSongRatingChange={onSongRatingChange}
+                    songsRatings={songsRatings}
+                />
+                <AlbumReviews
+                    id={album.id}
+                    reviews={reviews}
+                    isStatistics={isStatistics}
+                    reviewsStatistics={reviewsStatistics}
+                />
                 {isAuthenticated && (
                     <div className="mt-3 w-50">
                         <ReviewForm albumId={id} onReviewAdded={handleReviewAdded}/>
