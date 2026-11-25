@@ -18,6 +18,7 @@ function WishlistIcon({initialValue = false, onClick}){
         alignItems: 'center',
         justifyContent: 'center',
       }}
+      data-testid="wishlist-icon"
     >
       <FaListUl
         color={wishlist ? "orange" : "gray"}

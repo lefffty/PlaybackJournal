@@ -19,6 +19,7 @@ function Headphones({initialValue, onClick}){
                 alignItems: 'center',
                 justifyContent: 'center',
             }}
+            data-testid="headphones"
         >
             <FaHeadphones
                 color={listened ? "blue" : "gray"}

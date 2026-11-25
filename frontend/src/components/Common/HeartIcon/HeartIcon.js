@@ -3,6 +3,7 @@ import { FaHeart } from 'react-icons/fa';
 
 import './HeartIcon.css';
 
+
 function HeartIcon({initialValue = true, onClick}) {
   const [favourite, setFavourite] = useState(initialValue);
 
@@ -19,6 +20,7 @@ function HeartIcon({initialValue = true, onClick}) {
         alignItems: 'center',
         justifyContent: 'center',
       }}
+      data-testid="heart-icon"
     >
       <FaHeart
         color={favourite ? "red" : "gray"}
