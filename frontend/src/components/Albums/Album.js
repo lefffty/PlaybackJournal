@@ -187,12 +187,6 @@ const Album = () => {
             })
     }
 
-    if (!album) {
-        return (
-            <Spinner animation={"grow"} variant={"primary"}/>
-        )
-    }
-
     if (error) {
         return (
             <Alert>
@@ -200,6 +194,12 @@ const Album = () => {
                     Error: {error}
                 </Alert.Heading>
             </Alert>
+        )
+    }
+
+    if (!album) {
+        return (
+            <Spinner animation={"grow"} variant={"primary"}/>
         )
     }
 

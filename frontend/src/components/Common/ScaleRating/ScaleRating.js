@@ -29,6 +29,7 @@ const ScaleRating = ({initialValue, onRatingChange, totalStars = 10, frozen = fa
                             const starValue = index + 1;
                             return (
                                 <FaStar
+                                    data-testid={`fa-star-${index + 1}`}
                                     key={index}
                                     size={30}
                                     color={starValue <= (hover || rating) ? '#ad8611' : '#e4e5e9'}
@@ -44,6 +45,7 @@ const ScaleRating = ({initialValue, onRatingChange, totalStars = 10, frozen = fa
             </div>
             {!frozen && (
                 <FaTrash
+                    data-testid="fa-trash"
                     size={24}
                     color="#888"
                     onClick={handleReset}

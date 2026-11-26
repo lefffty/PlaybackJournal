@@ -1,9 +1,9 @@
-import {describe, expect, it, jest, beforeEach} from "@jest/globals";
+import {describe, expect, it, jest} from "@jest/globals";
 import "@testing-library/jest-dom";
 import {render, screen} from "@testing-library/react";
 import {MemoryRouter} from "react-router-dom";
+
 import AlbumReviews from "./AlbumReviews";
-import Review from "../Reviews/Review";
 
 
 jest.mock("../Reviews/Review", () => () => (
