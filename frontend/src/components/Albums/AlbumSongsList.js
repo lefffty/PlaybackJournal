@@ -1,43 +1,25 @@
-import {Card, Col, ListGroup, Row} from "react-bootstrap";
-import {Link} from "react-router-dom";
-import ScaleRating from "../Common/ScaleRating/ScaleRating";
+import {Card, ListGroup} from "react-bootstrap";
+
+import AlbumSongsListEntry from "./AlbumSongsListEntry";
 
 const AlbumSongsList = ({token, album, songsRatings, onSongRatingChange}) => {
     return (
         <Card className="mb-3 border-0">
             <Card.Body>
                 <ListGroup variant="flush">
-                    <Card.Title>
+                    <Card.Title data-testid="album-songs-list-title">
                         Список песен:
                     </Card.Title>
                     {album.songs.map(
                         (song, index) => (
                             <ListGroup.Item key={song.id} className="px-0">
-                                <Row>
-                                    <Col xs={1} className="text-muted fs-5">
-                                        {index + 1}
-                                    </Col>
-                                    <Col xs={5} className="fs-5">
-                                        <Link to={`/songs/${song.id}/`} className="text-decoration-none">
-                                            {song.name}
-                                        </Link>
-                                    </Col>
-                                    <Col xs={5}>
-                                        {token ? (
-                                                <ScaleRating
-                                                    initialValue={songsRatings[song.id]}
-                                                    onRatingChange={(value) => onSongRatingChange(song.id, value)}
-                                                />
-                                            ) :
-                                            (
-                                                <>
-                                                </>
-                                            )}
-                                    </Col>
-                                    <Col xs={1} className="text-end fs-5">
-                                        {song.duration}
-                                    </Col>
-                                </Row>
+                                <AlbumSongsListEntry
+                                    index={index}
+                                    songRating={songsRatings[song.id]}
+                                    song={song}
+                                    token={token}
+                                    onSongRatingChange={onSongRatingChange}
+                                />
                             </ListGroup.Item>
                         )
                     )}
