@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Row, Col } from "react-bootstrap";
 
 import Review from "../Reviews/Review";
-import Reviews from "../Statistics/Reviews/Reviews";
+import ReviewsStats from "../Statistics/Reviews/ReviewsStats";
 
 const AlbumReviews = ({ id, isStatistics, reviewsStatistics, reviews }) => {
     if (!isStatistics) {
@@ -25,7 +25,7 @@ const AlbumReviews = ({ id, isStatistics, reviewsStatistics, reviews }) => {
                     ))}
                 </Col>
                 <Col md={4} className="statistics-block" style={{ top: "20px" }}>
-                    <Reviews stats={reviewsStatistics} />
+                    <ReviewsStats stats={reviewsStatistics} />
                 </Col>
             </Row>
         </>

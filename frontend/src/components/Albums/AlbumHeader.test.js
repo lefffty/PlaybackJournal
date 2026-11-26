@@ -1,9 +1,9 @@
 import {describe, expect, it, jest} from "@jest/globals";
-import AlbumHeader from "./AlbumHeader";
 import "@testing-library/jest-dom";
 import {render, screen} from "@testing-library/react";
 import {MemoryRouter} from "react-router-dom";
 
+import AlbumHeader from "./AlbumHeader";
 
 jest.mock("../Common/ScaleRating/ScaleRating", () => () => (
     <div data-testid="scale-rating">ScaleRating Mock</div>
