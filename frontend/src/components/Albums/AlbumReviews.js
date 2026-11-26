@@ -11,7 +11,7 @@ const AlbumReviews = ({ id, isStatistics, reviewsStatistics, reviews }) => {
 
     return (
         <>
-            <Card.Title className="mb-3 fs-3">
+            <Card.Title data-testid="reviews-title" className="mb-3 fs-3">
                 Рецензии слушателей
             </Card.Title>
             <Row className="g-0">
