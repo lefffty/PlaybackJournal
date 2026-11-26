@@ -2,7 +2,6 @@ import {describe, expect, it, jest} from "@jest/globals";
 import "@testing-library/jest-dom";
 import {render, screen} from "@testing-library/react";
 import {MemoryRouter} from "react-router-dom";
-import userEvent from "@testing-library/user-event";
 
 import AlbumSongsListEntry from "./AlbumSongsListEntry";
 
