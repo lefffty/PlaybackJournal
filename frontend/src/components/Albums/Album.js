@@ -11,7 +11,7 @@ import AlbumSongsList from "./AlbumSongsList";
 import AlbumReviews from "./AlbumReviews";
 
 import AlbumService from "../../services/AlbumService";
-import SongService from "../../services/SongService";
+import SongService from "../../services/Song";
 
 const Album = () => {
     const {id} = useParams();

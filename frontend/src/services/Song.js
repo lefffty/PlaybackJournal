@@ -1,6 +1,6 @@
 import AxiosInstance from "../components/AxiosInstance";
 
-class SongService{
+class SongService {
     fetchSongs(){
         return AxiosInstance.get('/api/songs/');
     }

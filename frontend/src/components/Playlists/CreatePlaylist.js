@@ -4,7 +4,7 @@ import Alert from "react-bootstrap/Alert";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Card, ListGroup, ListGroupItem, Button } from "react-bootstrap";
 
-import SongService from '../../services/SongService';
+import SongService from '../../services/Song';
 import PlaylistService from '../../services/PlaylistService';
 
 

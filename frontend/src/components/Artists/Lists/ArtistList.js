@@ -64,7 +64,7 @@ const ArtistList = (props) => {
     }
 
     const alignText = dataType === 'similar' ? 'center' : 'left';
-    const showArtists = dataType === 'similar' ? false : true;
+    const showArtists = dataType !== 'similar';
 
     var border_radius = '';
     if (dataType === 'similar'){
